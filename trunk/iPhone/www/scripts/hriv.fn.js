@@ -364,7 +364,7 @@ hriv.fn.compare.distance = function (a,b) {
 /**
  * Load info from datastore to listarray
  * */
-hriv.fn.listview.load = function(obj, listItems){
+hriv.fn.listview.load = function(obj, listItems, lat, lng){
 		
 		var arrOpenHours, openHours;
 		var openImg = "DotGray.png";
@@ -378,7 +378,7 @@ hriv.fn.listview.load = function(obj, listItems){
 		//Load listitem info
 		var dist = "";
 		if(!(obj.latitude < 1 ||  obj.longitude < 1)){
-			dist =  hriv.fn.calc.distance(gmap.curentPosition.latitude(), gmap.curentPosition.longitude(), obj.latitude, obj.longitude);
+			dist =  hriv.fn.calc.distance(lat, lng, obj.latitude, obj.longitude);
 			try { dist = Math.round(dist*10)/10; }catch(e){}
 		}else{ dist = 999999999; }				  
 		
@@ -717,7 +717,7 @@ hriv.CareUnits.init = function(){
 	
 	//Loads pois to marker object
 	var pois = [], listItems = [], listDetails = [], 
-		data = hriv.dataStore.CareUnits.careUnits;	
+		data = hriv.dataStore.CareUnits.careUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();	
 		
 	for(var i = 0; i < data.length; i++){
 		
@@ -729,7 +729,7 @@ hriv.CareUnits.init = function(){
 		});
 		
 		//Load list items
-		hriv.fn.listview.load(data[i], listItems);
+		hriv.fn.listview.load(data[i], listItems, lat, lng);
 		
 		//Load detail items
 		hriv.fn.detailview.load(data[i], listDetails);
@@ -748,7 +748,7 @@ hriv.DutyUnits.init = function(){
 	
 	//Loads pois to marker object
 	var pois = [], listItems = [], listDetails = [],
-		data = hriv.dataStore.DutyUnits.dutyUnits;	
+		data = hriv.dataStore.DutyUnits.dutyUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();
 	
 	for(var i = 0; i < data.length; i++){
 		pois.push({
@@ -758,7 +758,7 @@ hriv.DutyUnits.init = function(){
 		});		
 
 		//Load list items
-		hriv.fn.listview.load(data[i], listItems);
+		hriv.fn.listview.load(data[i], listItems, lat, lng);
 		
 		//Load detail items		
 		hriv.fn.detailview.load(data[i], listDetails);
@@ -778,7 +778,7 @@ hriv.EmergencyUnits.init = function(){
 	
 	//Loads pois to marker object
 	var pois = [], listItems = [], listDetails = [],
-		data = hriv.dataStore.EmergencyUnits.emergencyUnits;	
+		data = hriv.dataStore.EmergencyUnits.emergencyUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();	
 	
 	for(var i = 0; i < data.length; i++){
 		pois.push({
@@ -788,7 +788,7 @@ hriv.EmergencyUnits.init = function(){
 		});		
 		
 		//Load list items
-		hriv.fn.listview.load(data[i], listItems);
+		hriv.fn.listview.load(data[i], listItems, lat, lng);
 		
 		//Load detail items
 		hriv.fn.detailview.load(data[i], listDetails);			
