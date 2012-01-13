@@ -82,7 +82,7 @@ gmap.curentPosition.onError = function (error) {
 $(document).ready(function() {	
 		
 	if(navigator.geolocation.getCurrentPosition(function(){}) === undefined){		
-		gmap.curentPosition.onError();
+		gmap.curentPosition.set(57.6969943, 11.9865);
 		hriv.app.init();
 	}
 	
