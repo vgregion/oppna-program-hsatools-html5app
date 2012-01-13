@@ -836,3 +836,6 @@ hriv.app.print = function(){
 	hriv.CareUnits.detail.init();
 	hriv.DutyUnits.detail.init();	
 };
+
+
+
