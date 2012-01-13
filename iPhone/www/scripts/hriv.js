@@ -46,104 +46,58 @@ $(document).bind( "mobileinit", function() {
 *****************************************/
 hriv.CareUnits.map = gmap.map({pageId : '#mapCareUnits [data-icon="compass"]',   mapCanvasId: "map_canvas", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
 hriv.CareUnits.marker = gmap.marker();
-hriv.CareUnits.list = hriv.listview({listId: "#lCareUnits"});
-hriv.CareUnits.detail = hriv.detailview({listId: "#lCareUnits"});
+hriv.CareUnits.list = hriv.classes.listview({listId: "#lCareUnits"});
+hriv.CareUnits.detail = hriv.classes.detailview({listId: "#lCareUnits"});
 hriv.CareUnits.mode.map = hriv.classes.mode({mapId : "#mapCareUnits .ui-button-map", listId : "#mapCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
 hriv.CareUnits.mode.list = hriv.classes.mode({mapId : "#listCareUnits .ui-button-map", listId : "#listCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
 
 
 hriv.DutyUnits.map = gmap.map({pageId : '#mapDutyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_DutyUnits", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
 hriv.DutyUnits.marker = gmap.marker();
-hriv.DutyUnits.list = hriv.listview({listId: "#ldutyUnits"});
-hriv.DutyUnits.detail = hriv.detailview({listId: "#ldutyUnits"});
+hriv.DutyUnits.list = hriv.classes.listview({listId: "#ldutyUnits"});
+hriv.DutyUnits.detail = hriv.classes.detailview({listId: "#ldutyUnits"});
 hriv.DutyUnits.mode.map = hriv.classes.mode({mapId : "#mapDutyUnits .ui-button-map", listId : "#mapDutyUnits .ui-button-list", linkId : "#linkDutyUnits", linkMap: "#mapDutyUnits" , linkList : "#listDutyUnits"});
 hriv.DutyUnits.mode.list = hriv.classes.mode({mapId : "#listDutyUnits .ui-button-map", listId : "#listDutyUnits .ui-button-list", linkId : "#linkDutyUnits", linkMap: "#mapDutyUnits" , linkList : "#listDutyUnits" });
 
 
 hriv.EmergencyUnits.map = gmap.map({pageId : '#mapEmergencyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_Emergency", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
 hriv.EmergencyUnits.marker = gmap.marker();
-hriv.EmergencyUnits.list = hriv.listview({listId: "#lemergencyUnits"});
-hriv.EmergencyUnits.detail = hriv.detailview({listId: "#lemergencyUnits"});
+hriv.EmergencyUnits.list = hriv.classes.listview({listId: "#lemergencyUnits"});
+hriv.EmergencyUnits.detail = hriv.classes.detailview({listId: "#lemergencyUnits"});
 hriv.EmergencyUnits.mode.map = hriv.classes.mode({mapId : "#mapEmergencyUnits .ui-button-map", listId : "#mapEmergencyUnits .ui-button-list", linkId : "#linkEmergencyUnits", linkMap: "#mapEmergencyUnits" , linkList : "#listEmergencyUnits"});
 hriv.EmergencyUnits.mode.list = hriv.classes.mode({mapId : "#listEmergencyUnits .ui-button-map", listId : "#listEmergencyUnits .ui-button-list", linkId : "#linkEmergencyUnits", linkMap: "#mapEmergencyUnits" , linkList : "#listEmergencyUnits"});
 
 
+    // onSuccess Geolocation
+gmap.curentPosition.onSuccess = function (position) {
+    	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);
+    	hriv.app.init();
+    	console.log("pos success");
+};
 
-	setTimeout(function(){
-		hriv.DutyUnits.list.isOpen();
-	},600);		
-	setTimeout(function(){
-		hriv.EmergencyUnits.list.isOpen();
-	},600);	
-	setTimeout(function(){
-		hriv.CareUnits.list.isOpen();
-	},600);
+    // onError Callback receives a PositionError object    
+gmap.curentPosition.onError = function (error) {
+    	gmap.curentPosition.set(57.6969943, 11.9865);
+    	hriv.app.init();
+    	console.log("pos error");
+};
+
 
 $(document).ready(function() {	
 		
-	if(navigator.geolocation.getCurrentPosition(function(){}) === undefined){
-		gmap.curentPosition.set(57.6969943, 11.9865);
-		
-		hriv.CareUnits.init();
-		hriv.DutyUnits.init();	
-		hriv.EmergencyUnits.init();
-			
-		setTimeout(function(){
-			hriv.CareUnits.list.print();
-			hriv.DutyUnits.list.print();		
-			hriv.EmergencyUnits.list.print();
-			
-			hriv.EmergencyUnits.detail.init();
-			hriv.CareUnits.detail.init();
-			hriv.DutyUnits.detail.init();
-
-		}, 500);	
+	if(navigator.geolocation.getCurrentPosition(function(){}) === undefined){		
+		gmap.curentPosition.onError();
 	}
 	
-	navigator.geolocation.getCurrentPosition(function(position){					
-		gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);		
-		
-		hriv.CareUnits.init();
-		hriv.DutyUnits.init();	
-		hriv.EmergencyUnits.init();
-			
-		setTimeout(function(){
-			hriv.CareUnits.list.print();
-			hriv.DutyUnits.list.print();		
-			hriv.EmergencyUnits.list.print();
-			
-			hriv.EmergencyUnits.detail.init();
-			hriv.CareUnits.detail.init();
-			hriv.DutyUnits.detail.init();
-
-		}, 500);	
-	});			
+	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError);	
+	navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });			
 
     $(document).bind("deviceready", function(){
-		navigator.geolocation.getCurrentPosition(function(position){			
-			gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);
-			
-			hriv.CareUnits.init();
-			hriv.DutyUnits.init();	
-			hriv.EmergencyUnits.init();	
-			
-			setTimeout(function(){
-				hriv.CareUnits.list.print();
-				hriv.DutyUnits.list.print();
-				hriv.EmergencyUnits.list.print();				
-				
-				hriv.EmergencyUnits.detail.init();
-				hriv.CareUnits.detail.init();
-				hriv.DutyUnits.detail.init();
-
-			}, 500);								
-		});			
+		navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError);		
+		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });
 	});	
 	
 });
-	
-
-
 
 /************************
 * Page initializers 

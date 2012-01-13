@@ -10,8 +10,8 @@ var gmap = {};
  * 			set
  **/
 gmap.curentPosition = (function(){
-	var lat, lng, marker = null;	    
-      
+	var lat, lng, marker = null;
+	     
     return {    	     
 		get : function() {		
 			
