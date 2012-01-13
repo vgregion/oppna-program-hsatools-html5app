@@ -148,7 +148,7 @@ $(document).ready(function() {
 /************************
 * Page initializers 
 ************************/
-$('#mapCareUnits' ).live('pagecreate', function(event){	
+$('#mapCareUnits').live('pagecreate', function(event){	
 	
 	hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, 
 								   mapCenterLat : gmap.curentPosition.latitude(), 
@@ -164,28 +164,31 @@ $('#mapCareUnits' ).live('pagecreate', function(event){
 });
 
 //Page initializers CareUnits
-$('#mapCareUnits' ).live( 'pageshow', function(event){		
-	
+$('#mapCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.map.mapOn();
-	
 	setTimeout(function(){
 		hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());		
 	}, 700);	
 });
 
-$('#mapCareUnits' ).live( 'pagehide', function(event){			
+$('#mapCareUnits').live('pagehide', function(event){	
+	hriv.CareUnits.mode.map.listOn();
 	gmap.currentInfoWindow.close();
 	hriv.CareUnits.marker.clearMyPos();
 });
 
 
-$('#listCareUnits' ).live('pagecreate', function(event){
+$('#listCareUnits').live('pagecreate', function(event){	
 	hriv.CareUnits.mode.list.init("list");
 });
 
-$('#listCareUnits' ).live( 'pageshow', function(event){
+$('#listCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.list.listOn();
 });
+$('#listCareUnits').live('pagehide', function(event){
+	hriv.CareUnits.mode.list.mapOn();
+});
+
 
 //Page initializers CareUnits
 $('#mapDutyUnits' ).live('pagecreate', function(event){
@@ -209,7 +212,7 @@ $('#mapDutyUnits' ).live('pageshow', function(event){
 	}, 700);	
 });
 
-$('#mapDutyUnits' ).live( 'pagehide', function(event){			
+$('#mapDutyUnits' ).live('pagehide', function(event){			
 	gmap.currentInfoWindow.close();
 	hriv.DutyUnits.marker.clearMyPos();
 });
@@ -219,7 +222,7 @@ $('#listDutyUnits' ).live('pagecreate', function(event){
 	hriv.DutyUnits.mode.list.init("list");
 });
 
-$('#listDutyUnits' ).live( 'pageshow', function(event){
+$('#listDutyUnits' ).live('pageshow', function(event){
 	hriv.DutyUnits.mode.list.listOn();
 });
 
@@ -247,7 +250,7 @@ $('#mapEmergencyUnits' ).live('pageshow', function(event){
 	}, 700);		
 });
 
-$('#mapEmergencyUnits' ).live( 'pagehide', function(event){			
+$('#mapEmergencyUnits' ).live('pagehide', function(event){			
 	gmap.currentInfoWindow.close();
 	hriv.EmergencyUnits.marker.clearMyPos();
 });
@@ -256,6 +259,6 @@ $('#listEmergencyUnits' ).live('pagecreate', function(event){
 	hriv.EmergencyUnits.mode.list.init("list");
 });
 
-$('#listEmergencyUnits' ).live( 'pageshow', function(event){
+$('#listEmergencyUnits' ).live('pageshow', function(event){
 	hriv.EmergencyUnits.mode.list.listOn();
 });

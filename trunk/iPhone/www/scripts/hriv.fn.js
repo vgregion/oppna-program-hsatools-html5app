@@ -519,18 +519,18 @@ hriv.classes.mode = function(spec){
 		that.listOn();
 	};
 	
-	that.mapOn = function(){		
+	that.mapOn = function(){
 		setTimeout(function(){
 			$(conf.mapId).mousedown();
 			$(conf.listId).mouseup();	
-		}, 50);
+		}, 10);
 				
 	};
 	that.listOn = function(){		
 		setTimeout(function(){
 			$(conf.listId).mousedown();
 			$(conf.mapId).mouseup();		
-		}, 50);				
+		}, 10);				
 	};	
 	
 	return that;
@@ -557,6 +557,8 @@ hriv.detailview = function(spec){
 		$(conf.listId + " li").bind('click', function($e){			
 			$e.preventDefault();							
 			that.print($(this).attr("data-viewid"));
+			$.mobile.changePage("#detailview");
+			return false;
 		});		
 		
 	};

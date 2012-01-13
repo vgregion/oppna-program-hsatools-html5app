@@ -194,8 +194,8 @@
 }
 
 .ui-page-map .ui-footer {
-    bottom: 44px;
-    position: absolute;
+    /*bottom: 0px;
+    position: absolute;*/
 }
 
 
