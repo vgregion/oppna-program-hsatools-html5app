@@ -265,8 +265,8 @@ gmap.map = function(spec) {
 		config.mapCenterLat = spec.mapCenterLat;
 		config.mapCenterLng = spec.mapCenterLng;	
 		
-		that.resizeMap();
-		
+		that.resizeMap();		
+		 
 		config.mapIsInitialized = true;
 		
 		$(config.pageId).bind("click", that.zoom);
@@ -291,7 +291,7 @@ gmap.map = function(spec) {
     var header = $(".header:visible");
     //var footer = $(".footer:visible");    
     var content = $(".content:visible");
-    var viewport_height = $(window).height();
+    var viewport_height = $(document).height();
     
     var content_height = viewport_height - header.outerHeight(); // - footer.outerHeight();
     

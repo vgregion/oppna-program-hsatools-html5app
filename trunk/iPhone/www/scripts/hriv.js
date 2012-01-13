@@ -37,9 +37,17 @@ $(document).bind( "mobileinit", function() {
 	// Make your jQuery Mobile framework configuration changes here!
 	$.support.cors = true;
 	$.mobile.allowCrossDomainPages = true;
-	$.mobile.fixedToolbars.setTouchToggleEnabled(false);
+	$.mobile.fixedToolbars.setTouchToggleEnabled(false);	
 	$.mobile.touchOverflowEnabled = true;
 });
+
+$(document).ready(function(){
+	//$.support.cors = true;
+	//$.mobile.allowCrossDomainPages = true;	
+	$.mobile.fixedToolbars.setTouchToggleEnabled(false);
+	$.mobile.touchOverflowEnabled = true;
+})
+
 
 /*****************************************
 * Function setup & object initilization 
@@ -101,8 +109,10 @@ $(document).ready(function() {
 	
 });
 
+
+
 /************************
-* Page initializers 
+* Page initializers CareUnits 
 ************************/
 $('#mapCareUnits').live('pagecreate', function(event){	
 	
@@ -119,7 +129,10 @@ $('#mapCareUnits').live('pagecreate', function(event){
 	},1000);
 });
 
-//Page initializers CareUnits
+
+/***
+ * Page initializers CareUnits 
+ **/
 $('#mapCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.map.mapOn();
 	setTimeout(function(){
@@ -128,9 +141,9 @@ $('#mapCareUnits').live('pageshow', function(event){
 });
 
 $('#mapCareUnits').live('pagehide', function(event){	
-	hriv.CareUnits.mode.map.listOn();
+	//hriv.CareUnits.mode.map.listOn();
 	gmap.currentInfoWindow.close();
-	hriv.CareUnits.marker.clearMyPos();
+	//hriv.CareUnits.marker.clearMyPos();
 });
 
 
@@ -146,7 +159,10 @@ $('#listCareUnits').live('pagehide', function(event){
 });
 
 
-//Page initializers CareUnits
+
+/***
+ * Page initializers DutyUnits 
+ **/
 $('#mapDutyUnits' ).live('pagecreate', function(event){
 	hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker,
 								   mapCenterLat : gmap.curentPosition.latitude(), 
@@ -183,8 +199,9 @@ $('#listDutyUnits' ).live('pageshow', function(event){
 });
 
 
-
-//Page initializers EmergencyUnits
+/***
+ * Page initializers EmergencyUnits 
+ **/
 $('#mapEmergencyUnits' ).live('pagecreate', function(event){
 	hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker,
 								   mapCenterLat : gmap.curentPosition.latitude(), 
