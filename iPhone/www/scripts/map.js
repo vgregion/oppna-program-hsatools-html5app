@@ -224,13 +224,15 @@ gmap.map = function(spec) {
 		
 	
   config = {
-        mapCenterLat: null,
+  		pageId : null,
+  		mapCenterLat: null,
         mapCenterLng: null,
         myPosIcon: "images/BlueDot.png",
         myPosTitle: "Här är du!",        
         mapCanvasId: null,
         headerSelector: null,
-        footerSelector: null
+        footerSelector: null,
+        zoomIn : false        
     };	
 	
     that.bubbleType = {
@@ -267,10 +269,7 @@ gmap.map = function(spec) {
 		
 		config.mapIsInitialized = true;
 		
-		//marker.addMarker(latitude, longitude, myPosTitle, "", myPosIcon, bubbleType, map);
-		//if (local.focusOnCurrentPosition || that.isWithinPark(myLatlng))
-		//that.focusOnMarkers();           
-        //};
+		$(config.pageId).bind("click", that.zoom);
 	};
 
 
@@ -284,8 +283,24 @@ gmap.map = function(spec) {
             return;
 		}
 		
+    /* Some orientation changes leave the scroll position at something
+     * that isn't 0,0. This is annoying for user experience. */
+    scroll(0, 0);
+
+    /* Calculate the geometry that our content area should take */
+    var header = $(".header:visible");
+    //var footer = $(".footer:visible");    
+    var content = $(".content:visible");
+    var viewport_height = $(window).height();
+    
+    var content_height = viewport_height - header.outerHeight(); // - footer.outerHeight();
+    
+    /* Trim margin/border/padding height */
+    content_height -= (content.outerHeight() - content.height());
+    		
+		$('#' + config.mapCanvasId).height(content_height);
         //$('#' + config.mapCanvasId).height($(window).height() - $(config.headerSelector).height() - $(config.footerSelector).height());
-        $('#' + config.mapCanvasId).height($(window).height() - 42 - 44);
+        //$('#' + config.mapCanvasId).height($(window).height() - 42 - 44);
         google.maps.event.trigger(this.map, 'resize');
 
         this.mapIsResized = true;
@@ -301,6 +316,26 @@ gmap.map = function(spec) {
         
         google.maps.event.trigger(this.map, 'resize');
     };
+    
+    that.zoom = function(){
+    	var _map = that.getMap();
+    	//var myLatlng = new google.maps.LatLng(spec.mapCenterLat, spec.mapCenterLng);
+        //_map.panTo(myLatlng);
+		if(config.zoomIn){
+			_map.setZoom(15);
+			config.zoomIn = false;						
+		}else{
+			_map.setZoom(10);
+			config.zoomIn = true;
+		}
+		
+		setTimeout(function(){
+			var myLatlng = new google.maps.LatLng(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
+			_map.panTo(myLatlng);    
+		}, 500);
+		
+		return false;		
+	};
 
     that.showMarkers = function() {
         // Only change markers if map has changed
@@ -318,8 +353,6 @@ gmap.map = function(spec) {
 	that.showCurrentPosition = function(){
 		this.marker.addPosMarker(gmap.curentPosition.latitude(), gmap.curentPosition.longitude(), 
 								 config.myPosTitle, "", config.myPosIcon, that.bubbleType.None, this.map, "animate");			
-		//this.marker.addMarker(gmap.curentPosition.latitude(), gmap.curentPosition.longitude(), config.myPosTitle, "", config.myPosIcon, that.bubbleType.None, this.map);
-		//gmap.curentPosition.showOnMap(config.myPosTitle, "", config.myPosIcon, that.bubbleType.None, this.map);
 	};	
 		
 	return that;
