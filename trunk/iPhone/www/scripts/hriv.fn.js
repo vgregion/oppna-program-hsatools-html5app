@@ -93,7 +93,8 @@ var hriv = {
 		fn : {listview : {},
 			  detailview :  {} ,
 			  calc : {}
-		}			
+		},
+		app : {}			
 	};
 
 
@@ -540,7 +541,7 @@ hriv.classes.mode = function(spec){
 /**
  * Class DetailView 
  **/
-hriv.detailview = function(spec){
+hriv.classes.detailview = function(spec){
 		
 	var that = {}, conf, pois = [];
 	
@@ -637,7 +638,7 @@ hriv.detailview = function(spec){
 /**
  * Class listview
  * */
-hriv.listview = function(spec){
+hriv.classes.listview = function(spec){
 	var that = {}, conf = {}; 
 	
 	conf = {
@@ -798,3 +799,39 @@ hriv.EmergencyUnits.init = function(){
 	hriv.EmergencyUnits.detail.set(listDetails);			
 };
 
+
+/**
+ * Initilize HRIV javascript application framework
+ * */
+hriv.app.init = function(){
+	
+	hriv.CareUnits.init();
+	hriv.DutyUnits.init();	
+	hriv.EmergencyUnits.init();
+
+	hriv.EmergencyUnits.detail.init();
+	hriv.CareUnits.detail.init();
+	hriv.DutyUnits.detail.init();
+		
+	setTimeout(function(){
+		hriv.app.print();
+	}, 500);	
+	
+	setInterval(function(){
+		hriv.DutyUnits.list.isOpen();
+	},120000);
+			
+	setInterval(function(){
+		hriv.EmergencyUnits.list.isOpen();
+	},360000);	
+	setInterval(function(){
+		hriv.CareUnits.list.isOpen();
+	},720000);
+			
+};
+
+hriv.app.print = function(){
+	hriv.CareUnits.list.print();
+	hriv.DutyUnits.list.print();		
+	hriv.EmergencyUnits.list.print();	
+};
