@@ -193,6 +193,11 @@
     padding-top: 0;
 }
 
+.ui-page-map .ui-footer {
+    bottom: 44px;
+    position: absolute;
+}
+
 
 /* Page: DetailView */
 .ui-page-detailview.ui-body-f {

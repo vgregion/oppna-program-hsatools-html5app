@@ -17,7 +17,7 @@
 	{ 
       //e.preventDefault(); 
     }
-	document.addEventListener("touchmove", preventBehavior, false);
+	//document.addEventListener("touchmove", preventBehavior, false);
     </script>
     
     <script type="text/javascript" charset="utf-8" src="scripts/phonegap.js"></script>
@@ -27,15 +27,15 @@
     <link href="styles/hriv_ios_app._theme_f.css" rel="stylesheet" type="text/css" />
     
     <script src="framework/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="framework/jquery.jsonp-2.2.0.js" type="text/javascript"></script>
     <script src="framework/jquery.mobile-1.0.js" type="text/javascript"></script>
-        
+      
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>    	
 	            
 	<script src="scripts/map.js" type="text/javascript"></script>          
     <script src="scripts/hriv.fn.js" type="text/javascript"></script>
 	<script src="scripts/data.js" type="text/javascript"></script>    
 	<script src="scripts/hriv.js" type="text/javascript"></script>
-    
     
 </head>
 <body>
@@ -51,7 +51,7 @@
             <div class="ui-listbox">
                 <ul data-role="listview" data-inset="false" data-theme="d">                
                     <li data-icon="care" class="ui-li-single ui-li-rounded">        
-                        <a href="#mapCareUnits" data-theme="f">Vårdcentral</a>
+                        <a id="linkCareUnits" href="#mapCareUnits" data-theme="f">Vårdcentral</a>
                     </li>
                 </ul> 
             </div>
@@ -59,7 +59,7 @@
             <div class="ui-listbox">
                 <ul data-role="listview" data-inset="false" data-theme="d">                
                     <li data-icon="duty" class="ui-li-single ui-li-rounded">
-                        <a href="#mapDutyUnits" data-theme="f">Jourmottagning</a>                        
+                        <a id="linkDutyUnits" href="#mapDutyUnits" data-theme="f">Jourmottagning</a>                        
                     </li>
                 </ul> 
             </div>           
@@ -67,7 +67,7 @@
             <div class="ui-listbox">
                 <ul data-role="listview" data-inset="false" data-theme="d">                
                     <li data-icon="emergency" class="ui-li-single ui-li-rounded">
-                        <a href="#mapEmergencyUnits" data-theme="f">Akutmottagning</a>
+                        <a id="linkEmergencyUnits" href="#mapEmergencyUnits" data-theme="f">Akutmottagning</a>
                     </li>
                 </ul> 
             </div>
@@ -76,26 +76,26 @@
 
 
     <div data-role="page" id="mapCareUnits" class="ui-page-map">
-        <div data-role="header" data-theme="f" data-position="fixed">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
             <a href="#" data-icon="compass" class="ui-button"></a>
         </div>
 
         <div data-role="content">
-          <div id="map_canvas"></div>
+          <div style=" width: 100%; height: 100%" id="map_canvas"></div>
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f">
-        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listCareUnits" class="ui-button ui-button-bottom-right">Lista</a>			        	
+        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left ui-button-map" >Karta</a>
+			<a href="#listCareUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>			        	
         </div>        
     </div>
     
     
     <div data-role="page" id="listCareUnits">
         <div data-role="header" data-theme="f" data-position="fixed">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
         </div>
 
@@ -105,14 +105,14 @@
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
-        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listCareUnits" class="ui-button ui-button-bottom-right">Lista</a>       	        	
+        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left ui-button-map" >Karta</a>
+			<a href="#listCareUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>       	        	
         </div>       
     </div>               
     
     <div data-role="page" id="mapDutyUnits" class="ui-page-map">
-        <div data-role="header" data-theme="f" data-position="fixed">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
             <a href="#" data-icon="compass" class="ui-button"></a>
         </div>
@@ -122,14 +122,14 @@
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f">
-        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right">Lista</a>        	
+        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left ui-button-map" >Karta</a>
+			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>        	
         </div>        
     </div>
     
     <div data-role="page" id="listDutyUnits">
-        <div data-role="header" data-theme="f">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+        <div data-role="header" data-theme="f" data-position="fixed">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Jourmottagningar</h1>
         </div>
 
@@ -139,15 +139,15 @@
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
-        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right">Lista</a>       	        	
+        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left ui-button-map" >Karta</a>
+			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>       	        	
         </div>       
     </div>    
     
     
     <div data-role="page" id="mapEmergencyUnits" class="ui-page-map">
-        <div data-role="header" data-theme="f" data-position="fixed">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
             <a href="#" data-icon="compass" class="ui-button"></a>
         </div>
@@ -158,14 +158,14 @@
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
-        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right">Lista</a>       	        	
+        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left ui-button-map" >Karta</a>
+			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>       	        	
         </div>        
     </div>   
     
     <div data-role="page" id="listEmergencyUnits">
-        <div data-role="header" data-theme="f">
-            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">Hem</a>
+        <div data-role="header" data-theme="f" data-position="fixed">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Akutmottagningar</h1>
         </div>
 
@@ -175,15 +175,15 @@
         </div>
         
         <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
-        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left" >Karta</a>
-			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right">Lista</a>       	        	
+        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left ui-button-map">Karta</a>
+			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right ui-button-list">Lista</a>       	        	
         </div>       
     </div>    
     
     
       
     <div data-role="page" id="detailview" data-viewid="" class="ui-page-detailview" data-theme="f">
-    	<div data-role="header" data-theme="f">
+    	<div data-role="header" data-theme="f" data-position="fixed">
     		<a  data-rel="back" data-direction="reverse" class="back-btn ui-button-back nav-button">tillbaka</a>
             <h1>Information</h1>
     	</div>
@@ -216,7 +216,7 @@
 				</div>
     			<hr class="detailview-divider">
     			<div class="ui-li-desc">
-    				<a href="" data-role="button">Färdbeskrivning</a>   				   				
+    				<a href="" data-role="button">Vägbeskrivning</a>   				   				
     			</div>
     		</div>    		    		
     		<div class="detailview-head">Beskrivning</div>

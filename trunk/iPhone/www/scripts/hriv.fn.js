@@ -35,7 +35,7 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 
 
 /**
- *  Fallback solution for keys 
+ * Fallback solution for keys 
  * function in Object type.
  * */
 if(!Object.keys){ 
@@ -69,21 +69,24 @@ var hriv = {
 			map : null,
 			marker : null,
 			list : {}, 
-			detail : {}
+			detail : {}, 
+			mode : {}
 		},
 		DutyUnits : {
 			init: null,
 			map : null,
 			marker : null, 
 			list : {},
-			detail : {}
+			detail : {},
+			mode : {}
 		},
 		EmergencyUnits : {
 			init : null,
 			map : null,
 			marker : null,
 			list : {},
-			detail : {}
+			detail : {},
+			mode : {}
 		},
 		listview : {},
 		detailview : {},
@@ -101,7 +104,7 @@ var hriv = {
 
 /**
  * Calculate distance between two sets of lat lang coordinates 
- * */
+ **/
 hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 				
 		var _calculate = function(lt1, ln1, lt2, ln2){
@@ -125,7 +128,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 
 
 /**
- *  Calculate open icon
+ * Calculate open icon
  **/
  hriv.fn.calc.isOpen = function(hours){
 
@@ -139,7 +142,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    monday = obj.monday[0];
 	    monday.day = "monday";
 	    monday.daynb = 0;
-	    monday.openingHour = obj.monday[0].openingHour;
+	    monday.openingHour = (obj.monday[0].openingHour === null ? "00:00" : obj.monday[0].openingHour );
 	    monday.closingHour = obj.monday[0].closingHour;
 	    arrOpen[0] = monday;
 	}else{arrOpen[0] = null;}	
@@ -148,7 +151,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    tuesday= obj.tuesday[0];
 	    tuesday.day = "tuesday";
 	    tuesday.daynb = 1;
-	    tuesday.openingHour = obj.tuesday[0].openingHour;
+	    tuesday.openingHour = (obj.tuesday[0].openingHour === null ? "00:00" : obj.tuesday[0].openingHour );
 	    tuesday.closingHour = obj.tuesday[0].closingHour;
 	    arrOpen[1] = tuesday;
 	}else{arrOpen[1] = null;}	
@@ -157,7 +160,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    wednesday= obj.wednesday[0];
 	    wednesday.day = "wednesday";
 	    wednesday.daynb = 2;
-	    wednesday.openingHour = obj.wednesday[0].openingHour;
+	    wednesday.openingHour = (obj.wednesday[0].openingHour === null ? "00:00" : obj.wednesday[0].openingHour );
 	    wednesday.closingHour = obj.wednesday[0].closingHour;
 	    arrOpen[2] = wednesday;
 	}else{arrOpen[2] = null;}	
@@ -166,7 +169,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    thursday= obj.thursday[0];
 	    thursday.day = "thursday";
 	    thursday.daynb = 3;
-	    thursday.openingHour = obj.thursday[0].openingHour;
+	    thursday.openingHour = (obj.thursday[0].openingHour === null ? "00:00" : obj.thursday[0].openingHour );
 	    thursday.closingHour = obj.thursday[0].closingHour;	    
 	    arrOpen[3] = thursday;
 	}else{arrOpen[3] = null;}	
@@ -175,7 +178,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    friday= obj.friday[0];
 	    friday.day = "friday";
 	    friday.daynb = 4;	    
-	    friday.openingHour = obj.friday[0].openingHour;
+	    friday.openingHour = (obj.friday[0].openingHour === null ? "00:00" : obj.friday[0].openingHour );
 	    friday.closingHour = obj.friday[0].closingHour;	    
 	    arrOpen[4] = friday;
 	}else{arrOpen[4] = null;}	
@@ -185,7 +188,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    saturday= obj.saturday[0];
 	    saturday.day = "saturday";
 	    saturday.daynb = 5;	    
-	    saturday.openingHour = obj.saturday[0].openingHour;
+	    saturday.openingHour = (obj.saturday[0].openingHour === null ? "00:00" : obj.saturday[0].openingHour );
 	    saturday.closingHour = obj.saturday[0].closingHour;	    
 	    arrOpen[5] = saturday;
 	}else{arrOpen[5] = null;}	
@@ -194,7 +197,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    sunday= obj.sunday[0];
 	    sunday.day = "sunday";
 	    sunday.daynb = 6;	    
-	    sunday.openingHour = obj.sunday[0].openingHour;
+	    sunday.openingHour = (obj.sunday[0].openingHour === null ? "00:00" : obj.sunday[0].openingHour );
 	    sunday.closingHour = obj.sunday[0].closingHour;	    
 	    arrOpen[6] = sunday;
 	}else{arrOpen[6] = null;}	
@@ -204,7 +207,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	day = arrOpen[day];
 	var result;
 	
-	result = (day !== undefined) ? hriv.fn.calc.time(day.openingHour + ":00", day.closingHour +":00") : -1;
+	result = (day !== null) ? hriv.fn.calc.time(day.openingHour +":00", day.closingHour +":00") : -1;
 	
 	return result;
 };
@@ -229,9 +232,9 @@ hriv.fn.calc.time =  function (open1,close2) {
 };
 
 
-/* *
+/**
  * Calculate display layout open hours
- * */
+ **/
  hriv.fn.calc.openhours = function(hours){
 
 	var arrDays = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
@@ -337,7 +340,7 @@ hriv.fn.calc.time =  function (open1,close2) {
 
 
 /**
- *Compare distance in object array
+ * Compare distance in object array
  * */
 hriv.fn.compare = {};
 hriv.fn.compare.distance = function (a,b) {
@@ -358,15 +361,17 @@ hriv.fn.compare.distance = function (a,b) {
 
 
 /**
- *
+ * Load info from datastore to listarray
  * */
 hriv.fn.listview.load = function(obj, listItems){
 		
 		var arrOpenHours, openHours;
 		var openImg = "DotGray.png";
+		var isOpen = -1;
 		//Kontroll öppettider
-		if(Object.keys(obj.hsaSurgeryHours).length > 0){			
-			openImg = (hriv.fn.calc.isOpen(obj.hsaSurgeryHours) === 1) ? 'DotGreen.png' : 'DotGray.png' ;			
+		if(Object.keys(obj.hsaSurgeryHours).length > 0){
+			isOpen = hriv.fn.calc.isOpen(obj.hsaSurgeryHours);			
+			openImg = (isOpen === 1) ? 'DotGreen.png' : 'DotGray.png' ;			
 		}	
 		
 		//Load listitem info
@@ -381,14 +386,15 @@ hriv.fn.listview.load = function(obj, listItems){
 			locale : obj.locale,
 			hsaIdentity : obj.hsaIdentity,
 			distance: dist,
-			open: hsaSurgeryHours,
-			openImg: openImg
+			open: obj.hsaSurgeryHours,
+			openImg: openImg,
+			isOpen : isOpen
 		});					
 };
 
 
 /** 
- * Load info from datastore to array
+ * Load info from datastore to details array
  * */
 hriv.fn.detailview.load = function(obj, listDetails) {
 			
@@ -458,6 +464,79 @@ hriv.fn.detailview.load = function(obj, listDetails) {
 };
 
 
+hriv.classes =  {};
+
+
+/**
+ * Class mode 
+ **/
+hriv.classes.mode = function(spec){
+	var that = {}, mode, conf, _toggle, dataBase = 0; 
+	
+	conf = {
+		mapId : null, 
+		listId : null,
+		linkId : null,
+		linkMap : null,
+		linkList : null
+	};
+	
+	$.extend(conf, spec);
+	
+	that.init = function(mod){
+		
+		if(mod === undefined){
+			throw("argument [mode, list] to init func is neeed.");
+		}
+		
+		$(conf.mapId).bind("click", that.mapClick);
+		$(conf.mapId).bind("mouseover", that.mapOn);		
+		$(conf.listId).bind("click", that.listClick);	
+		$(conf.listId).bind("mouseover", that.listOn);
+		
+		switch(mod){
+			case "map":
+				$(conf.mapId).bind("mouseout", that.mapOn);
+				$(conf.listId).bind("mouseout", that.mapOn);
+			break;
+			case "list":
+				$(conf.mapId).bind("mouseout", that.listOn);
+				$(conf.listId).bind("mouseout", that.listOn);
+			break;
+			default:
+				throw("argument [mode, list] to init func is neeed.");
+			break;
+		}			
+	};
+	
+	that.mapClick = function(){
+		$(conf.linkId).attr("href", conf.linkMap);
+		that.mapOn();		
+	};
+	
+	that.listClick = function(){
+		$(conf.linkId).attr("href", conf.linkList);
+		that.listOn();
+	};
+	
+	that.mapOn = function(){		
+		setTimeout(function(){
+			$(conf.mapId).mousedown();
+			$(conf.listId).mouseup();	
+		}, 50);
+				
+	};
+	that.listOn = function(){		
+		setTimeout(function(){
+			$(conf.listId).mousedown();
+			$(conf.mapId).mouseup();		
+		}, 50);				
+	};	
+	
+	return that;
+};
+
+
 /**
  * Class DetailView 
  **/
@@ -494,7 +573,9 @@ hriv.detailview = function(spec){
 		// Check if user let's us track position. If not, do not pass the source address. This will force the user to choose it.	        
 	    if(gmap.curentPosition.latitude() !== null && gmap.curentPosition.longitude() !== null){
 			nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
-		};		
+		};
+		
+		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
 		
 		str = '<div class="detailview-head">' + conf.myListArr[idx].name + ' , ' + conf.myListArr[idx].locale + '</div>' +
 				'<div class="detailview-content1">'    			 +
@@ -513,9 +594,10 @@ hriv.detailview = function(spec){
 				'<div class="detailview-head">Kontaktinfomation</div>' +
 				'<div class="detailview-content2">' +
 					'<div class="ui-li-heading">Telefontid</div>' +
-					'<div class="ui-li-desc">'+ conf.myListArr[idx].teltime +'</div>' +
+					'<div class="ui-li-desc">'+ (conf.myListArr[idx].teltime !== undefined ? conf.myListArr[idx].teltime : "") +'</div>' +
+					'<hr class="detailview-divider">' +
 					'<div class="ui-li-heading">Telefonnummer</div>' +
-					'<div class="ui-li-desc">'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) +'</div>' +
+					'<div class="ui-li-desc"> '+ telnb +'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc detailview-buttons">' +      								
 						'<div class="detailview-buttons1"><a href="tel:'+ conf.myListArr[idx].tel +'" data-role="button" data-inline="true">Ring</a></div>' +
@@ -551,7 +633,7 @@ hriv.detailview = function(spec){
 
 
 /**
- *
+ * Class listview
  * */
 hriv.listview = function(spec){
 	var that = {}, conf = {}; 
@@ -576,8 +658,8 @@ hriv.listview = function(spec){
 			
 			strDistance = (conf.myListArr[i].distance === 999999999) ? "Avstånd saknas, " + conf.myListArr[i].locale : conf.myListArr[i].distance + ' km, '+ conf.myListArr[i].locale;			
 			
-			$(conf.listId).append('<li data-icon="false" data-viewid="'+  conf.myListArr[i].hsaIdentity +'"><a href="#detailview">' +
-								  '<img src="images/' + conf.myListArr[i].openImg  +' alt="" class="ui-li-icon">' +
+			$(conf.listId).append('<li data-icon="false" data-viewid="' + conf.myListArr[i].hsaIdentity + '"><a href="#detailview">' +
+								  '<img src="images/' + conf.myListArr[i].openImg  + '" alt="" class="ui-li-icon">' +
 								  '<h3>' + conf.myListArr[i].name + '</h3>' +
 								  '<p>' + strDistance + '</p>' + 							  								  
 								  '</a></li>');
@@ -586,9 +668,29 @@ hriv.listview = function(spec){
 	
 	that.isOpen = function(){
 		
+		var $li = $(conf.listId +" li");
+		
+		//Kontroll öppettider		
 		for(var i = 0; i < conf.myListArr.length; i++){
-				
-		}		
+			if(Object.keys(conf.myListArr[i].open).length > 0){
+				var open = hriv.fn.calc.isOpen(conf.myListArr[i].open);
+
+				if(open !== conf.myListArr[i].isOpen){
+									
+					switch(open){
+						case 1:
+							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGreen.png";
+							conf.myListArr[i].isOpen = -1;
+						break;							
+						case -1:
+							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGray.png";
+							conf.myListArr[i].isOpen = 1;
+						break;						
+					}					
+				}					
+			}			
+		} 
+		
 	};
 		
 	that.set = function(myListArr){
@@ -598,6 +700,11 @@ hriv.listview = function(spec){
 	return that;
 };
 
+
+hriv.CareUnits.getData = function(){
+	
+	
+};
 
 
 /**
@@ -629,8 +736,6 @@ hriv.CareUnits.init = function(){
 	hriv.CareUnits.list.set(listItems);	
 	hriv.CareUnits.detail.set(listDetails);		
 };
-
-
 
 /**
  * DutyUnits - Utility function
