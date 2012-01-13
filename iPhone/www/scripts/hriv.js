@@ -168,7 +168,7 @@ $('#mapCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.map.mapOn();
 	setTimeout(function(){
 		hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());		
-	}, 700);	
+	}, 1000);	
 });
 
 $('#mapCareUnits').live('pagehide', function(event){	
@@ -209,7 +209,7 @@ $('#mapDutyUnits' ).live('pageshow', function(event){
 	hriv.DutyUnits.mode.map.mapOn();	
 	setTimeout(function(){
 		hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
-	}, 700);	
+	}, 1000);	
 });
 
 $('#mapDutyUnits' ).live('pagehide', function(event){			
@@ -247,7 +247,7 @@ $('#mapEmergencyUnits' ).live('pageshow', function(event){
 	hriv.EmergencyUnits.mode.map.mapOn();
 	setTimeout(function(){		
 		hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
-	}, 700);		
+	}, 1000);		
 });
 
 $('#mapEmergencyUnits' ).live('pagehide', function(event){			
