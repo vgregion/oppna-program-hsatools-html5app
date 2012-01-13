@@ -75,7 +75,7 @@ gmap.curentPosition.onSuccess = function (position) {
 
     // onError Callback receives a PositionError object    
 gmap.curentPosition.onError = function (error) {
-    	gmap.curentPosition.set(57.6969943, 11.9865);      
+    	//      
 };
 
 
@@ -86,11 +86,11 @@ $(document).ready(function() {
 		hriv.app.init();
 	}
 	
-	navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, gmap.curentPosition.onError);	
+	navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, function(){gmap.curentPosition.set(57.6969943, 11.9865);});		
 	navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });			
 
     $(document).bind("deviceready", function(){
-		navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, gmap.curentPosition.onError);		
+		navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, function(){gmap.curentPosition.set(57.6969943, 11.9865);});		
 		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });
 	});	
 	
