@@ -125,7 +125,7 @@ gmap.marker = function(){
             position: latlng,
             title: title,
             icon: image,
-            animation: (animate !== undefined ? google.maps.Animation.DROP : null),
+            //animation: (animate !== undefined ? google.maps.Animation.DROP : null),
             map: this.map,
             shape: {
                 coords: [10, 10, 100],
