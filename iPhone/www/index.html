@@ -35,7 +35,34 @@
     <script src="scripts/hriv.fn.js" type="text/javascript"></script>
 	<script src="scripts/data.js" type="text/javascript"></script>    
 	<script src="scripts/hriv.js" type="text/javascript"></script>  
-    
+    <script>
+    	
+    	$(document).ready(function(){
+    		
+    		
+    		$("#main").bind("vmousemove", function(e){    			
+    			e.preventDefault();
+    		});
+    		
+    		$(".ui-page-map").bind("vmousemove", function(e){    			
+    			e.preventDefault();
+    		});
+    		
+    		
+    		$(".listview-header").bind("vmousemove", function(e){    			
+    			e.preventDefault();
+    		});
+    		
+    		$(".listview-footer").bind("vmousemove", function(e){    			
+    			e.preventDefault();
+    		});
+    		
+    		$('#detailview .detailview-header').bind("vmousemove", function(e){    			
+    			e.preventDefault();
+    		});    		
+    	});
+    	
+    </script>
 </head>
 <body>
 
@@ -94,7 +121,7 @@
     
     
     <div data-role="page" id="listCareUnits">
-        <div data-role="header" data-theme="f" data-position="fixed">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
             <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
         </div>
@@ -104,7 +131,7 @@
             </ul>        	           	
         </div>
         
-        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
         	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map" >Karta</a>
 			<a href="#listCareUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
         </div>       
@@ -128,7 +155,7 @@
     </div>
     
     <div data-role="page" id="listDutyUnits">
-        <div data-role="header" data-theme="f" data-position="fixed">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
             <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Jourmottagningar</h1>
         </div>
@@ -138,7 +165,7 @@
             </ul>        	           	
         </div>
         
-        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
         	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map" >Karta</a>
 			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
         </div>       
@@ -163,7 +190,7 @@
     </div>   
     
     <div data-role="page" id="listEmergencyUnits">
-        <div data-role="header" data-theme="f" data-position="fixed">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
             <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Akutmottagningar</h1>
         </div>
@@ -173,7 +200,7 @@
             </ul>        	           	
         </div>
         
-        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
         	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map">Karta</a>
 			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
         </div>       
@@ -182,7 +209,7 @@
     
       
     <div data-role="page" id="detailview" data-viewid="" class="ui-page-detailview" data-theme="f">
-    	<div data-role="header" data-theme="f" data-position="fixed">
+    	<div data-role="header" class="detailview-header" data-theme="f" data-position="fixed">
     		<a  data-rel="back" data-direction="reverse" class="back-btn ui-button-back nav-button">tillbaka</a>
             <h1>Information</h1>
     	</div>
