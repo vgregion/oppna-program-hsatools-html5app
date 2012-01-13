@@ -808,11 +808,7 @@ hriv.app.init = function(){
 	hriv.CareUnits.init();
 	hriv.DutyUnits.init();	
 	hriv.EmergencyUnits.init();
-
-	hriv.EmergencyUnits.detail.init();
-	hriv.CareUnits.detail.init();
-	hriv.DutyUnits.detail.init();
-		
+	
 	setTimeout(function(){
 		hriv.app.print();
 	}, 500);	
@@ -833,5 +829,10 @@ hriv.app.init = function(){
 hriv.app.print = function(){
 	hriv.CareUnits.list.print();
 	hriv.DutyUnits.list.print();		
-	hriv.EmergencyUnits.list.print();	
+	hriv.EmergencyUnits.list.print();
+	
+	
+	hriv.EmergencyUnits.detail.init();
+	hriv.CareUnits.detail.init();
+	hriv.DutyUnits.detail.init();	
 };
