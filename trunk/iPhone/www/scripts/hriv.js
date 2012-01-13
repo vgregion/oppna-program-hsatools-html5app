@@ -70,16 +70,12 @@ hriv.EmergencyUnits.mode.list = hriv.classes.mode({mapId : "#listEmergencyUnits 
 
     // onSuccess Geolocation
 gmap.curentPosition.onSuccess = function (position) {
-    	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);
-    	hriv.app.init();
-    	console.log("pos success");
+    	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);    	    	
 };
 
     // onError Callback receives a PositionError object    
 gmap.curentPosition.onError = function (error) {
-    	gmap.curentPosition.set(57.6969943, 11.9865);
-    	hriv.app.init();
-    	console.log("pos error");
+    	gmap.curentPosition.set(57.6969943, 11.9865);      
 };
 
 
@@ -87,13 +83,14 @@ $(document).ready(function() {
 		
 	if(navigator.geolocation.getCurrentPosition(function(){}) === undefined){		
 		gmap.curentPosition.onError();
+		hriv.app.init();
 	}
 	
-	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError);	
+	navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, gmap.curentPosition.onError);	
 	navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });			
 
     $(document).bind("deviceready", function(){
-		navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError);		
+		navigator.geolocation.getCurrentPosition(function(){ gmap.curentPosition.onSuccess; hriv.app.init(); }, gmap.curentPosition.onError);		
 		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });
 	});	
 	
