@@ -407,12 +407,12 @@ hriv.classes.mode = function(spec){
 	};
 	
 	that.mapClick = function(){
-		$(conf.linkId).attr("href", conf.linkMap);
+		//$(conf.linkId).attr("href", conf.linkMap);
 		that.mapOn();		
 	};
 	
 	that.listClick = function(){
-		$(conf.linkId).attr("href", conf.linkList);
+		//$(conf.linkId).attr("href", conf.linkList);
 		that.listOn();
 	};
 	
