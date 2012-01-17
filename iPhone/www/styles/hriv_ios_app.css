@@ -116,6 +116,7 @@
 }
 
 /* list units */
+
 .ui-listview-units .ui-li-icon {
 	top: 1.5em;
 }
@@ -216,8 +217,7 @@
 }
 
 .ui-page-map .ui-footer {
-    /*bottom: 0px;
-    position: absolute;*/
+   height: 42px;
 }
 
 
