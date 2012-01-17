@@ -123,6 +123,28 @@
 	margin-left: 8px;
 }
 
+.ui-listview-units .ui-list-load-up {
+	 display: none;	
+}
+
+.ui-listview-units .ui-list-load-up,
+.ui-listview-units .ui-list-load-down {			
+ 	background : #C0C0C0;  	
+}
+
+.ui-listview-units .ui-list-load-up a,
+.ui-listview-units .ui-list-load-down a {
+	 /*text-align : center;
+	 height: 40px;*/	 
+}
+
+.ui-listview-units .ui-list-load  .ui-li-heading {
+	color: White;
+    margin-top: 0;
+    text-shadow: 0 1px 1px Black;
+}
+
+
 /* NavButtons - Start */
 .nav-button {
     padding: 0;
@@ -271,3 +293,18 @@
 }
 
 
+.ui-link {
+	border:none;
+}
+
+.ui-listbox .ui-li .ui-icon{ 
+	text-decoration: none; 
+		-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border: none;	
+	border-bottom: 0px;
+}
