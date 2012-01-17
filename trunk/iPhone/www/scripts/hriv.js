@@ -99,7 +99,15 @@ hriv.EmergencyUnits.mode.list = hriv.classes.mode({mapId : "#listEmergencyUnits 
 
 
     // onSuccess Geolocation
-gmap.curentPosition.onSuccess1 = function (position) { gmap.curentPosition.set(position.coords.latitude, position.coords.longitude); hriv.app.init(); };
+gmap.curentPosition.onSuccess1 = function (position) { 
+	if(position === undefined);
+		return false;
+		
+	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude); 
+	hriv.app.init();
+	
+	return true; 
+};
 gmap.curentPosition.onSuccess2 = function (position) { gmap.curentPosition.set(position.coords.latitude, position.coords.longitude); };
 
     // onError Callback receives a PositionError object    
@@ -108,18 +116,27 @@ gmap.curentPosition.onError2 = function (error) { gmap.curentPosition.set(57.696
 
 
 $(document).ready(function() {	
+	var pos = null, res;
 	
-	if(!navigator.geolocation){ 
-		gmap.curentPosition.onError1(); 
-		hriv.app.init();
-	}			
-	
-	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1, gmap.curentPosition.onError1);					
+	res = navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1, gmap.curentPosition.onError1);					
     
+    if(!res){
+    	gmap.curentPosition.onError();
+    }
+    
+	if(!navigator.geolocation){ 
+		gmap.curentPosition.onError();
+	
+	}
+	hriv.app.init();
+    	
     $(document).bind("deviceready", function(){
-    	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError1);
-		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError2, { frequency: 3000 });
-	});	
+    	//navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError1);
+		//navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError2, { frequency: 3000 });
+	});
+	
+			
+		
 });
 
 
