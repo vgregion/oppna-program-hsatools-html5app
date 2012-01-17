@@ -10,8 +10,6 @@ var jCall = function(){
 };
 
 
-
-
 function jsonp(url,callback,name, query)
 {                
     if (url.indexOf("?") > -1)
@@ -32,7 +30,6 @@ function jsonp(url,callback,name, query)
 
 
 
-
 $(document).bind( "mobileinit", function() {
 	// Make your jQuery Mobile framework configuration changes here!
 	$.support.cors = true;
@@ -41,17 +38,38 @@ $(document).bind( "mobileinit", function() {
 	$.mobile.touchOverflowEnabled = true;
 });
 
+
 $(document).ready(function(){
 	//$.support.cors = true;
 	//$.mobile.allowCrossDomainPages = true;	
 	$.mobile.fixedToolbars.setTouchToggleEnabled(false);
 	$.mobile.touchOverflowEnabled = true;
-})
-
+	
+	$("#main").bind("vmousemove", function(e){    			
+		e.preventDefault();
+	});
+	
+	$(".ui-page-map").bind("vmousemove", function(e){    			
+		e.preventDefault();
+	});
+		
+	$(".listview-header").bind("vmousemove", function(e){    			
+		e.preventDefault();
+	});
+	
+	$(".listview-footer").bind("vmousemove", function(e){    			
+		e.preventDefault();
+	});
+	
+	$('#detailview .detailview-header').bind("vmousemove", function(e){    			
+		e.preventDefault();
+	});    		
+});
 
 /*****************************************
 * Function setup & object initilization 
 *****************************************/
+
 hriv.CareUnits.map = gmap.map({pageId : '#mapCareUnits [data-icon="compass"]',   mapCanvasId: "map_canvas", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
 hriv.CareUnits.marker = gmap.marker();
 hriv.CareUnits.list = hriv.classes.listview({listId: "#lCareUnits"});
@@ -76,37 +94,30 @@ hriv.EmergencyUnits.mode.map = hriv.classes.mode({mapId : "#mapEmergencyUnits .u
 hriv.EmergencyUnits.mode.list = hriv.classes.mode({mapId : "#listEmergencyUnits .ui-button-map", listId : "#listEmergencyUnits .ui-button-list", linkId : "#linkEmergencyUnits", linkMap: "#mapEmergencyUnits" , linkList : "#listEmergencyUnits"});
 
 
-    // onSuccess Geolocation
-gmap.curentPosition.onSuccess1 = function (position) {
-	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);
-	hriv.app.init();
-	console.log("sucess");    	    	
-};
 
-gmap.curentPosition.onSuccess2 = function (position) {
-	gmap.curentPosition.set(position.coords.latitude, position.coords.longitude);
-	console.log("sucess");    	    	
-};
+
+    // onSuccess Geolocation
+gmap.curentPosition.onSuccess1 = function (position) { gmap.curentPosition.set(position.coords.latitude, position.coords.longitude); hriv.app.init(); };
+gmap.curentPosition.onSuccess2 = function (position) { gmap.curentPosition.set(position.coords.latitude, position.coords.longitude); };
 
     // onError Callback receives a PositionError object    
-gmap.curentPosition.onError1 = function (error) { gmap.curentPosition.set(57.6969943, 11.9865); };
+gmap.curentPosition.onError = function (error) { gmap.curentPosition.set(57.6969943, 11.9865); };
 gmap.curentPosition.onError2 = function (error) { gmap.curentPosition.set(57.6969943, 11.9865); };
 
 
 $(document).ready(function() {	
-		
-	if(navigator.geolocation.getCurrentPosition(function(){}) === undefined){		
-		gmap.curentPosition.set(57.6969943, 11.9865);
+	
+	if(!navigator.geolocation){ 
+		gmap.curentPosition.onError1(); 
 		hriv.app.init();
-	}
+	}			
 	
-	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1,gmap.curentPosition.onError1);				
-
+	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1, gmap.curentPosition.onError1);					
+    
     $(document).bind("deviceready", function(){
-		navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1,gmap.curentPosition.onError1);
-		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess, gmap.curentPosition.onError, { frequency: 3000 });
+    	navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError1);
+		navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError2, { frequency: 3000 });
 	});	
-	
 });
 
 
@@ -128,34 +139,25 @@ $('#mapCareUnits').live('pagecreate', function(event){
 		hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap());		
 	},1000);
 });
-
-
-/***
- * Page initializers CareUnits 
- **/
 $('#mapCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.map.mapOn();
 	setTimeout(function(){
 		hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());		
 	}, 1000);	
 });
-
 $('#mapCareUnits').live('pagehide', function(event){	
-	//hriv.CareUnits.mode.map.listOn();
 	gmap.currentInfoWindow.close();
-	//hriv.CareUnits.marker.clearMyPos();
+	hriv.CareUnits.marker.clearMyPos();
 });
-
 
 $('#listCareUnits').live('pagecreate', function(event){	
 	hriv.CareUnits.mode.list.init("list");
 });
-
 $('#listCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.list.listOn();
 });
 $('#listCareUnits').live('pagehide', function(event){
-	hriv.CareUnits.mode.list.mapOn();
+
 });
 
 
@@ -176,14 +178,12 @@ $('#mapDutyUnits' ).live('pagecreate', function(event){
 		hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap());	
 	},1000);		
 });
-
 $('#mapDutyUnits' ).live('pageshow', function(event){		
 	hriv.DutyUnits.mode.map.mapOn();	
 	setTimeout(function(){
 		hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
 	}, 1000);	
 });
-
 $('#mapDutyUnits' ).live('pagehide', function(event){			
 	gmap.currentInfoWindow.close();
 	hriv.DutyUnits.marker.clearMyPos();
@@ -193,10 +193,14 @@ $('#mapDutyUnits' ).live('pagehide', function(event){
 $('#listDutyUnits' ).live('pagecreate', function(event){
 	hriv.DutyUnits.mode.list.init("list");
 });
-
 $('#listDutyUnits' ).live('pageshow', function(event){
 	hriv.DutyUnits.mode.list.listOn();
 });
+$('#listDutyUnits').live('pagehide', function(event){
+
+});
+
+
 
 
 /***
@@ -215,14 +219,12 @@ $('#mapEmergencyUnits' ).live('pagecreate', function(event){
 		hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap());	
 	},1000);		
 });
-
 $('#mapEmergencyUnits' ).live('pageshow', function(event){		
 	hriv.EmergencyUnits.mode.map.mapOn();
 	setTimeout(function(){		
 		hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
 	}, 1000);		
 });
-
 $('#mapEmergencyUnits' ).live('pagehide', function(event){			
 	gmap.currentInfoWindow.close();
 	hriv.EmergencyUnits.marker.clearMyPos();
@@ -231,7 +233,10 @@ $('#mapEmergencyUnits' ).live('pagehide', function(event){
 $('#listEmergencyUnits' ).live('pagecreate', function(event){
 	hriv.EmergencyUnits.mode.list.init("list");
 });
-
 $('#listEmergencyUnits' ).live('pageshow', function(event){
 	hriv.EmergencyUnits.mode.list.listOn();
 });
+$('#listEmergencyUnits').live('pagehide', function(event){
+	
+});
+

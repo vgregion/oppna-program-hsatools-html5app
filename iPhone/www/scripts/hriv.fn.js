@@ -133,7 +133,7 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
  **/
  hriv.fn.calc.isOpen = function(hours){
 
-	var arrDays = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
+	var arrDays = ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"];
 	var arrOpen = [];
 	var monday, tuesday, wednesday, thursday, friday, saturday, sunday;	
 	
@@ -145,8 +145,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    monday.daynb = 0;
 	    monday.openingHour = (obj.monday[0].openingHour === null ? "00:00" : obj.monday[0].openingHour );
 	    monday.closingHour = obj.monday[0].closingHour;
-	    arrOpen[0] = monday;
-	}else{arrOpen[0] = null;}	
+	    arrOpen[1] = monday;
+	}else{arrOpen[1] = null;}	
 	
 	if(obj.hasOwnProperty('tuesday')){
 	    tuesday= obj.tuesday[0];
@@ -154,8 +154,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    tuesday.daynb = 1;
 	    tuesday.openingHour = (obj.tuesday[0].openingHour === null ? "00:00" : obj.tuesday[0].openingHour );
 	    tuesday.closingHour = obj.tuesday[0].closingHour;
-	    arrOpen[1] = tuesday;
-	}else{arrOpen[1] = null;}	
+	    arrOpen[2] = tuesday;
+	}else{arrOpen[2] = null;}	
 	
 	if(obj.hasOwnProperty('wednesday')){
 	    wednesday= obj.wednesday[0];
@@ -163,8 +163,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    wednesday.daynb = 2;
 	    wednesday.openingHour = (obj.wednesday[0].openingHour === null ? "00:00" : obj.wednesday[0].openingHour );
 	    wednesday.closingHour = obj.wednesday[0].closingHour;
-	    arrOpen[2] = wednesday;
-	}else{arrOpen[2] = null;}	
+	    arrOpen[3] = wednesday;
+	}else{arrOpen[3] = null;}	
 		
 	if(obj.hasOwnProperty('thursday')){
 	    thursday= obj.thursday[0];
@@ -172,8 +172,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    thursday.daynb = 3;
 	    thursday.openingHour = (obj.thursday[0].openingHour === null ? "00:00" : obj.thursday[0].openingHour );
 	    thursday.closingHour = obj.thursday[0].closingHour;	    
-	    arrOpen[3] = thursday;
-	}else{arrOpen[3] = null;}	
+	    arrOpen[4] = thursday;
+	}else{arrOpen[4] = null;}	
 		
 	if(obj.hasOwnProperty('friday')){
 	    friday= obj.friday[0];
@@ -181,8 +181,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    friday.daynb = 4;	    
 	    friday.openingHour = (obj.friday[0].openingHour === null ? "00:00" : obj.friday[0].openingHour );
 	    friday.closingHour = obj.friday[0].closingHour;	    
-	    arrOpen[4] = friday;
-	}else{arrOpen[4] = null;}	
+	    arrOpen[5] = friday;
+	}else{arrOpen[5] = null;}	
 
 	
 	if(obj.hasOwnProperty('saturday')){
@@ -191,8 +191,8 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    saturday.daynb = 5;	    
 	    saturday.openingHour = (obj.saturday[0].openingHour === null ? "00:00" : obj.saturday[0].openingHour );
 	    saturday.closingHour = obj.saturday[0].closingHour;	    
-	    arrOpen[5] = saturday;
-	}else{arrOpen[5] = null;}	
+	    arrOpen[6] = saturday;
+	}else{arrOpen[6] = null;}	
 	
 	if(obj.hasOwnProperty('sunday')){
 	    sunday= obj.sunday[0];
@@ -200,11 +200,11 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	    sunday.daynb = 6;	    
 	    sunday.openingHour = (obj.sunday[0].openingHour === null ? "00:00" : obj.sunday[0].openingHour );
 	    sunday.closingHour = obj.sunday[0].closingHour;	    
-	    arrOpen[6] = sunday;
-	}else{arrOpen[6] = null;}	
+	    arrOpen[0] = sunday;
+	}else{arrOpen[0] = null;}	
 
 	var d = new Date();	
-	var day = d.getDay() - 1;
+	var day = d.getDay();
 	day = arrOpen[day];
 	var result;
 	
@@ -238,7 +238,7 @@ hriv.fn.calc.time =  function (open1,close2) {
  **/
  hriv.fn.calc.openhours = function(hours){
 
-	var arrDays = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
+	var arrDays = ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"];
 	var arrOpen = [];
 	var arrOpenHours = [];
 	var monday, tuesday, wednesday, thursday, friday, saturday, sunday;	
@@ -361,110 +361,6 @@ hriv.fn.compare.distance = function (a,b) {
 
 
 
-/**
- * Load info from datastore to listarray
- * */
-hriv.fn.listview.load = function(obj, listItems, lat, lng){
-		
-		var arrOpenHours, openHours;
-		var openImg = "DotGray.png";
-		var isOpen = -1;
-		//Kontroll öppettider
-		if(Object.keys(obj.hsaSurgeryHours).length > 0){
-			isOpen = hriv.fn.calc.isOpen(obj.hsaSurgeryHours);			
-			openImg = (isOpen === 1) ? 'DotGreen.png' : 'DotGray.png' ;			
-		}	
-		
-		//Load listitem info
-		var dist = "";
-		if(!(obj.latitude < 1 ||  obj.longitude < 1)){
-			dist =  hriv.fn.calc.distance(lat, lng, obj.latitude, obj.longitude);
-			try { dist = Math.round(dist*10)/10; }catch(e){}
-		}else{ dist = 999999999; }				  
-		
-		listItems.push({
-			name : obj.name,			
-			locale : obj.locale,
-			hsaIdentity : obj.hsaIdentity,
-			distance: dist,
-			open: obj.hsaSurgeryHours,
-			openImg: openImg,
-			isOpen : isOpen
-		});					
-};
-
-
-/** 
- * Load info from datastore to details array
- * */
-hriv.fn.detailview.load = function(obj, listDetails) {
-			
-	var openHours ="", arrOpenHours = [], dropInHours = "", arrDropIn, teletime ="", arrTeleTime, age ="", operator ="";	
-		
-	//Kontroll öppettider
-	if(Object.keys(obj.hsaSurgeryHours).length > 0){
-		arrOpenHours = hriv.fn.calc.openhours(obj.hsaSurgeryHours);
-		
-		for(var i = 0; i < arrOpenHours.length; i++){			
-			openHours = openHours + '<div class="ui-li-desc">'+ arrOpenHours[i] + '</div>';			
-		}
-		
-	}else {
-		openHours =  '<div class="ui-li-desc">Uppgifter saknas</div>';
-	}
-	
-	//Kontroll dropintider
-	if(Object.keys(obj.hsaDropInHours).length > 0){
-		arrDropIn = hriv.fn.calc.openhours(obj.hsaDropInHours);
-		
-		for(var i = 0; i < arrDropIn.length ; i++){			
-			dropInHours = '<div class="ui-li-desc">' + arrDropIn[i] + '</div>';
-		}
-		
-	}else {
-		dropInHours = '<div class="ui-li-desc">Ingen dropin</div>';
-	}
-		
-
-	//Kontroll telefontider
-	if(Object.keys(obj.hsaTelephoneTime).length > 0){
-		arrTeleTime = hriv.fn.calc.openhours(obj.hsaTelephoneTime);
-		
-		for(var i = 0; i < arrTeleTime.length ; i++){			
-			teletime = '<div class="ui-li-desc">' + arrTeleTime[i] + '</div>';
-		}
-		
-	}else {
-		teletime = '<div class="ui-li-desc">Uppgifter saknas</div>';
-	}
-
-	//Kontroll ålder
-	(obj.hsaVisitingRuleAge === "0-99") ? age = "Alla åldrar" : age = obj.hsaVisitingRuleAge;  
-
-	//Kontroll operatör	
-	(obj.hsaManagementCodeText === "Landsting/Region") ? operator = "Offentlig vårdgivare" : operator = "Privat vårdgivare";
-	
-	
-	listDetails.push({
-		detailViewId : obj.hsaIdentity,
-		name : obj.name,			
-		locale : obj.locale,		
-		open : openHours,
-		dropin : dropInHours,
-		operatedBy : operator, 
-		age : age,
-		teltime : arrTeleTime, 
-		tel: obj.hsaPublicTelephoneNumber,
-		website : obj.labeleduri,
-		desc: obj.description,		
-		latitude : obj.latitude,
-		longitude :  obj.longitude,
-		title : obj.name
-	});	
-	
-};
-
-
 hriv.classes =  {};
 
 
@@ -543,7 +439,7 @@ hriv.classes.mode = function(spec){
  **/
 hriv.classes.detailview = function(spec){
 		
-	var that = {}, conf, pois = [];
+	var that = {}, conf, pois = [], _listDetails = [];
 	
 	conf = {
 		myListArr : null,
@@ -551,12 +447,13 @@ hriv.classes.detailview = function(spec){
 	};	
 	
 	$.extend(conf, spec);
+	conf.myListArr = _listDetails;
 			
 	that.init = function(){		
 		
-		$(conf.listId + " li").unbind('click');
-		$(conf.listId + " li").bind('click', function($e){			
-			$e.preventDefault();							
+		$(conf.listId + " li.ui-listItem").unbind('click');
+		$(conf.listId + " li.ui-listItem").bind('click', function($e){			
+			$e.preventDefault();						
 			that.print($(this).attr("data-viewid"));
 			$.mobile.changePage("#detailview");
 			return false;
@@ -564,6 +461,76 @@ hriv.classes.detailview = function(spec){
 		
 	};
 	
+	/** 
+	 * Load info from datastore to details array
+	 * */
+	that.load = function(obj, listDetails) {
+				
+		var openHours ="", arrOpenHours = [], dropInHours = "", arrDropIn, teletime ="", arrTeleTime, age ="", operator ="";	
+			
+		//Kontroll öppettider
+		if(Object.keys(obj.hsaSurgeryHours).length > 0){
+			arrOpenHours = hriv.fn.calc.openhours(obj.hsaSurgeryHours);
+			
+			for(var i = 0; i < arrOpenHours.length; i++){			
+				openHours = openHours + '<div class="ui-li-desc">'+ arrOpenHours[i] + '</div>';			
+			}
+			
+		}else {
+			openHours =  '<div class="ui-li-desc">Uppgifter saknas</div>';
+		}
+		
+		//Kontroll dropintider
+		if(Object.keys(obj.hsaDropInHours).length > 0){
+			arrDropIn = hriv.fn.calc.openhours(obj.hsaDropInHours);
+			
+			for(var i = 0; i < arrDropIn.length ; i++){			
+				dropInHours = '<div class="ui-li-desc">' + arrDropIn[i] + '</div>';
+			}
+			
+		}else {
+			dropInHours = '<div class="ui-li-desc">Ingen dropin</div>';
+		}
+			
+	
+		//Kontroll telefontider
+		if(Object.keys(obj.hsaTelephoneTime).length > 0){
+			arrTeleTime = hriv.fn.calc.openhours(obj.hsaTelephoneTime);
+			
+			for(var i = 0; i < arrTeleTime.length ; i++){			
+				teletime = '<div class="ui-li-desc">' + arrTeleTime[i] + '</div>';
+			}
+			
+		}else {
+			teletime = '<div class="ui-li-desc">Uppgifter saknas</div>';
+		}
+	
+		//Kontroll ålder
+		(obj.hsaVisitingRuleAge === "0-99") ? age = "Alla åldrar" : age = obj.hsaVisitingRuleAge;  
+	
+		//Kontroll operatör	
+		(obj.hsaManagementCodeText === "Landsting/Region") ? operator = "Offentlig vårdgivare" : operator = "Privat vårdgivare";
+		
+		
+		conf.myListArr.push({
+			detailViewId : obj.hsaIdentity,
+			name : obj.name,			
+			locale : obj.locale,		
+			open : openHours,
+			dropin : dropInHours,
+			operatedBy : operator, 
+			age : age,
+			teltime : arrTeleTime, 
+			tel: obj.hsaPublicTelephoneNumber,
+			website : obj.labeleduri,
+			desc: obj.description,		
+			latitude : obj.latitude,
+			longitude :  obj.longitude,
+			title : obj.name
+		});	
+		
+	};
+		
 	that.print = function(hsaId){				
 		
 		var str, idx, nativeDirectionsLink;	
@@ -636,58 +603,137 @@ hriv.classes.detailview = function(spec){
 
 
 /**
- * Class listview
+ * Class list
  * */
-hriv.classes.listview = function(spec){
-	var that = {}, conf = {}; 
+hriv.classes.list = function(spec){
+	var that = {}, conf, _listItems = [];
 	
 	conf = {
-		listId : null, 
-		myListArr : []	
+		listId : null,
+		start : 0,
+		stop : 0
 	};	
+	$.extend(conf, spec);			
 	
-	$.extend(conf, spec);
 	
-	that.sortOnDistance = function(){
-		conf.myListArr.sort(hriv.fn.compare.distance);		
+	that.load = function(obj, lat, lng){
+		
+		var openHours, openImg = "DotGray.png", isOpen = -1;
+		
+		//Kontroll öppettider
+		if(Object.keys(obj.hsaSurgeryHours).length > 0){
+			isOpen = hriv.fn.calc.isOpen(obj.hsaSurgeryHours);			
+			openImg = (isOpen === 1) ? 'DotGreen.png' : 'DotGray.png' ;			
+		}	
+		
+		//Load listitem info
+		var dist = "";
+		if(!(obj.latitude < 1 ||  obj.longitude < 1)){
+			dist =  hriv.fn.calc.distance(lat, lng, obj.latitude, obj.longitude);
+			try { dist = Math.round(dist*10)/10; }catch(e){}
+		}else{ dist = 999999999; }				  
+		
+		_listItems.push({
+			name : obj.name,			
+			locale : obj.locale,
+			hsaIdentity : obj.hsaIdentity,
+			distance: dist,
+			open: obj.hsaSurgeryHours,
+			openImg: openImg,
+			isOpen : isOpen
+		});						
 	};
-	 
-	that.print = function(){
 			
-		that.sortOnDistance();
+	that.print2 = function(itms){
+		
+		var strDistance =  "", bolShow = false;
+	
+		if(itms < _listItems.length){
+			conf.stop = itms;
+			bolShow = true;
+		}else{
+			conf.stop = _listItems.length;			
+		}
+										
+		for(var i = 0; i < conf.stop; i++){
 			
-		var strDistance =  "";				
-		for(var i = 0; i < conf.myListArr.length; i++){
+			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
 			
-			strDistance = (conf.myListArr[i].distance === 999999999) ? "Avstånd saknas, " + conf.myListArr[i].locale : conf.myListArr[i].distance + ' km, '+ conf.myListArr[i].locale;			
-			
-			$(conf.listId).append('<li data-icon="false" data-viewid="' + conf.myListArr[i].hsaIdentity + '"><a href="#detailview">' +
-								  '<img src="images/' + conf.myListArr[i].openImg  + '" alt="" class="ui-li-icon">' +
-								  '<h3>' + conf.myListArr[i].name + '</h3>' +
+			$(conf.listId).first().append('<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">' +
+								  '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">' +
+								  '<h3>' + _listItems[i].name + '</h3>' +
 								  '<p>' + strDistance + '</p>' + 							  								  
 								  '</a></li>');
-		}			
+		}
+		
+		if(bolShow){
+			$(conf.listId).first().append('<li data-icon="false" class="ui-list-load-down"><a><h3>Gå ner</h3></a></li>');
+		};
+		
+	};
+	
+	that.sortOnDistance = function(){
+		_listItems.sort(hriv.fn.compare.distance);				
+	};
+	
+	that.get = function(){
+		return _listItems;
+	};
+	
+	that.set = function(val){
+		_listItems = val;		
+	};
+	
+	that.update = function(start, stop){
+		var list = [];
+	
+		(stop < _listItems.length) ? stop : (stop = _listItems.length);
+		$(conf.listId + " li.ui-listItem").unbind('click');
+	
+		for(var i = start; i < stop; i++){
+
+			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
+
+			list.push('<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">' +
+								  '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">' +
+								  '<h3>' + _listItems[i].name + '</h3>' +
+								  '<p>' + strDistance + '</p>' + 							  								  
+								  '</a></li>');
+		  
+		}
+		
+		$(conf.listId + " li.ui-listItem").each(function(index) {
+		  $(this).replaceWith(list[index]);
+		});			
+		
+		$(conf.listId).listview('refresh');
+		
+		$(conf.listId + " li.ui-listItem").bind('click', function($e){			
+			$e.preventDefault();						
+			that.print($(this).attr("data-viewid"));
+			$.mobile.changePage("#detailview");
+			return false;
+		});	
 	};
 	
 	that.isOpen = function(){
 		
-		var $li = $(conf.listId +" li");
+		var $li = $(conf.listId +" li.ui-listItem");
 		
 		//Kontroll öppettider		
-		for(var i = 0; i < conf.myListArr.length; i++){
-			if(Object.keys(conf.myListArr[i].open).length > 0){
-				var open = hriv.fn.calc.isOpen(conf.myListArr[i].open);
+		for(var i = conf.start; i < conf.stop; i++){
+			if(Object.keys(_listItems[i].open).length > 0){
+				var open = hriv.fn.calc.isOpen(_listItems[i].open);
 
-				if(open !== conf.myListArr[i].isOpen){
-									
+				if(open !== _listItems[i].isOpen){									
 					switch(open){
 						case 1:
 							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGreen.png";
-							conf.myListArr[i].isOpen = -1;
+							_listItems[i].isOpen = -1;
 						break;							
 						case -1:
 							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGray.png";
-							conf.myListArr[i].isOpen = 1;
+							_listItems[i].isOpen = 1;
 						break;						
 					}					
 				}					
@@ -695,9 +741,77 @@ hriv.classes.listview = function(spec){
 		} 
 		
 	};
+	
+	return that;	
+};
+
+/**
+ * Class panel
+ * */
+
+/**
+ * Class listview
+ * */
+hriv.classes.listview = function(spec){
+	var that, conf = {}, list, panel; 
+	
+	conf = {
+		listId : null,
+		listLength : 0,
+		listStart : 0,
+		listStop : 0,
+		listPadding : 0						
+	};	
+	$.extend(conf, spec);		
+	that = hriv.classes.list(spec);
 		
-	that.set = function(myListArr){
-		conf.myListArr = myListArr;
+	that.print = function(itms){
+		conf.listStop = itms;
+		conf.listPadding = itms;
+		conf.listLength = that.get().length;
+		that.sortOnDistance();
+		that.print2(itms);
+		
+		$(conf.listId + " .ui-list-load-up").on("click", that.upClick);
+		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
+	};		
+		
+	that.upClick = function(){
+		$.mobile.showPageLoadingMsg();
+		var res  = conf.listStart - conf.listPadding; 
+		
+		if( res > 0){
+			conf.listStart = (conf.listStart - conf.listPadding);
+		}else {
+			conf.listStart = 0;
+			$(conf.listId + " .ui-list-load-up").hide();
+		}
+		
+		conf.listStop = (conf.listStop - conf.listPadding) >= conf.listPadding ? (conf.listStop - conf.listPadding) :  conf.listPadding;
+		that.update(conf.listStart, conf.listStop);
+		
+		setTimeout(function(){
+			$.mobile.hidePageLoadingMsg();
+		},2000);
+		
+		return false;
+	};
+	
+	that.downClick = function(){		
+		$.mobile.showPageLoadingMsg();						
+		
+		conf.listStart = conf.listStart + conf.listPadding;
+		conf.listStop = conf.listStop + conf.listPadding;
+		
+	
+		that.update(conf.listStart, conf.listStop);			
+		
+		setTimeout(function(){
+			$.mobile.hidePageLoadingMsg();					
+			$(conf.listId + " .ui-list-load-up").show();				   
+		},2000);
+		
+		return false;
 	};
 	
 	return that;
@@ -713,11 +827,67 @@ hriv.CareUnits.getData = function(){
 /**
  * Careunit section
  * */
+
 hriv.CareUnits.init = function(){
+	hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
+};
+
+
+/**
+ * DutyUnits - Utility function
+ * Load pois from datastore to marker object
+ * */
+hriv.DutyUnits.init = function(){
+	hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
+};
+
+/**
+ * EmergencyUnits - Utility function
+ * Load pois from datastore to marker object
+ * */
+hriv.EmergencyUnits.init = function(){
+	hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);
+};
+
+
+
+/**
+ * Initilize HRIV javascript application framework
+ * */
+hriv.app.state = (function(){
+	
+	var init = false;
+	
+	return{
+		isInit : function(){
+			return init;
+			
+		},
+		set : function(val){
+			init = val;
+		}		
+	};
+	
+})();
+
+
+hriv.app.settings = (function(){
+	
+	var numPrintListItems = 30;
+	
+	return {
+		printListItems : function(){
+			return numPrintListItems;	
+		}
+	};
+	
+})();
+
+hriv.app.load = function(refData, refObj){
 	
 	//Loads pois to marker object
 	var pois = [], listItems = [], listDetails = [], 
-		data = hriv.dataStore.CareUnits.careUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();	
+		data = refData, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();	
 		
 	for(var i = 0; i < data.length; i++){
 		
@@ -729,89 +899,29 @@ hriv.CareUnits.init = function(){
 		});
 		
 		//Load list items
-		hriv.fn.listview.load(data[i], listItems, lat, lng);
+		refObj.list.load(data[i], lat, lng);
 		
 		//Load detail items
-		hriv.fn.detailview.load(data[i], listDetails);
+		refObj.detail.load(data[i], listDetails);
 	}
-		
-	hriv.CareUnits.marker.setPOIS(pois);
-	hriv.CareUnits.list.set(listItems);	
-	hriv.CareUnits.detail.set(listDetails);		
+
+	refObj.marker.setPOIS(pois);	
+	
 };
 
-/**
- * DutyUnits - Utility function
- * Load pois from datastore to marker object
- * */
-hriv.DutyUnits.init = function(){
-	
-	//Loads pois to marker object
-	var pois = [], listItems = [], listDetails = [],
-		data = hriv.dataStore.DutyUnits.dutyUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();
-	
-	for(var i = 0; i < data.length; i++){
-		pois.push({
-			Latitude : data[i].latitude,
-			Longitude :  data[i].longitude,
-			Title : data[i].name
-		});		
-
-		//Load list items
-		hriv.fn.listview.load(data[i], listItems, lat, lng);
-		
-		//Load detail items		
-		hriv.fn.detailview.load(data[i], listDetails);
-			
-	}
-		
-	hriv.DutyUnits.marker.setPOIS(pois);
-	hriv.DutyUnits.list.set(listItems);	
-	hriv.DutyUnits.detail.set(listDetails);			
-};
-
-/**
- * EmergencyUnits - Utility function
- * Load pois from datastore to marker object
- * */
-hriv.EmergencyUnits.init = function(){
-	
-	//Loads pois to marker object
-	var pois = [], listItems = [], listDetails = [],
-		data = hriv.dataStore.EmergencyUnits.emergencyUnits, lat = gmap.curentPosition.latitude(), lng = gmap.curentPosition.longitude();	
-	
-	for(var i = 0; i < data.length; i++){
-		pois.push({
-			Latitude : data[i].latitude,
-			Longitude :  data[i].longitude,
-			Title : data[i].name
-		});		
-		
-		//Load list items
-		hriv.fn.listview.load(data[i], listItems, lat, lng);
-		
-		//Load detail items
-		hriv.fn.detailview.load(data[i], listDetails);			
-	}
-		
-	hriv.EmergencyUnits.marker.setPOIS(pois);
-	hriv.EmergencyUnits.list.set(listItems);
-	hriv.EmergencyUnits.detail.set(listDetails);			
-};
-
-
-/**
- * Initilize HRIV javascript application framework
- * */
 hriv.app.init = function(){
+	
+	//Check if app is initilized
+	if(hriv.app.state.isInit()){ return;}
+	hriv.app.state.set(true);	
 	
 	hriv.CareUnits.init();
 	hriv.DutyUnits.init();	
 	hriv.EmergencyUnits.init();
 	
-	setTimeout(function(){
+	setTimeout(function(){		
 		hriv.app.print();
-	}, 500);	
+	}, 700);	
 	
 	setInterval(function(){
 		hriv.DutyUnits.list.isOpen();
@@ -823,14 +933,15 @@ hriv.app.init = function(){
 	setInterval(function(){
 		hriv.CareUnits.list.isOpen();
 	},720000);
-			
+		
 };
 
 hriv.app.print = function(){
-	hriv.CareUnits.list.print();
-	hriv.DutyUnits.list.print();		
-	hriv.EmergencyUnits.list.print();
+	var itms = hriv.app.settings.printListItems();
 	
+	hriv.CareUnits.list.print(itms);
+	hriv.DutyUnits.list.print(itms);		
+	hriv.EmergencyUnits.list.print(itms);	
 	
 	hriv.EmergencyUnits.detail.init();
 	hriv.CareUnits.detail.init();

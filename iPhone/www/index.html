@@ -10,16 +10,7 @@
 	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
 	-->
 	<!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
-	<script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>
-	<script type="text/javascript">
-	// If you want to prevent dragging, uncomment this section
-	function preventBehavior(e) 
-	{ 
-      //e.preventDefault(); 
-    }
-	//document.addEventListener("touchmove", preventBehavior, false);
-    </script>
-    
+	<script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>    
     <script type="text/javascript" charset="utf-8" src="scripts/phonegap.js"></script>
     
     <link href="framework/jquery.mobile-1.0.css" rel="stylesheet" type="text/css" />
@@ -28,41 +19,15 @@
     
     <script src="framework/jquery-1.7.1.js" type="text/javascript"></script>
     <script src="framework/jquery.mobile-1.0.js" type="text/javascript"></script>
+    
       
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>    	
 	            
 	<script src="scripts/map.js" type="text/javascript"></script>          
     <script src="scripts/hriv.fn.js" type="text/javascript"></script>
 	<script src="scripts/data.js" type="text/javascript"></script>    
-	<script src="scripts/hriv.js" type="text/javascript"></script>  
-    <script>
-    	
-    	$(document).ready(function(){
-    		
-    		
-    		$("#main").bind("vmousemove", function(e){    			
-    			e.preventDefault();
-    		});
-    		
-    		$(".ui-page-map").bind("vmousemove", function(e){    			
-    			e.preventDefault();
-    		});
-    		
-    		
-    		$(".listview-header").bind("vmousemove", function(e){    			
-    			e.preventDefault();
-    		});
-    		
-    		$(".listview-footer").bind("vmousemove", function(e){    			
-    			e.preventDefault();
-    		});
-    		
-    		$('#detailview .detailview-header').bind("vmousemove", function(e){    			
-    			e.preventDefault();
-    		});    		
-    	});
-    	
-    </script>
+	<script src="scripts/hriv.js" type="text/javascript"></script> 
+	
 </head>
 <body>
 
@@ -127,7 +92,8 @@
         </div>
 
         <div data-role="content">                
-        	<ul id="lCareUnits"  class="ui-listview-units" data-role="listview" data-theme="d">                 		
+        	<ul id="lCareUnits"  class="ui-listview-units" data-role="listview" data-theme="d"> 
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		     		                		
             </ul>        	           	
         </div>
         
@@ -161,7 +127,8 @@
         </div>
 
         <div data-role="content">                
-        	<ul id="ldutyUnits" class="ui-listview-units" data-role="listview" data-theme="d">            	
+        	<ul id="ldutyUnits" class="ui-listview-units" data-role="listview" data-theme="d">  
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		
             </ul>        	           	
         </div>
         
@@ -196,7 +163,8 @@
         </div>
 
         <div data-role="content">                
-        	<ul id="lemergencyUnits" class="ui-listview-units" data-role="listview" data-theme="d">            	
+        	<ul id="lemergencyUnits" class="ui-listview-units" data-role="listview" data-theme="d">
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		        		            
             </ul>        	           	
         </div>
         
