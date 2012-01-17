@@ -75,7 +75,9 @@ hriv.CareUnits.marker = gmap.marker();
 hriv.CareUnits.list = hriv.classes.listview({listId: "#lCareUnits"});
 hriv.CareUnits.detail = hriv.classes.detailview({listId: "#lCareUnits"});
 hriv.CareUnits.mode.map = hriv.classes.mode({mapId : "#mapCareUnits .ui-button-map", listId : "#mapCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
-hriv.CareUnits.mode.list = hriv.classes.mode({mapId : "#listCareUnits .ui-button-map", listId : "#listCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
+hriv.CareUnits.mode.list = hriv.classes.mode({mapId : "#listCareUnits .ui-button-map", 
+											  listId : "#listCareUnits .ui-button-list", linkId : "#linkCareUnits", 
+										  	  linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
 
 
 hriv.DutyUnits.map = gmap.map({pageId : '#mapDutyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_DutyUnits", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
