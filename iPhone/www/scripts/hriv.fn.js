@@ -646,7 +646,7 @@ hriv.classes.list = function(spec){
 			
 	that.print2 = function(itms){
 		
-		var strDistance =  "", bolShow = false;
+		var strDistance =  "", bolShow = false, strList ="";
 	
 		if(itms < _listItems.length){
 			conf.stop = itms;
@@ -654,22 +654,30 @@ hriv.classes.list = function(spec){
 		}else{
 			conf.stop = _listItems.length;			
 		}
-										
+		
+		//strList = '<ul data-inset="true" data-role="listview" data-theme="d">';				
+		strList = strList + '<li data-icon="false" class="ui-list-load-up"><a><h3>Gå upp</h3></a></li>';
+							
 		for(var i = 0; i < conf.stop; i++){
 			
 			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
 			
-			$(conf.listId).first().append('<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">' +
-								  '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">' +
-								  '<h3>' + _listItems[i].name + '</h3>' +
-								  '<p>' + strDistance + '</p>' + 							  								  
-								  '</a></li>');
+			strList = strList + '<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">';
+			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
+			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
+			strList = strList + '<p>' + strDistance + '</p>';					  								  
+			strList = strList + '</a></li>';
 		}
 		
 		if(bolShow){
-			$(conf.listId).first().append('<li data-icon="false" class="ui-list-load-down"><a><h3>Gå ner</h3></a></li>');
-		};
+			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Gå ner</h3></a></li>';
+		};		
 		
+		//strList = strList + '</ul>';
+		$(conf.listId).append(strList);		
+		//$(conf.listId).listview();
+		//$(conf.listId).listview('refresh');
+		$(conf.listId).trigger("create");
 	};
 	
 	that.sortOnDistance = function(){

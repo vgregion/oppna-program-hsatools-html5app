@@ -165,7 +165,6 @@ $('#listCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.list.listOn();
 });
 $('#listCareUnits').live('pagehide', function(event){
-
 });
 
 

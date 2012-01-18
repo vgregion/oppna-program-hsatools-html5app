@@ -97,7 +97,7 @@ gmap.bubble = function(refMap){
 gmap.marker = function(){
 	
 	var that = {}, markers = [], focusOnCurrentPosition, 
-	mapPois = [], map, bubble, idxMyPos;
+	mapPois = [], map, bubble, idxMyPos = null;
 		
 	/**
 	 * Intitialize
@@ -110,8 +110,7 @@ gmap.marker = function(){
 	
 	that.addPosMarker = function(lat, lng, title, bubbleContent, image, bubbleType, animate){
 		idxMyPos = markers.length;
-		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, animate);
-				
+		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, animate);				
 	};
 	
 	/**
@@ -163,7 +162,9 @@ gmap.marker = function(){
    };	
 	
 	that.clearMyPos = function(){		
-		that.clearMarker(idxMyPos);
+		if(idxMyPos !== null){
+			that.clearMarker(idxMyPos);
+		}
 	};
 	
 	/*
@@ -283,24 +284,22 @@ gmap.map = function(spec) {
             return;
 		}
 		
-    /* Some orientation changes leave the scroll position at something
-     * that isn't 0,0. This is annoying for user experience. */
-    scroll(0, 0);
+    	/* Some orientation changes leave the scroll position at something
+     	* that isn't 0,0. This is annoying for user experience. */
+    	scroll(0, 0);
 
-    /* Calculate the geometry that our content area should take */
-    var header = $(".header:visible");
-    //var footer = $(".footer:visible");    
-    var content = $(".content:visible");
-    var viewport_height = $(document).height();
+    	/* Calculate the geometry that our content area should take */
+    	var header = $(".header:visible");
+    	//var footer = $(".footer:visible");    
+    	var content = $(".content:visible");
+    	var viewport_height = $(document).height();    
+    	var content_height = viewport_height - header.outerHeight(); // - footer.outerHeight();
     
-    var content_height = viewport_height - header.outerHeight(); // - footer.outerHeight();
-    
-    /* Trim margin/border/padding height */
-    content_height -= (content.outerHeight() - content.height());
+    	/* Trim margin/border/padding height */
+    	content_height -= (content.outerHeight() - content.height());
     		
 		$('#' + config.mapCanvasId).height(content_height);
-        //$('#' + config.mapCanvasId).height($(window).height() - $(config.headerSelector).height() - $(config.footerSelector).height());
-        //$('#' + config.mapCanvasId).height($(window).height() - 42 - 44);
+    	//$('#' + config.mapCanvasId).height($(window).height() - $(config.headerSelector).height() - $(config.footerSelector).height());
         google.maps.event.trigger(this.map, 'resize');
 
         this.mapIsResized = true;
@@ -308,13 +307,14 @@ gmap.map = function(spec) {
     
         // Fires every time jQuery Mobile shows the map page
     that.show = function(lat, lng) {
-
-		that.showCurrentPosition();
 				
         var myLatlng = new google.maps.LatLng(lat, lng);
         this.map.panTo(myLatlng);                            
         
         google.maps.event.trigger(this.map, 'resize');
+        //setTimeout(function(){
+		//	that.showCurrentPosition();        	
+        //},500);
     };
     
     that.zoom = function(){
