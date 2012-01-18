@@ -912,7 +912,9 @@ hriv.app.load = function(refData, refObj){
 hriv.app.init = function(){
 	
 	//Check if app is initilized
-	if(hriv.app.state.isInit()){ return;}
+	if(hriv.app.state.isInit()){ 
+		return;
+	}
 	hriv.app.state.set(true);	
 	
 	hriv.CareUnits.init();

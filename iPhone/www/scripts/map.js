@@ -10,13 +10,13 @@ var gmap = {};
  * 			set
  **/
 gmap.curentPosition = (function(){
-	var lat, lng, marker = null;
+	var lat = null, lng = null, marker = null;
 	     
     return {    	     
 		get : function() {		
 			
 			if(lat === null || lng === null){
-		     throw "For showing current position lat and lang must be set";  
+		     	return null;  
 			}
 			
 			return {latitude : lat, longitude: lng};		
