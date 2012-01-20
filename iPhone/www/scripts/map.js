@@ -64,24 +64,23 @@ gmap.bubble = function(refMap){
 	/**
 	 *Add bubble to map
 	 */
-	that.addBubble = function(marker, title, bubbleContent, lat, lng, bubbleType) {
+	that.addBubble = function(marker, title, bubbleContent, lat, lng, bubbleType, link) {
 
-        var infowindow = new google.maps.InfoWindow();
-
+        var infowindow = new google.maps.InfoWindow(), slink;
+		
         google.maps.event.addListener(marker, 'click', function() {
 			
 			gmap.currentInfoWindow.close();
             
             var content = '<div id="content">' +
-                            '<b>' + title + '</b>' +                            
+                            '<b>' + title + '</b></br>'+((link !== null) ? '<a rel=external href="' + link  + '">Mer info</a>' : "") +''+             			             
                         '</div>';
 
             infowindow.content = '<div style="display: block;">' + content + '</div>';            
             infowindow.open(this.map, marker);
             
-            gmap.currentInfoWindow.set(infowindow);            
-        });
-
+            gmap.currentInfoWindow.set(infowindow);   
+        });        
     };    
 
 	return that;
@@ -116,7 +115,7 @@ gmap.marker = function(){
 	/**
 	 * addMarker
 	 */
-    that.addMarker = function(lat, lng, title, bubbleContent, image, bubbleType, animate) {        
+    that.addMarker = function(lat, lng, title, bubbleContent, image, bubbleType, link) {        
 
         var latlng = new google.maps.LatLng(lat, lng),options, marker;
         
@@ -137,7 +136,7 @@ gmap.marker = function(){
         markers.push(marker);
 
 		if (bubbleType !== undefined) { 
-			this.bubble.addBubble(marker, title, bubbleContent, lat, lng, bubbleType); 
+			this.bubble.addBubble(marker, title, bubbleContent, lat, lng, bubbleType, link); 
 		}
 	};
 	
@@ -157,7 +156,8 @@ gmap.marker = function(){
 		
             that.addMarker(mapPois[i].Latitude, mapPois[i].Longitude, 
 						   mapPois[i].Title, mapPois[i].BubbleContent, 
-						   mapPois[i].Image, 2);						   
+						   mapPois[i].Image, 2, mapPois[i].link);
+		   				   
 		}       
    };	
 	
@@ -233,7 +233,9 @@ gmap.map = function(spec) {
         mapCanvasId: null,
         headerSelector: null,
         footerSelector: null,
-        zoomIn : false        
+        zoomIn : false,
+        linkMap : null, 
+        page : null   
     };	
 	
     that.bubbleType = {
@@ -265,8 +267,6 @@ gmap.map = function(spec) {
 		
 		config.mapCenterLat = spec.mapCenterLat;
 		config.mapCenterLng = spec.mapCenterLng;	
-		
-		that.resizeMap();		
 		 
 		config.mapIsInitialized = true;
 		
@@ -278,6 +278,13 @@ gmap.map = function(spec) {
 		return this.map;		
 	};
 	
+	that.getLink = function(){
+		return config.linkMap;		
+	};
+	
+	that.getPage = function(){
+		return config.page;
+	};
 
     that.resizeMap = function() {
         if (this.mapIsResized){
@@ -311,10 +318,7 @@ gmap.map = function(spec) {
         var myLatlng = new google.maps.LatLng(lat, lng);
         this.map.panTo(myLatlng);                            
         
-        google.maps.event.trigger(this.map, 'resize');
-        //setTimeout(function(){
-		//	that.showCurrentPosition();        	
-        //},500);
+        google.maps.event.trigger(this.map, 'resize');        
     };
     
     that.zoom = function(){

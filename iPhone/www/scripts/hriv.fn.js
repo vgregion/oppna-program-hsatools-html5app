@@ -103,6 +103,18 @@ var hriv = {
 ************************/
 
 
+hriv.fn.getQueryStringParamters = function(name)
+{
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+};
+
 /**
  * Calculate distance between two sets of lat lang coordinates 
  **/
@@ -453,12 +465,11 @@ hriv.classes.detailview = function(spec){
 		
 		$(conf.listId + " li.ui-listItem").unbind('click');
 		$(conf.listId + " li.ui-listItem").bind('click', function($e){			
-			$e.preventDefault();						
-			that.print($(this).attr("data-viewid"));
-			$.mobile.changePage("#detailview");
-			return false;
-		});		
-		
+			//$e.preventDefault();						
+			//that.print($(this).attr("data-viewid"));
+			//$.mobile.changePage("#detailview");
+			//return false;
+		});				
 	};
 	
 	/** 
@@ -616,7 +627,7 @@ hriv.classes.list = function(spec){
 	$.extend(conf, spec);			
 	
 	
-	that.load = function(obj, lat, lng){
+	that.load = function(refObj, obj, lat, lng){
 		
 		var openHours, openImg = "DotGray.png", isOpen = -1;
 		
@@ -640,7 +651,8 @@ hriv.classes.list = function(spec){
 			distance: dist,
 			open: obj.hsaSurgeryHours,
 			openImg: openImg,
-			isOpen : isOpen
+			isOpen : isOpen, 
+			link : refObj.map.getLink() +'?page='+ refObj.map.getPage() +'&id='+ obj.hsaIdentity
 		});						
 	};
 			
@@ -662,7 +674,7 @@ hriv.classes.list = function(spec){
 			
 			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
 			
-			strList = strList + '<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">';
+			strList = strList + '<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a rel=external href="' + _listItems[i].link + '">';
 			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
 			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
 			strList = strList + '<p>' + strDistance + '</p>';					  								  
@@ -903,11 +915,13 @@ hriv.app.load = function(refData, refObj){
 		pois.push({
 			Latitude : data[i].latitude,
 			Longitude :  data[i].longitude,
-			Title : data[i].name
+			Title : data[i].name,
+			hsaIdentity : data[i].hsaIdentity,
+			link : refObj.map.getLink() +'?page='+ refObj.map.getPage() +'&id='+ data[i].hsaIdentity 
 		});
 		
 		//Load list items
-		refObj.list.load(data[i], lat, lng);
+		refObj.list.load(refObj, data[i], lat, lng);
 		
 		//Load detail items
 		refObj.detail.load(data[i], listDetails);
