@@ -70,17 +70,15 @@ $(document).ready(function(){
 * Function setup & object initilization 
 *****************************************/
 
-hriv.CareUnits.map = gmap.map({pageId : '#mapCareUnits [data-icon="compass"]',   mapCanvasId: "map_canvas", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
+hriv.CareUnits.map = gmap.map({pageId : '#mapCareUnits [data-icon="compass"]', mapCanvasId: "map_canvas", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer", linkMap : "#detailview", page : "CareUnits"});
 hriv.CareUnits.marker = gmap.marker();
 hriv.CareUnits.list = hriv.classes.listview({listId: "#lCareUnits"});
 hriv.CareUnits.detail = hriv.classes.detailview({listId: "#lCareUnits"});
 hriv.CareUnits.mode.map = hriv.classes.mode({mapId : "#mapCareUnits .ui-button-map", listId : "#mapCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
-hriv.CareUnits.mode.list = hriv.classes.mode({mapId : "#listCareUnits .ui-button-map", 
-											  listId : "#listCareUnits .ui-button-list", linkId : "#linkCareUnits", 
-										  	  linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
+hriv.CareUnits.mode.list = hriv.classes.mode({mapId : "#listCareUnits .ui-button-map", listId : "#listCareUnits .ui-button-list", linkId : "#linkCareUnits", linkMap: "#mapCareUnits" , linkList : "#listCareUnits" });
 
 
-hriv.DutyUnits.map = gmap.map({pageId : '#mapDutyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_DutyUnits", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
+hriv.DutyUnits.map = gmap.map({pageId : '#mapDutyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_DutyUnits", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer", linkMap : "#detailview", page : "DutyUnits"});
 hriv.DutyUnits.marker = gmap.marker();
 hriv.DutyUnits.list = hriv.classes.listview({listId: "#ldutyUnits"});
 hriv.DutyUnits.detail = hriv.classes.detailview({listId: "#ldutyUnits"});
@@ -88,7 +86,7 @@ hriv.DutyUnits.mode.map = hriv.classes.mode({mapId : "#mapDutyUnits .ui-button-m
 hriv.DutyUnits.mode.list = hriv.classes.mode({mapId : "#listDutyUnits .ui-button-map", listId : "#listDutyUnits .ui-button-list", linkId : "#linkDutyUnits", linkMap: "#mapDutyUnits" , linkList : "#listDutyUnits" });
 
 
-hriv.EmergencyUnits.map = gmap.map({pageId : '#mapEmergencyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_Emergency", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer"});
+hriv.EmergencyUnits.map = gmap.map({pageId : '#mapEmergencyUnits [data-icon="compass"]', mapCanvasId: "map_canvas_Emergency", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer", linkMap : "#detailview", page : "EmergencyUnits"});
 hriv.EmergencyUnits.marker = gmap.marker();
 hriv.EmergencyUnits.list = hriv.classes.listview({listId: "#lemergencyUnits"});
 hriv.EmergencyUnits.detail = hriv.classes.detailview({listId: "#lemergencyUnits"});
@@ -123,6 +121,22 @@ $(document).ready(function() {
 	
 	hriv.app.init();
     	
+	hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});								   
+	hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});		
+		
+	hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});								   	   
+	hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
+	
+	hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});
+	hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
+		
+	setTimeout(function(){
+		hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap());
+		hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap());			
+		hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap());	
+	},400);
+	
+	
     $(document).bind("deviceready", function(){    	
 		//navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });
 	});		
@@ -133,24 +147,18 @@ $(document).ready(function() {
 /************************
 * Page initializers CareUnits 
 ************************/
+
 $('#mapCareUnits').live('pagecreate', function(event){	
-	
-	hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, 
-								   mapCenterLat : gmap.curentPosition.latitude(), 
-								   mapCenterLng : gmap.curentPosition.longitude()});
-								   
-	hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});
-	
 	hriv.CareUnits.mode.map.init("map");
-	
-	setTimeout(function(){
-		hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap());		
-	},1000);
 });
+
 $('#mapCareUnits').live('pageshow', function(event){
 	hriv.CareUnits.mode.map.mapOn();
+	hriv.CareUnits.map.resizeMap();
+	hriv.CareUnits.map.showCurrentPosition();  
+	
 	setTimeout(function(){
-		hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());		
+		hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());				
 	}, 1000);	
 });
 $('#mapCareUnits').live('pagehide', function(event){	
@@ -172,23 +180,16 @@ $('#listCareUnits').live('pagehide', function(event){
 /***
  * Page initializers DutyUnits 
  **/
-$('#mapDutyUnits' ).live('pagecreate', function(event){
-	hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker,
-								   mapCenterLat : gmap.curentPosition.latitude(), 
-								   mapCenterLng : gmap.curentPosition.longitude()});
-								   	   
-	hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
-	
-	hriv.DutyUnits.mode.map.init("map");
-			
-	setTimeout(function(){
-		hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap());	
-	},1000);		
+$('#mapDutyUnits' ).live('pagecreate', function(event){	
+	hriv.DutyUnits.mode.map.init("map");	
 });
 $('#mapDutyUnits' ).live('pageshow', function(event){		
-	hriv.DutyUnits.mode.map.mapOn();	
+	hriv.DutyUnits.mode.map.mapOn();
+	hriv.DutyUnits.map.resizeMap();
+	hriv.DutyUnits.map.showCurrentPosition();      
+		
 	setTimeout(function(){
-		hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
+		hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());  	
 	}, 1000);	
 });
 $('#mapDutyUnits' ).live('pagehide', function(event){			
@@ -214,22 +215,15 @@ $('#listDutyUnits').live('pagehide', function(event){
  * Page initializers EmergencyUnits 
  **/
 $('#mapEmergencyUnits' ).live('pagecreate', function(event){
-	hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker,
-								   mapCenterLat : gmap.curentPosition.latitude(), 
-								   mapCenterLng : gmap.curentPosition.longitude()});
-								   
-	hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
-	
 	hriv.EmergencyUnits.mode.map.init("map");
-	
-	setTimeout(function(){
-		hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap());	
-	},1000);		
 });
 $('#mapEmergencyUnits' ).live('pageshow', function(event){		
 	hriv.EmergencyUnits.mode.map.mapOn();
-	setTimeout(function(){		
-		hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
+	hriv.EmergencyUnits.map.resizeMap();
+	hriv.EmergencyUnits.map.showCurrentPosition();
+		
+	setTimeout(function(){
+		hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());	
 	}, 1000);		
 });
 $('#mapEmergencyUnits' ).live('pagehide', function(event){			
@@ -247,3 +241,20 @@ $('#listEmergencyUnits').live('pagehide', function(event){
 	
 });
 
+
+$("#detailview").live('pageshow', function(event){
+	var page = hriv.fn.getQueryStringParamters("page"),
+		id = hriv.fn.getQueryStringParamters("id");
+	
+	switch(page){
+		case "CareUnits":
+			hriv.CareUnits.detail.print(id);
+		break;
+		case "DutyUnits":
+			hriv.DutyUnits.detail.print(id);
+		break;
+		case "EmergencyUnits":
+			hriv.EmergencyUnits.detail.print(id);
+		break;		
+	}
+});
