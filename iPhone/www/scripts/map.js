@@ -107,9 +107,9 @@ gmap.marker = function(){
 	};
 	
 	
-	that.addPosMarker = function(lat, lng, title, bubbleContent, image, bubbleType, animate){
+	that.addPosMarker = function(lat, lng, title, bubbleContent, image, bubbleType, link){
 		idxMyPos = markers.length;
-		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, animate);				
+		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, link);				
 	};
 	
 	/**
@@ -356,7 +356,7 @@ gmap.map = function(spec) {
     
 	that.showCurrentPosition = function(){
 		this.marker.addPosMarker(gmap.curentPosition.latitude(), gmap.curentPosition.longitude(), 
-								 config.myPosTitle, "", config.myPosIcon, that.bubbleType.None, this.map, "animate");			
+								 config.myPosTitle, "", config.myPosIcon, that.bubbleType.None, null);			
 	};	
 		
 	return that;
