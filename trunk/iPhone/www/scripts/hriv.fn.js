@@ -255,55 +255,55 @@ hriv.fn.calc.time =  function (open1,close2) {
 	var arrOpenHours = [];
 	var monday, tuesday, wednesday, thursday, friday, saturday, sunday;	
 	
-	var obj = hours;
+	var obj = hours;	
+	
+	if(obj.hasOwnProperty('sunday')){
+	    sunday= obj.sunday[0];
+	    sunday.day = "sunday";
+	    sunday.daynb = 0;	    
+	    arrOpen.push(sunday);
+	}
 	
 	if(obj.hasOwnProperty('monday')){
 	    monday = obj.monday[0];
 	    monday.day = "monday";
-	    monday.daynb = 0;
+	    monday.daynb = 1;
 	    arrOpen.push(monday);
 	}	
 	
 	if(obj.hasOwnProperty('tuesday')){
 	    tuesday= obj.tuesday[0];
 	    tuesday.day = "tuesday";
-	    tuesday.daynb = 1;
+	    tuesday.daynb = 2;
 	    arrOpen.push(tuesday);
 	}	
 	
 	if(obj.hasOwnProperty('wednesday')){
 	    wednesday= obj.wednesday[0];
 	    wednesday.day = "wednesday";
-	    wednesday.daynb = 2;
+	    wednesday.daynb = 3;
 	    arrOpen.push(wednesday);
 	}	
 	
 	if(obj.hasOwnProperty('thursday')){
 	    thursday= obj.thursday[0];
 	    thursday.day = "thursday";
-	    thursday.daynb = 3;
+	    thursday.daynb = 4;
 	    arrOpen.push(thursday);
 	}	
 	
 	if(obj.hasOwnProperty('friday')){
 	    friday= obj.friday[0];
 	    friday.day = "friday";
-	    friday.daynb = 4;	    
+	    friday.daynb = 5;	    
 	    arrOpen.push(friday);
 	}	
 	
 	if(obj.hasOwnProperty('saturday')){
 	    saturday= obj.saturday[0];
 	    saturday.day = "saturday";
-	    saturday.daynb = 5;	    
+	    saturday.daynb = 6;	    
 	    arrOpen.push(saturday);
-	}	
-	
-	if(obj.hasOwnProperty('sunday')){
-	    sunday= obj.sunday[0];
-	    sunday.day = "sunday";
-	    sunday.daynb = 6;	    
-	    arrOpen.push(sunday);
 	}	
 	
 	arrOpen.sort(function(a,b){
@@ -613,6 +613,12 @@ hriv.classes.detailview = function(spec){
 };
 
 
+/***
+ * Class item
+ * */
+
+
+
 /**
  * Class list
  * */
@@ -622,10 +628,10 @@ hriv.classes.list = function(spec){
 	conf = {
 		listId : null,
 		start : 0,
-		stop : 0
+		stop : 0,
+		itms : 0
 	};	
-	$.extend(conf, spec);			
-	
+	$.extend(conf, spec);	
 	
 	that.load = function(refObj, obj, lat, lng){
 		
@@ -654,27 +660,32 @@ hriv.classes.list = function(spec){
 			isOpen : isOpen, 
 			link : refObj.map.getLink() +'?page='+ refObj.map.getPage() +'&id='+ obj.hsaIdentity
 		});						
-	};
+	};	
 			
-	that.print2 = function(itms){
+	that.print2 = function(itms, start, stop){
 		
 		var strDistance =  "", bolShow = false, strList ="";
-	
-		if(itms < _listItems.length){
-			conf.stop = itms;
-			bolShow = true;
-		}else{
-			conf.stop = _listItems.length;			
-		}
-		
-		//strList = '<ul data-inset="true" data-role="listview" data-theme="d">';				
-		strList = strList + '<li data-icon="false" class="ui-list-load-up"><a><h3>Gå upp</h3></a></li>';
-							
-		for(var i = 0; i < conf.stop; i++){
+				
+		if(itms !== undefined){ 
+			conf.itms = itms;			
+			if(itms < _listItems.length){
+				conf.stop = itms;
+				bolShow = true;
+			}else{
+				conf.stop = _listItems.length;			
+			}					
+	 	}
+
+		if(start !== undefined){ conf.start = start; }
+		if(stop !== undefined){ conf.stop = stop; }
+		if(conf.stop > _listItems.length){ conf.stop = _listItems.length; bolShow = false; }	 	
+									
+		for(var i = conf.start; i < conf.stop; i++){
 			
 			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
 			
-			strList = strList + '<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a rel=external href="' + _listItems[i].link + '">';
+			strList = strList + '<li class="ui-listItem" data-icon="false">';
+			strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
 			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
 			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
 			strList = strList + '<p>' + strDistance + '</p>';					  								  
@@ -682,15 +693,13 @@ hriv.classes.list = function(spec){
 		}
 		
 		if(bolShow){
-			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Gå ner</h3></a></li>';
-		};		
+			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta mer</h3></a></li>';
+			strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
+		};
 		
-		//strList = strList + '</ul>';
 		$(conf.listId).append(strList);		
-		//$(conf.listId).listview();
-		//$(conf.listId).listview('refresh');
-		$(conf.listId).trigger("create");
-	};
+		$(conf.listId).trigger("create");	
+	};	
 	
 	that.sortOnDistance = function(){
 		_listItems.sort(hriv.fn.compare.distance);				
@@ -704,38 +713,28 @@ hriv.classes.list = function(spec){
 		_listItems = val;		
 	};
 	
-	that.update = function(start, stop){
-		var list = [];
-	
-		(stop < _listItems.length) ? stop : (stop = _listItems.length);
-		$(conf.listId + " li.ui-listItem").unbind('click');
-	
-		for(var i = start; i < stop; i++){
-
-			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
-
-			list.push('<li class="ui-listItem" data-icon="false" data-viewid="' + _listItems[i].hsaIdentity + '"><a href="#detailview">' +
-								  '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">' +
-								  '<h3>' + _listItems[i].name + '</h3>' +
-								  '<p>' + strDistance + '</p>' + 							  								  
-								  '</a></li>');
-		  
-		}
-		
+	that.update = function(){
+		var list = [], strList ="";
+				
 		$(conf.listId + " li.ui-listItem").each(function(index) {
-		  $(this).replaceWith(list[index]);
-		});			
-		
-		$(conf.listId).listview('refresh');
-		
-		$(conf.listId + " li.ui-listItem").bind('click', function($e){			
-			$e.preventDefault();						
-			that.print($(this).attr("data-viewid"));
-			$.mobile.changePage("#detailview");
-			return false;
-		});	
+		  	var i = 0 + index;
+		  	
+		  	strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
+			strList = "";			
+		 	strList = strList + '<li class="ui-listItem" data-icon="false">';
+			strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
+			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
+			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
+			strList = strList + '<p>' + strDistance + '</p>';					  								  
+			strList = strList + '</a></li>';
+					 
+		  	$(this).replaceWith(strList);		  		  
+		});
+			
+		try{$(conf.listId).listview("refresh");}catch(e){};		
+		//$(conf.listId).trigger("create");		
 	};
-	
+		
 	that.isOpen = function(){
 		
 		var $li = $(conf.listId +" li.ui-listItem");
@@ -780,7 +779,8 @@ hriv.classes.listview = function(spec){
 		listLength : 0,
 		listStart : 0,
 		listStop : 0,
-		listPadding : 0						
+		listPadding : 0,
+		refObj : null						
 	};	
 	$.extend(conf, spec);		
 	that = hriv.classes.list(spec);
@@ -792,44 +792,51 @@ hriv.classes.listview = function(spec){
 		that.sortOnDistance();
 		that.print2(itms);
 		
-		$(conf.listId + " .ui-list-load-up").on("click", that.upClick);
+		//$(conf.listId + " .ui-list-load-up").on("click", that.upClick);
 		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
-	};		
-		
-	that.upClick = function(){
-		$.mobile.showPageLoadingMsg();
-		var res  = conf.listStart - conf.listPadding; 
-		
-		if( res > 0){
-			conf.listStart = (conf.listStart - conf.listPadding);
-		}else {
-			conf.listStart = 0;
-			$(conf.listId + " .ui-list-load-up").hide();
-		}
-		
-		conf.listStop = (conf.listStop - conf.listPadding) >= conf.listPadding ? (conf.listStop - conf.listPadding) :  conf.listPadding;
-		that.update(conf.listStart, conf.listStop);
-		
-		setTimeout(function(){
-			$.mobile.hidePageLoadingMsg();
-		},2000);
-		
-		return false;
 	};
 	
-	that.downClick = function(){		
+	that.reload = function(refData){
+		//Loads pois to marker object
+		var data = refData, 
+			latit = gmap.curentPosition.latitude(), 
+			longi = gmap.curentPosition.longitude();	
+		
+		that.set([]);
+			
+		for(var i = 0; i < data.length; i++){	
+			//Load list items
+			that.load(conf.refObj, data[i], latit, longi);
+		}	
+		
+		that.sortOnDistance();						
+	};	
+	
+	that.remove = function(){
+		conf.listStart = 0;
+		conf.listStop = conf.listPadding;		
+		$(conf.listId + "  .ui-list-marker ~ li").remove();
+		$(conf.listId + "  .ui-list-load-down").show();
+	};
+	
+	that.downClick = function($e){		
+		
+		$(this).hide();
+		
 		$.mobile.showPageLoadingMsg();						
 		
 		conf.listStart = conf.listStart + conf.listPadding;
-		conf.listStop = conf.listStop + conf.listPadding;
+		conf.listStop = conf.listStop + conf.listPadding;	
+		that.print2(conf.listPadding, conf.listStart, conf.listStop);			
+		$(conf.listId).listview("refresh");	
 		
-	
-		that.update(conf.listStart, conf.listStop);			
+		setTimeout(function(){									  
+		},2000);		
 		
-		setTimeout(function(){
-			$.mobile.hidePageLoadingMsg();					
-			$(conf.listId + " .ui-list-load-up").show();				   
-		},2000);
+		$(conf.listId + " .ui-list-load-down").off("click", that.downClick);	
+		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
+		
+		$.mobile.hidePageLoadingMsg();
 		
 		return false;
 	};
@@ -893,7 +900,7 @@ hriv.app.state = (function(){
 
 hriv.app.settings = (function(){
 	
-	var numPrintListItems = 30;
+	var numPrintListItems = 20;
 	
 	return {
 		printListItems : function(){
@@ -945,19 +952,7 @@ hriv.app.init = function(){
 	
 	setTimeout(function(){		
 		hriv.app.print();
-	}, 700);	
-	
-	setInterval(function(){
-		hriv.DutyUnits.list.isOpen();
-	},120000);
-			
-	setInterval(function(){
-		hriv.EmergencyUnits.list.isOpen();
-	},360000);	
-	setInterval(function(){
-		hriv.CareUnits.list.isOpen();
-	},720000);
-		
+	}, 500);	
 };
 
 hriv.app.print = function(){

@@ -125,6 +125,11 @@
 	/*margin-left: 8px;*/
 }
 
+.ui-listview-units .ui-list-marker {
+	 display: none;	
+}
+
+
 .ui-listview-units .ui-list-load-up {
 	 display: none;	
 }
