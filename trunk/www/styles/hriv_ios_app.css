@@ -1,0 +1,316 @@
+﻿
+/* header */
+.ui-header .ui-btn-left{
+  left: 5px;
+}
+
+/* footer */
+.ui-footer {
+	height: 42px;
+}
+
+.ui-controlgroup-horizontal {
+	height: 34px;
+	margin-bottom: 5px;
+    margin-top: 5px;
+ 	text-align: center;
+}
+
+/* listbox */
+.ui-listbox {    
+}
+
+.ui-listbox .ui-listview {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.ui-listbox li {
+    border: 1px thin #ABABAB;    
+    background-color: #FFFFFF;     
+    padding-right: 15px;
+    color:#53728C;     
+}
+.ui-listbox li:first-child {    
+    border-bottom-width: 0px;
+}
+.ui-listbox li:last-child {
+}
+.ui-listbox .ui-li-single.ui-li{                  
+    border-width: 1px thin;
+}
+
+.ui-listbox a.ui-link-inherit{
+    color: #33333;
+    font-size:large;    
+}
+.ui-listbox a.ui-link-inherit > div > div{
+    color:#333333;
+    font-size:small;
+}
+
+.ui-listbox .ui-icon, .ui-listbox .ui-icon-searchfield:after {
+	background: 						#666 /*{global-icon-color}*/;
+	background: 						none; /*{global-icon-disc}*/;
+	background-image: none; /*{global-icon-set}*/;
+	background-repeat: no-repeat;
+	-moz-border-radius: 				0px;
+	-webkit-border-radius: 				0px;
+	border-radius: 						0px;
+}
+
+.ui-listbox .ui-li-rounded{    
+    -webkit-border-radius: 10px; 
+    -moz-border-radius: 10px; 
+    border-radius: 10px;                     
+    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+}
+.ui-listbox .ui-li-rounded.ui-li-single{
+    border: 1px solid #ABABAB;
+    margin-left:8px;
+    margin-right:8px; 
+    margin-top: 15px; 
+    /*padding-bottom: 16px;
+    padding-top: 16px;*/
+}
+.ui-listbox.ui-listbox-rounded li:first-child{    
+  -webkit-border-radius: 10px 10px 0px 0px ; 
+     -moz-border-radius: 10px 10px 0px 0px ; 
+          border-radius: 10px 10px 0px 0px ; 
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+}
+.ui-listbox.ui-listbox-rounded li:last-child{    
+  -webkit-border-radius: 0px 0px 10px 10px; 
+     -moz-border-radius: 0px 0px 10px 10px; 
+          border-radius: 0px 0px 10px 10px; 
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+}
+
+
+/* list mainpage */
+.ui-listbox .ui-li .ui-icon {
+	margin-top: -19px;
+	height: 35px;
+	left: 10px;
+    width: 35px;	
+}
+
+.ui-listbox .ui-li  .ui-icon-care {
+    background-image:url('../images/IconVardcentral.png');	
+}
+
+.ui-listbox .ui-li  .ui-icon-duty {
+    background-image:url('../images/IconJourmottagning.png');	
+}
+
+.ui-listbox .ui-li  .ui-icon-emergency {
+    background-image:url('../images/IconAkutmottagning.png');	
+}
+
+.ui-listbox .ui-li a {		
+	margin-left: 55px;
+}
+
+.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit {
+	padding-left: 5px;
+}
+
+/* list units */
+.ui-listview-units {}
+
+.ui-listview-units .ui-li-icon {
+	/*top: 1.5em;*/
+}
+.ui-listview-units a.ui-link-inherit {
+	/*margin-left: 8px;*/
+}
+
+.ui-listview-units .ui-list-marker {
+	 display: none;	
+}
+
+
+.ui-listview-units .ui-list-load-up {
+	 display: none;	
+}
+
+.ui-listview-units .ui-list-load-up,
+.ui-listview-units .ui-list-load-down {			
+ 	background : #C0C0C0;  	
+}
+
+.ui-listview-units .ui-list-load-up a,
+.ui-listview-units .ui-list-load-down a {
+	 /*text-align : center;
+	 height: 40px;*/	 
+}
+
+.ui-listview-units .ui-list-load  .ui-li-heading {
+	/*color: White;
+    margin-top: 0;
+    text-shadow: 0 1px 1px Black;*/
+}
+
+
+/* NavButtons - Start */
+.nav-button {
+    padding: 0;
+    border: none;
+}
+.nav-button.ui-btn-corner-all,
+.nav-button .ui-btn-corner-all {
+    -moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.nav-button .ui-btn-inner {
+    border-color: transparent;
+    border-top: 0px none;
+}
+.nav-icon-button {
+	height: 42px;
+	width: 35px;	  
+}
+.nav-icon-button .ui-icon {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	height: 30px;
+	width: 42px;
+	border: none;
+	background-color: transparent;
+	background-repeat:no-repeat;
+}
+.nav-icon-button .ui-icon-shadow {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.nav-text-button {
+	height: 30px;
+}
+/* NavButtons - End */
+
+
+/* Button icons */
+.ui-button .ui-icon-compass {
+	margin-top: -11px;
+	background: url(../images/Compass.png)
+}
+
+
+
+
+
+/* Page main */
+#main .ui-header .ui-title   {
+	margin-left: auto;
+    margin-right: auto;	
+}
+
+/* Page: map */
+.ui-page-map .ui-content{
+	padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+}
+
+.ui-page-map .ui-footer {
+   height: 42px;
+}
+
+
+/* Page: DetailView */
+.ui-page-detailview.ui-body-f {
+  background-color: #FFFFFF;	
+} 
+
+.ui-page-detailview .ui-content { 
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;		
+}
+
+.ui-page-detailview .detailview-head {
+
+  	background-color: #abb6be;
+  	background-image: -webkit-gradient(linear, left top, left bottom, from(#abb6be), to(#b7c0c7)); 
+  	background-image: -webkit-linear-gradient(top, #abb6be, #b7c0c7); 
+  	background-image:    -moz-linear-gradient(top, #abb6be, #b7c0c7); 
+  	background-image:     -ms-linear-gradient(top, #abb6be, #b7c0c7); 
+  	background-image:      -o-linear-gradient(top, #abb6be, #b7c0c7); 
+  	background-image:         linear-gradient(top, #abb6be, #b7c0c7);
+
+	color: #FFFFFF;	
+  
+   	border-top: 1px solid #6F767B;
+   	border-bottom: 1px solid #929FA9;
+   
+   	margin-left: -15px;
+   	margin-right: -15px;   
+    padding-left: 15px;
+    
+	text-shadow: 1px 1px 3px #888; 
+	font-weight:  bold;
+}
+
+.ui-page-detailview .detailview-divider { 
+   	margin-left: -15px;
+   	margin-right: -15px;   
+   	
+    border-color: #CCCCCC;
+    border-style: solid;	
+ 	border-bottom-width: 0px;    
+}
+
+
+.ui-page-detailview .detailview-buttons {
+	margin-left: -10px;
+    margin-right: -10px;
+}
+
+.ui-page-detailview .detailview-buttons1 { 	
+  	display: inline;
+	width: 50%  	
+	text-align:left;
+}
+.ui-page-detailview .detailview-buttons2 { 
+ 	display: inline;
+ 	width: 50% 	
+ 	text-align:right;
+}
+.ui-page-detailview .detailview-buttons1 a {
+	 width: 45%
+}
+.ui-page-detailview .detailview-buttons2 a {
+	 width: 45%
+}
+
+.ui-page-detailview .ui-content .ui-li-desc {
+  	white-space: pre-wrap;
+}
+
+
+.ui-link {
+	border:none;
+}
+
+.ui-listbox .ui-li .ui-icon{ 
+	text-decoration: none; 
+		-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border: none;	
+	border-bottom: 0px;
+}
