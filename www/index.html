@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Västra Götalandregionen</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>	
+	<meta charset="utf-8">
+	<!-- iPad/iPhone specific css below, add after your main css >
+	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
+	-->
+	<!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+	<script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="scripts/phonegap.js"></script>
+    
+    <link href="framework/jquery.mobile-1.0.css" rel="stylesheet" type="text/css" />
+    <link href="styles/hriv_ios_app.css" rel="stylesheet" type="text/css" />
+    <link href="styles/hriv_ios_app._theme_f.css" rel="stylesheet" type="text/css" />
+    
+    <script src="framework/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="framework/jquery.mobile-1.0.js" type="text/javascript"></script>
+    
+      
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>    	
+	            
+	<script src="scripts/map.js" type="text/javascript"></script>          
+    <script src="scripts/hriv.fn.js" type="text/javascript"></script>
+	<script src="scripts/data.js" type="text/javascript"></script>    
+	<script src="scripts/hriv.js" type="text/javascript"></script> 	
+	
+</head>
+<body>
+
+    <div data-role="page" id="main" data-theme="f">
+        <div data-role="header" data-theme="f">
+            <h1>Västra Götalandsregionen</h1>
+        </div>
+        
+        <div data-role="content">
+            <div class="ui-content-text-header">Hitta vård nu</div>
+
+            <div class="ui-listbox">
+                <ul data-role="listview" data-inset="false" data-theme="d">                
+                    <li data-icon="care" class="ui-li-single ui-li-rounded">        
+                        <a id="linkCareUnits" href="#mapCareUnits" data-theme="f">Vårdcentral</a>
+                    </li>
+                </ul> 
+            </div>
+            
+            <div class="ui-listbox">
+                <ul data-role="listview" data-inset="false" data-theme="d">                
+                    <li data-icon="duty" class="ui-li-single ui-li-rounded">
+                        <a id="linkDutyUnits" href="#mapDutyUnits" data-theme="f">Jourmottagning</a>                        
+                    </li>
+                </ul> 
+            </div>           
+
+            <div class="ui-listbox">
+                <ul data-role="listview" data-inset="false" data-theme="d">                
+                    <li data-icon="emergency" class="ui-li-single ui-li-rounded">
+                        <a id="linkEmergencyUnits" href="#mapEmergencyUnits" data-theme="f">Akutmottagning</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>    
+    </div>
+
+
+    <div data-role="page" id="mapCareUnits" class="ui-page-map" style="width: 100%; height:100%;">
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Vårdcentraler</h1>
+            <a href="#" data-icon="compass" class="ui-button"></a>
+        </div>
+
+        <div data-role="content" style="width:100%;height:100%;padding:0;">
+          <div id="map_canvas" style="width:100%;height:100%;padding:0;"></div>
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-on ui-button-map" >Karta</a>
+			<a href="#listCareUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-off ui-button-list">Lista</a>			        	
+        </div>
+                
+    </div>
+    
+    
+    <div data-role="page" id="listCareUnits">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Vårdcentraler</h1>
+        </div>
+
+        <div data-role="content" style="width: 90%">                
+        	<ul id="lCareUnits"  class="ui-listview-units" data-role="listview" data-theme="d"> 
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		     		                		
+            </ul>        	           	
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
+        	<a href="#mapCareUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map" >Karta</a>
+			<a href="#listCareUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
+        </div>       
+    </div>               
+    
+    <div data-role="page" id="mapDutyUnits" class="ui-page-map">
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Jourmottagningar</h1>
+            <a href="#" data-icon="compass" class="ui-button"></a>
+        </div>
+
+        <div data-role="content" style="width:100%;height:100%;padding:0;">
+          <div id="map_canvas_DutyUnits"></div>
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-on ui-button-map" >Karta</a>
+			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-off ui-button-list">Lista</a>        	
+        </div>        
+    </div>
+    
+    <div data-role="page" id="listDutyUnits">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Jourmottagningar</h1>
+        </div>
+
+        <div data-role="content" style="width: 90%">                  
+        	<ul id="ldutyUnits" class="ui-listview-units" data-role="listview" data-theme="d">  
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		
+            </ul>        	           	
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
+        	<a href="#mapDutyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map" >Karta</a>
+			<a href="#listDutyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
+        </div>       
+    </div>    
+    
+    
+    <div data-role="page" id="mapEmergencyUnits" class="ui-page-map">
+        <div data-role="header" data-theme="f">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Akutmottagningar</h1>
+            <a href="#" data-icon="compass" class="ui-button"></a>
+        </div>
+
+        <div data-role="content" style="width:100%;height:100%;padding:0;">          
+          <div id="map_canvas_Emergency"></div>
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed">
+        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-on ui-button-map" >Karta</a>
+			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-off ui-button-list">Lista</a>       	        	
+        </div>        
+    </div>   
+    
+    <div data-role="page" id="listEmergencyUnits">
+        <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <h1>Akutmottagningar</h1>
+        </div>
+
+        <div data-role="content" style="width: 90%">                
+        	<ul id="lemergencyUnits" class="ui-listview-units" data-role="listview" data-theme="d">
+        		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		        		            
+            </ul>        	           	
+        </div>
+        
+        <div data-id="footer" data-role="footer" data-theme="f" data-position="fixed" class="listview-footer">
+        	<a href="#mapEmergencyUnits"  class="ui-button ui-button-bottom-left ui-button-bottom-left-off ui-button-map">Karta</a>
+			<a href="#listEmergencyUnits" class="ui-button ui-button-bottom-right ui-button-bottom-right-on ui-button-list">Lista</a>       	        	
+        </div>       
+    </div>    
+    
+    
+      
+    <div data-role="page" id="detailview" data-viewid="" class="ui-page-detailview" data-theme="f">
+    	<div data-role="header" class="detailview-header" data-theme="f" data-position="fixed">
+    		<a  data-rel="back" data-direction="reverse" class="back-btn ui-button-back nav-button">tillbaka</a>
+            <h1>Information</h1>
+    	</div>    	
+    	<div id="detailview-content" data-role="content">
+    		<div class="detailview-head"></div>
+    		<div class="detailview-content1"> 
+				<div class="ui-li-heading">Öppettider</div>
+    			<div class="ui-li-desc"></div>
+    			<div class="ui-li-desc"></div>
+    			<hr class="detailview-divider">    			
+    			<div class="ui-li-heading">Dropin</div>
+    			<div class="ui-li-desc"></div>
+    			<div class="ui-li-desc"></div>
+    			<hr class="detailview-divider">     			
+    			<div class="ui-li-heading">Drivs av</div>
+    			<div class="ui-li-desc"></div>
+				<hr class="detailview-divider">
+    			<div class="ui-li-heading">Tar emot åldersintervall</div>
+    			<div class="ui-li-desc"></div>        			  			
+    		</div>    		    		
+    		<div class="detailview-head">Kontaktinfomation</div>
+    		<div class="detailview-content2">
+    			<div class="ui-li-heading">Telefontid</div>
+    			<div class="ui-li-desc"></div>
+    			<hr class="detailview-divider">
+    			<div class="ui-li-desc detailview-buttons">      								
+    				<div class="detailview-buttons1"><a href="" data-role="button" data-inline="true" >Ring</a></div>
+    				<div class="detailview-buttons2"><a href="" data-role="button" data-inline="true">Webbplats</a></div>    								
+				</div>
+    			<hr class="detailview-divider">
+    			<div class="ui-li-desc">
+    				<a href="" data-role="button">Vägbeskrivning</a>   				   				
+    			</div>
+    		</div>    		    		
+    		<div class="detailview-head">Beskrivning</div>
+    		<div class="ui-li-heading"></div>
+    		<div class="ui-li-desc"></div>
+    	</div>   	        
+    </div>    
+    
+   
+
+</body>
+</html>
