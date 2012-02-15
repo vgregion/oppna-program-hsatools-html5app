@@ -169,11 +169,6 @@ DED.Queue.method('flush', function () {
 
 	/* Usage. */
 	var q = new DED.Queue;
-    q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
-    q.setTimeout(600000);    //Timeout when failure in ajax call 10 min
-    q.setInterval(30000);    //Time between runs 30 sec
-    q.setSleep(120000);         //Time between each iteration 2min
-    
 
 	q.add({
 		func : hriv.CareUnits.list.reload,
@@ -335,11 +330,7 @@ DED.AjaxQueue.method('flush', function () {
 
 	/* Usage. */
 	var aq = new DED.AjaxQueue;
-	aq.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
-	aq.setTimeout(600000);    //Timeout when failure in ajax call 10 min
-	aq.setInterval(60000);    //Time between runs 1min
-	aq.setSleep(240000);         //Time between each iteration 4min
-	
+
 	aq.add({
 	    url: "http://tycktill.vgregion.se/hriv-mobile-ws/getCareUnits.json",
 	    cmd: "ReloadCareUnits",
@@ -411,6 +402,18 @@ DED.AjaxQueue.method('flush', function () {
         q.flush();
 	});	
     
+
+
+    q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
+    q.setTimeout(600000);    //Timeout when failure in ajax call 10 min
+    q.setInterval(60000);    //Time between runs 1 min
+    q.setSleep(120000);         //Time between each iteration 2min
+
+    aq.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
+    aq.setTimeout(600000);    //Timeout when failure in ajax call 10 min
+    aq.setInterval(60000);    //Time between runs 1min
+    aq.setSleep(240000);         //Time between each iteration 4min
+
     
     setTimeout(function () { q.flush(); }, 2000);
 	setTimeout(function () { aq.flush(); }, 240000); //4 min
