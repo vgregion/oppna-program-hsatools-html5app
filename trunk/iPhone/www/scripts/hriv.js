@@ -160,11 +160,11 @@ $(document).ready(function() {
 	});
 	
 	
-	//$('#btnMap').live('click', function($e){
-         //$e.preventDefault();
+	$('#btnMap').live('click', function($e){
+         $e.preventDefault();
          //console.log($(this).attr("href"));
-         //window.location = $(this).attr("href");         
-    //});
+         window.location = $(this).attr("href");         
+    });
 		
 });
 
