@@ -215,7 +215,7 @@ hriv.classes.detailview = function(spec){
 					'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc">' +
-						'<a id="btnMap" href="'+ nativeDirectionsLink +'" data-role="button">Färdbeskrivning</a>' +
+						'<a id="btnMap" href="'+ nativeDirectionsLink +'" data-role="button" rel="external">Färdbeskrivning</a>' +
 					'</div>' +
 				'</div>'+
 				'<div class="detailview-head">Beskrivning</div>' +
