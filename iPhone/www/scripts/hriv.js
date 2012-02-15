@@ -157,8 +157,17 @@ $(document).ready(function() {
 	
     $(document).bind("deviceready", function(){
 		//navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });
-	});		
+	});
+	
+	
+	//$('#btnMap').live('click', function($e){
+         //$e.preventDefault();
+         //console.log($(this).attr("href"));
+         //window.location = $(this).attr("href");         
+    //});
+		
 });
+
 
 
 
