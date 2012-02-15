@@ -1,4 +1,4 @@
-/*global $, gmap, google, hriv */
+/*global $,window, gmap, google, console */
 
 
 /*****************************
@@ -22,7 +22,7 @@ if (typeof(Array.prototype.getIndex) === "undefined") {
 		return null;
 	};    
     
-};
+}
 
 /** 
  * Converts numeric degrees to radians 
@@ -109,10 +109,11 @@ hriv.fn.getQueryStringParamters = function(name)
   var regexS = "[\\?&]" + name + "=([^&#]*)";
   var regex = new RegExp(regexS);
   var results = regex.exec(window.location.href);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
+	if(results === null){
+		return "";
+	}else{
+		return decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
 };
 
 /**
@@ -308,17 +309,17 @@ hriv.fn.calc.time =  function (open1,close2) {
 	
 	arrOpen.sort(function(a,b){
 	    if(a !== null && b !==null ){
-	        if(a.openingHour<b.openingHour) return -1;
-	        if(a.openingHour>b.openingHour) return 1;
+	        if(a.openingHour<b.openingHour){ return -1; } 
+	        if(a.openingHour>b.openingHour){ return 1; } 
 	    }
 	    return 0;
 	});
 	
 	arrOpen.sort(function(a,b){
 	    if(a !== null && b !==null ){
-	        if(a.closingHour<b.closingHour) return -1;
-	        if(a.closingHour>b.closingHour) return 1;
-	    }
+	        if(a.closingHour<b.closingHour){ return -1; } 
+			if(a.closingHour>b.closingHour){ return 1; } 
+		}
 	    return 0;
 	});
 
@@ -328,7 +329,7 @@ hriv.fn.calc.time =  function (open1,close2) {
 	
 	    open1 = arrOpen[start].openingHour;
 	    close1 = arrOpen[start].closingHour;
-	    	
+
 	    if(arrOpen[i] !== undefined ){
 	        open2 = arrOpen[i].openingHour;
 	        close2 = arrOpen[i].closingHour;
@@ -339,8 +340,8 @@ hriv.fn.calc.time =  function (open1,close2) {
 	        arrOpenHours.push(str);        
 	        str = "";
 	        start = i;
-    	}	     	
-	   		
+		}
+
 	   stop = i;
 	}	
 	if(arrOpen[start] !== undefined)  {
@@ -371,519 +372,37 @@ hriv.fn.compare.distance = function (a,b) {
 
 
 
-
-
-hriv.classes =  {};
-
-
-/**
- * Class mode 
- **/
-hriv.classes.mode = function(spec){
-	var that = {}, mode, conf, _toggle, dataBase = 0; 
-	
-	conf = {
-		mapId : null, 
-		listId : null,
-		linkId : null,
-		linkMap : null,
-		linkList : null
-	};
-	
-	$.extend(conf, spec);
-	
-	that.init = function(mod){
-		
-		if(mod === undefined){
-			throw("argument [mode, list] to init func is neeed.");
-		}
-		
-		$(conf.mapId).bind("click", that.mapClick);
-		$(conf.mapId).bind("mouseover", that.mapOn);		
-		$(conf.listId).bind("click", that.listClick);	
-		$(conf.listId).bind("mouseover", that.listOn);
-		
-		switch(mod){
-			case "map":
-				$(conf.mapId).bind("mouseout", that.mapOn);
-				$(conf.listId).bind("mouseout", that.mapOn);
-			break;
-			case "list":
-				$(conf.mapId).bind("mouseout", that.listOn);
-				$(conf.listId).bind("mouseout", that.listOn);
-			break;
-			default:
-				throw("argument [mode, list] to init func is neeed.");
-			break;
-		}			
-	};
-	
-	that.mapClick = function(){
-		$(conf.linkId).attr("href", conf.linkMap);
-		that.mapOn();		
-	};
-	
-	that.listClick = function(){
-		$(conf.linkId).attr("href", conf.linkList);
-		that.listOn();
-	};
-	
-	that.mapOn = function(){
-		setTimeout(function(){
-			$(conf.mapId).mousedown();
-			$(conf.listId).mouseup();	
-		}, 10);
-				
-	};
-	that.listOn = function(){		
-		setTimeout(function(){
-			$(conf.listId).mousedown();
-			$(conf.mapId).mouseup();		
-		}, 10);				
-	};	
-	
-	return that;
-};
-
-
-/**
- * Class DetailView 
- **/
-hriv.classes.detailview = function(spec){
-		
-	var that = {}, conf, pois = [], _listDetails = [];
-	
-	conf = {
-		myListArr : null,
-		listId : null	
-	};	
-	
-	$.extend(conf, spec);
-	conf.myListArr = _listDetails;
-			
-	that.init = function(){		
-		
-		$(conf.listId + " li.ui-listItem").unbind('click');
-		$(conf.listId + " li.ui-listItem").bind('click', function($e){			
-			//$e.preventDefault();						
-			//that.print($(this).attr("data-viewid"));
-			//$.mobile.changePage("#detailview");
-			//return false;
-		});				
-	};
-	
-	/** 
-	 * Load info from datastore to details array
-	 * */
-	that.load = function(obj, listDetails) {
-				
-		var openHours ="", arrOpenHours = [], dropInHours = "", arrDropIn, teletime ="", arrTeleTime, age ="", operator ="";	
-			
-		//Kontroll öppettider
-		if(Object.keys(obj.hsaSurgeryHours).length > 0){
-			arrOpenHours = hriv.fn.calc.openhours(obj.hsaSurgeryHours);
-			
-			for(var i = 0; i < arrOpenHours.length; i++){			
-				openHours = openHours + '<div class="ui-li-desc">'+ arrOpenHours[i] + '</div>';			
-			}
-			
-		}else {
-			openHours =  '<div class="ui-li-desc">Uppgifter saknas</div>';
-		}
-		
-		//Kontroll dropintider
-		if(Object.keys(obj.hsaDropInHours).length > 0){
-			arrDropIn = hriv.fn.calc.openhours(obj.hsaDropInHours);
-			
-			for(var i = 0; i < arrDropIn.length ; i++){			
-				dropInHours = '<div class="ui-li-desc">' + arrDropIn[i] + '</div>';
-			}
-			
-		}else {
-			dropInHours = '<div class="ui-li-desc">Ingen dropin</div>';
-		}
-			
-	
-		//Kontroll telefontider
-		if(Object.keys(obj.hsaTelephoneTime).length > 0){
-			arrTeleTime = hriv.fn.calc.openhours(obj.hsaTelephoneTime);
-			
-			for(var i = 0; i < arrTeleTime.length ; i++){			
-				teletime = '<div class="ui-li-desc">' + arrTeleTime[i] + '</div>';
-			}
-			
-		}else {
-			teletime = '<div class="ui-li-desc">Uppgifter saknas</div>';
-		}
-	
-		//Kontroll ålder
-		(obj.hsaVisitingRuleAge === "0-99") ? age = "Alla åldrar" : age = obj.hsaVisitingRuleAge;  
-	
-		//Kontroll operatör	
-		(obj.hsaManagementCodeText === "Landsting/Region") ? operator = "Offentlig vårdgivare" : operator = "Privat vårdgivare";
-		
-		
-		conf.myListArr.push({
-			detailViewId : obj.hsaIdentity,
-			name : obj.name,			
-			locale : obj.locale,		
-			open : openHours,
-			dropin : dropInHours,
-			operatedBy : operator, 
-			age : age,
-			teltime : arrTeleTime, 
-			tel: obj.hsaPublicTelephoneNumber,
-			website : obj.labeleduri,
-			desc: obj.description,		
-			latitude : obj.latitude,
-			longitude :  obj.longitude,
-			title : obj.name
-		});	
-		
-	};
-		
-	that.print = function(hsaId){				
-		
-		var str, idx, nativeDirectionsLink;	
-		
-		idx = conf.myListArr.getIndex(hsaId);
-		if(idx === null){ return; }
-		
-	
-		nativeDirectionsLink = 'http://maps.google.com/maps?daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude + '&iwloc=A';
-		// Check if user let's us track position. If not, do not pass the source address. This will force the user to choose it.	        
-	    if(gmap.curentPosition.latitude() !== null && gmap.curentPosition.longitude() !== null){
-			nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
-		};
-		
-		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
-		
-		str = '<div class="detailview-head">' + conf.myListArr[idx].name + ' , ' + conf.myListArr[idx].locale + '</div>' +
-				'<div class="detailview-content1">'    			 +
-					'<div class="ui-li-heading">Öppettider</div>' +					
-					'' + conf.myListArr[idx].open + ''+					
-					'<hr class="detailview-divider">'    			 +
-					'<div class="ui-li-heading">Dropin</div>' +
-					'' + conf.myListArr[idx].dropin + ''+
-					'<hr class="detailview-divider">'     			 +
-					'<div class="ui-li-heading">Drivs av</div>' +
-					'<div class="ui-li-desc">' + conf.myListArr[idx].operatedBy + '</div>' +
-					'<hr class="detailview-divider">' +
-					'<div class="ui-li-heading">Tar emot åldersintervall</div>' +
-					'<div class="ui-li-desc">'+ conf.myListArr[idx].age +'</div>' +
-				'</div>'    		    		 +
-				'<div class="detailview-head">Kontaktinfomation</div>' +
-				'<div class="detailview-content2">' +
-					'<div class="ui-li-heading">Telefontid</div>' +
-					'<div class="ui-li-desc">'+ (conf.myListArr[idx].teltime !== undefined ? conf.myListArr[idx].teltime : "") +'</div>' +
-					'<hr class="detailview-divider">' +
-					'<div class="ui-li-heading">Telefonnummer</div>' +
-					'<div class="ui-li-desc"> '+ telnb +'</div>' +
-					'<hr class="detailview-divider">' +
-					'<div class="ui-li-desc detailview-buttons">' +      								
-						'<div class="detailview-buttons1"><a href="tel:'+ conf.myListArr[idx].tel +'" data-role="button" data-inline="true">Ring</a></div>' +
-						'<div class="detailview-buttons2"><a  target="_blank" href="'+ conf.myListArr[idx].website +'" data-role="button" data-inline="true">Webbplats</a></div>' +    								
-					'</div>' +
-					'<hr class="detailview-divider">' +
-					'<div class="ui-li-desc">' +
-						'<a href="'+ nativeDirectionsLink +'" data-role="button">Färdbeskrivning</a>' +   				   				
-					'</div>' +
-				'</div>' +    		    		
-				'<div class="detailview-head">Beskrivning</div>' +
-				'<div class="ui-li-heading"></div>' +
-				'<div class="ui-li-desc">'+ conf.myListArr[idx].desc +
-				'<br/>' +
-				'<br/>' +							
-			'</div>';
-		
-		
-		$("#detailview-content").html(str);
-		$("#detailview-content").trigger("create");		
-	};	
-	
-	that.set = function(arr){
-		conf.myListArr = arr;		
-	};
-	
-	that.get = function(){
-		return conf.myListArr;		
-	};
-	
-	return that;
-};
-
-
-/***
- * Class item
- * */
-
-
-
-/**
- * Class list
- * */
-hriv.classes.list = function(spec){
-	var that = {}, conf, _listItems = [];
-	
-	conf = {
-		listId : null,
-		start : 0,
-		stop : 0,
-		itms : 0
-	};	
-	$.extend(conf, spec);	
-	
-	that.load = function(refObj, obj, lat, lng){
-		
-		var openHours, openImg = "DotGray.png", isOpen = -1;
-		
-		//Kontroll öppettider
-		if(Object.keys(obj.hsaSurgeryHours).length > 0){
-			isOpen = hriv.fn.calc.isOpen(obj.hsaSurgeryHours);			
-			openImg = (isOpen === 1) ? 'DotGreen.png' : 'DotGray.png' ;			
-		}	
-		
-		//Load listitem info
-		var dist = "";
-		if(!(obj.latitude < 1 ||  obj.longitude < 1)){
-			dist =  hriv.fn.calc.distance(lat, lng, obj.latitude, obj.longitude);
-			try { dist = Math.round(dist*10)/10; }catch(e){}
-		}else{ dist = 999999999; }				  
-		
-		_listItems.push({
-			name : obj.name,			
-			locale : obj.locale,
-			hsaIdentity : obj.hsaIdentity,
-			distance: dist,
-			open: obj.hsaSurgeryHours,
-			openImg: openImg,
-			isOpen : isOpen, 
-			link : refObj.map.getLink() +'?page='+ refObj.map.getPage() +'&id='+ obj.hsaIdentity
-		});						
-	};	
-			
-	that.print2 = function(itms, start, stop){
-		
-		var strDistance =  "", bolShow = false, strList ="";
-				
-		if(itms !== undefined){ 
-			conf.itms = itms;			
-			if(itms < _listItems.length){
-				conf.stop = itms;
-				bolShow = true;
-			}else{
-				conf.stop = _listItems.length;			
-			}					
-	 	}
-
-		if(start !== undefined){ conf.start = start; }
-		if(stop !== undefined){ conf.stop = stop; }
-		if(conf.stop > _listItems.length){ conf.stop = _listItems.length; bolShow = false; }	 	
-									
-		for(var i = conf.start; i < conf.stop; i++){
-			
-			strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
-			
-			strList = strList + '<li class="ui-listItem" data-icon="false">';
-			strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
-			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
-			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
-			strList = strList + '<p>' + strDistance + '</p>';					  								  
-			strList = strList + '</a></li>';
-		}
-		
-		if(bolShow){
-			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta mer</h3></a></li>';
-			strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
-		};
-		
-		$(conf.listId).append(strList);		
-		$(conf.listId).trigger("create");	
-	};	
-	
-	that.sortOnDistance = function(){
-		_listItems.sort(hriv.fn.compare.distance);				
-	};
-	
-	that.get = function(){
-		return _listItems;
-	};
-	
-	that.set = function(val){
-		_listItems = val;		
-	};
-	
-	that.update = function(){
-		var list = [], strList ="";
-				
-		$(conf.listId + " li.ui-listItem").each(function(index) {
-		  	var i = 0 + index;
-		  	
-		  	strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;			
-			strList = "";			
-		 	strList = strList + '<li class="ui-listItem" data-icon="false">';
-			strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
-			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
-			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
-			strList = strList + '<p>' + strDistance + '</p>';					  								  
-			strList = strList + '</a></li>';
-					 
-		  	$(this).replaceWith(strList);		  		  
-		});
-			
-		try{$(conf.listId).listview("refresh");}catch(e){};		
-		//$(conf.listId).trigger("create");		
-	};
-		
-	that.isOpen = function(){
-		
-		var $li = $(conf.listId +" li.ui-listItem");
-		
-		//Kontroll öppettider		
-		for(var i = conf.start; i < conf.stop; i++){
-			if(Object.keys(_listItems[i].open).length > 0){
-				var open = hriv.fn.calc.isOpen(_listItems[i].open);
-
-				if(open !== _listItems[i].isOpen){									
-					switch(open){
-						case 1:
-							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGreen.png";
-							_listItems[i].isOpen = -1;
-						break;							
-						case -1:
-							$li[i].children[0].children[0].children[0].children[0].src  = "images/DotGray.png";
-							_listItems[i].isOpen = 1;
-						break;						
-					}					
-				}					
-			}			
-		} 
-		
-	};
-	
-	return that;	
-};
-
-/**
- * Class panel
- * */
-
-/**
- * Class listview
- * */
-hriv.classes.listview = function(spec){
-	var that, conf = {}, list, panel; 
-	
-	conf = {
-		listId : null,
-		listLength : 0,
-		listStart : 0,
-		listStop : 0,
-		listPadding : 0,
-		refObj : null						
-	};	
-	$.extend(conf, spec);		
-	that = hriv.classes.list(spec);
-		
-	that.print = function(itms){
-		conf.listStop = itms;
-		conf.listPadding = itms;
-		conf.listLength = that.get().length;
-		that.sortOnDistance();
-		that.print2(itms);
-		
-		//$(conf.listId + " .ui-list-load-up").on("click", that.upClick);
-		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
-	};
-	
-	that.reload = function(refData){
-		//Loads pois to marker object
-		var data = refData, 
-			latit = gmap.curentPosition.latitude(), 
-			longi = gmap.curentPosition.longitude();	
-		
-		that.set([]);
-			
-		for(var i = 0; i < data.length; i++){	
-			//Load list items
-			that.load(conf.refObj, data[i], latit, longi);
-		}	
-		
-		that.sortOnDistance();						
-	};	
-	
-	that.remove = function(){
-		conf.listStart = 0;
-		conf.listStop = conf.listPadding;		
-		$(conf.listId + "  .ui-list-marker ~ li").remove();
-		$(conf.listId + "  .ui-list-load-down").show();
-	};
-	
-	that.downClick = function($e){		
-		
-		$(this).hide();
-		
-		$.mobile.showPageLoadingMsg();						
-		
-		conf.listStart = conf.listStart + conf.listPadding;
-		conf.listStop = conf.listStop + conf.listPadding;	
-		that.print2(conf.listPadding, conf.listStart, conf.listStop);			
-		$(conf.listId).listview("refresh");	
-		
-		setTimeout(function(){									  
-		},2000);		
-		
-		$(conf.listId + " .ui-list-load-down").off("click", that.downClick);	
-		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
-		
-		$.mobile.hidePageLoadingMsg();
-		
-		return false;
-	};
-	
-	return that;
-};
-
-
-hriv.CareUnits.getData = function(){
-	
-	
-};
-
-
-/**
- * Careunit section
- * */
-
-hriv.CareUnits.init = function(){
-	hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
-};
-
-
-/**
- * DutyUnits - Utility function
- * Load pois from datastore to marker object
- * */
-hriv.DutyUnits.init = function(){
-	hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
-};
-
-/**
- * EmergencyUnits - Utility function
- * Load pois from datastore to marker object
- * */
-hriv.EmergencyUnits.init = function(){
-	hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);
-};
-
-
-
 /**
  * Initilize HRIV javascript application framework
  * */
 hriv.app.state = (function(){
 	
-	var init = false;
+	var init = false, isLoading, loadingObj;
+	 
+    loadingObj = {
+        CareUnits : false,
+        DutyUnits : false,
+        EmergencyUnits : false
+    };		
+	
+	isLoading = function(){
+        var res = false;
+        
+        for(var prop in loadingObj){                
+            if(!loadingObj[prop]){
+                res = true;
+            } 
+        }
+        
+        if(!res){
+            setTimeout(function(){
+                $.modal.close();
+                $.mobile.hidePageLoadingMsg();                
+            }, 2000); 
+        }   
+        
+        return res;  
+	};
 	
 	return{
 		isInit : function(){
@@ -892,6 +411,13 @@ hriv.app.state = (function(){
 		},
 		set : function(val){
 			init = val;
+		}, 
+		isLoading : function(){
+            isLoading();
+		},
+		readyLoading : function(prop, val){
+		    loadingObj[prop] = val;
+		    isLoading();
 		}		
 	};
 	
@@ -900,7 +426,7 @@ hriv.app.state = (function(){
 
 hriv.app.settings = (function(){
 	
-	var numPrintListItems = 20;
+	var numPrintListItems = 25;
 	
 	return {
 		printListItems : function(){
@@ -909,6 +435,7 @@ hriv.app.settings = (function(){
 	};
 	
 })();
+
 
 hriv.app.load = function(refData, refObj){
 	
@@ -938,23 +465,6 @@ hriv.app.load = function(refData, refObj){
 	
 };
 
-hriv.app.init = function(){
-	
-	//Check if app is initilized
-	if(hriv.app.state.isInit()){ 
-		return;
-	}
-	hriv.app.state.set(true);	
-	
-	hriv.CareUnits.init();
-	hriv.DutyUnits.init();	
-	hriv.EmergencyUnits.init();
-	
-	setTimeout(function(){		
-		hriv.app.print();
-	}, 500);	
-};
-
 hriv.app.print = function(){
 	var itms = hriv.app.settings.printListItems();
 	
@@ -967,5 +477,42 @@ hriv.app.print = function(){
 	hriv.DutyUnits.detail.init();	
 };
 
-
-
+hriv.app.init = function(){
+	
+	//Check if app is initilized
+	if(hriv.app.state.isInit()){ 
+		return;
+	}
+	hriv.app.state.set(true);	
+	
+	hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
+	hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
+	hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);
+	
+	hriv.CareUnits.map.addListerner("idle", function(){
+	    //console.log("Care idle");	   
+	    hriv.app.state.readyLoading("CareUnits", true);
+	});
+	
+    hriv.DutyUnits.map.addListerner("idle", function(){    
+        //console.log("Duty idle");
+        hriv.app.state.readyLoading("DutyUnits", true);
+    });    
+    
+    hriv.EmergencyUnits.map.addListerner("idle", function(){    
+        //console.log("Emg idle");
+        hriv.app.state.readyLoading("EmergencyUnits", true);
+    });	
+	
+	$('#jqmModal-start').modal();
+	
+    setTimeout(function(){        
+        $.mobile.showPageLoadingMsg("laddar");
+		hriv.app.print();
+	}, 500);
+	
+	setTimeout(function(){
+        $.modal.close();
+        $.mobile.hidePageLoadingMsg();    
+	},60000);	
+};
