@@ -178,7 +178,7 @@ DED.Queue.method('flush', function () {
 	
 	q.add({
 		func : function(){		
-			hriv.CareUnits.list.update();   
+			//hriv.CareUnits.list.update();   
 		},
 		para : "",
 		cmd : "UpdateListCareUnits"
@@ -192,7 +192,7 @@ DED.Queue.method('flush', function () {
 	
 	q.add({
 		func : function(){		
-			hriv.DutyUnits.list.update();   
+			//hriv.DutyUnits.list.update();   
 		},
 		para : "",
 		cmd : "UpdateListDutyUnitsUnits"
@@ -206,7 +206,7 @@ DED.Queue.method('flush', function () {
 	
 	q.add({
 		func : function(){		
-			hriv.EmergencyUnits.list.update();   
+			//hriv.EmergencyUnits.list.update();   
 		},
 		para : "",
 		cmd : "UpdateListEmergencyUnitsUnits"
