@@ -398,7 +398,7 @@ hriv.app.state = (function(){
             setTimeout(function(){
                 $.modal.close();
                 $.mobile.hidePageLoadingMsg();                
-            }, 2000); 
+            }, 2500); 
         }   
         
         return res;  
