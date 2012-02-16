@@ -176,16 +176,19 @@ hriv.classes.detailview = function(spec){
 		var str, idx, nativeDirectionsLink;	
 		
 		idx = conf.myListArr.getIndex(hsaId);
-		if(idx === null){ return; }
+		if(idx === null){ return; }	
+				
+		if (PhoneGap.available){
+            nativeDirectionsLink = 'maps:q=http://maps.google.com/maps?';
+        }else{
+            nativeDirectionsLink = 'http://maps.google.com/maps?';
+        }		
 		
-	
-		//nativeDirectionsLink = 'http://maps.google.com/maps?daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude + '&iwloc=A';
-		nativeDirectionsLink = "/javascript:Device.exec(\'openmap:q=roma\')";
-		// Check if user let's us track position. If not, do not pass the source address. This will force the user to choose it.	        
-	    if(gmap.curentPosition.latitude() !== null && gmap.curentPosition.longitude() !== null){
-			//nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
-		}
-		
+		nativeDirectionsLink += 'll=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
+		nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
+		nativeDirectionsLink += '&daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude;
+		//nativeDirectionsLink +=  + '&iwloc=A';		
+				
 		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
 		
 		str = '<div class="detailview-head">' + conf.myListArr[idx].name + ' , ' + conf.myListArr[idx].locale + '</div>' +
@@ -216,7 +219,7 @@ hriv.classes.detailview = function(spec){
 					'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc">' +
-						'<a id="btnMap" data-role="button" rel=external href="'+ nativeDirectionsLink +'">Färdbeskrivning</a>' +
+						'<a id="btnMap" data-role="button" href="'+ nativeDirectionsLink +'">Färdbeskrivning</a>' +
 					'</div>' +
 				'</div>'+
 				'<div class="detailview-head">Beskrivning</div>' +
