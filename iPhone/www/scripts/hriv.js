@@ -3,11 +3,7 @@
 /**************************
 * 
 **************************/
-window.addEventListener('load', function () {
-    document.addEventListener('deviceready', function () {
-        console.log("PhoneGap is now loaded!");
-    }, false);
-}, false);
+
 
 
 /**************************
