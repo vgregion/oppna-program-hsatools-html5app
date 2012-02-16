@@ -180,7 +180,7 @@ hriv.classes.detailview = function(spec){
 		
 	
 		//nativeDirectionsLink = 'http://maps.google.com/maps?daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude + '&iwloc=A';
-		nativeDirectionsLink = "/javascript:Device.exec(\'openmap:q=http%253A//code.google.com/apis/kml/documentation/KML_Samples.kml')";
+		nativeDirectionsLink = "/javascript:Device.exec(\'openmap:q=" + nativeDirectionsLink +"')";
 		// Check if user let's us track position. If not, do not pass the source address. This will force the user to choose it.	        
 	    if(gmap.curentPosition.latitude() !== null && gmap.curentPosition.longitude() !== null){
 			//nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
