@@ -121,7 +121,7 @@ hriv.app.inst = function(){
     
     //hriv.dataStore.CareUnits = dataStore.CareUnits.careUnits;
     //hriv.dataStore.DutyUnits = dataStore.DutyUnits.dutyUnits;
-    //hriv.dataStore.EmergencyUnits = dataStore.EmergencyUnits.emergencyUnits;
+    //hriv.dataStore.EmergencyUnits = dataStore.EmergencyUnits.emergencyUnits;     
     
     /*****************************************
     * Function setup & object initilization 
@@ -159,8 +159,7 @@ hriv.app.init = function(){
     //Check if app is initilized
     if(hriv.app.state.isInit()){ return; }
     
-    hriv.app.state.set(true);      
-    $('#jqmModal-start').modal();
+    hriv.app.state.set(true);   
     
     hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
     hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
@@ -200,8 +199,7 @@ hriv.app.init = function(){
     }, 200);
     
     
-    setTimeout(function(){        
-        $.mobile.showPageLoadingMsg("laddar");
+    setTimeout(function(){         
         hriv.app.print();
     }, 500);
     

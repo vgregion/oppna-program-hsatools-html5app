@@ -1,4 +1,4 @@
-/*global $, hriv, q, console, gmap, google, PhoneGap */
+/*global $, hriv, q, console, gmap, google, PhoneGap, window */
 
 /*************************************
 * Initializer jQuery mobile framework
@@ -41,32 +41,36 @@ $(document).ready(function(){
     });
 });
 
-
+/*****************************************
+* Case phongegap 
+* Instansitate the applications objects 
+*****************************************/          
 window.addEventListener('load', function () {
     document.addEventListener('deviceready', function () {
-        console.log("PhoneGap is now loaded!");        
+        console.log("PhoneGap is now loaded!");
+        hriv.app.inst(); 
+        gmap.curentPosition.update1();                        
     }, false);
 }, false);
 
+/*****************************************
+* Case desktop browser 
+* Instansitate the applications objects 
+*****************************************/          
 $(document).ready(function() {
-
-        /*****************************************
-        * Instansitate the applications objects 
-        *****************************************/
-        hriv.app.inst(); 
+                
+        $('#jqmModal-start').modal();
+        setTimeout(function(){        
+            $.mobile.showPageLoadingMsg("laddar");        
+        }, 500);        
         
-        console.log("nints");
-        
-        if (PhoneGap.available){
-            gmap.curentPosition.update1(); 
-            console.log("device ready");
+        if (!PhoneGap.available){
+            hriv.app.inst(); 
+            gmap.curentPosition.update1();
             //$(document).bind("deviceready", function(){
                 //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
             //});
-        }else{
-            //gmap.curentPosition.update1();        
-        }  
-        
+        }        
 });
 
 
