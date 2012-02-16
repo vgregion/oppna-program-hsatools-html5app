@@ -68,15 +68,10 @@ $(document).ready(function() {
         if (!hriv.state.gotGeoPos){
             gmap.curentPosition.update();
             //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
-        }       
-    },1000);                  
-       
-    
-    setTimeout(function(){        
-        hriv.app.inst();
-    },1500);
-    
-    
+        }
+         hriv.app.inst();       
+    },1000);
+        
     setTimeout(function(){
         hriv.app.init();   
     },2000);
