@@ -63,16 +63,18 @@ $(document).ready(function() {
         $.mobile.showPageLoadingMsg("laddar");        
     },500);    
                   
-    if (!PhoneGap.available){          
+    if (PhoneGap.available){
+        //Test          
+    }else{
         gmap.curentPosition.update();
-        //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
+        //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });
     }
     
     hriv.app.inst();    
        
     setTimeout(function(){
         hriv.app.init();   
-    },1000);
+    },30000);
          
 });
 
