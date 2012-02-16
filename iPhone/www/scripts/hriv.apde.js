@@ -1,4 +1,4 @@
-/*global $, DED, window, console, gmap, google, hriv */
+/*global $, DED, window, console, gmap, google, hriv, dataStore */
 
 
 /***********************************
@@ -138,7 +138,7 @@ DED.Queue.method('flush', function () {
 	  
 	if(this.jump !== cmd){
 		console.log("exe func qeueu: " + cmd + " " + new Date());
-		func(para);
+		//func(para);
 	}
 	callback(cmd,"");
 	  
@@ -400,8 +400,7 @@ DED.AjaxQueue.method('flush', function () {
 	    console.log("started queue");
 	    q.start();
         q.flush();
-	});	
-    
+	});   
 
 
     q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
@@ -413,9 +412,3 @@ DED.AjaxQueue.method('flush', function () {
     aq.setTimeout(600000);    //Timeout when failure in ajax call 10 min
     aq.setInterval(60000);    //Time between runs 1min
     aq.setSleep(240000);         //Time between each iteration 4min
-
-    
-    setTimeout(function () { q.flush(); }, 2000);
-	setTimeout(function () { aq.flush(); }, 240000); //4 min
-	
-
