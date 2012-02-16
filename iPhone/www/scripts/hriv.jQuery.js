@@ -69,17 +69,17 @@ $(document).ready(function() {
             gmap.curentPosition.update();
             //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
         }       
-    },1500);                  
+    },1000);                  
        
     
     setTimeout(function(){        
         hriv.app.inst();
-    },3000);
+    },1500);
     
     
     setTimeout(function(){
         hriv.app.init();   
-    },5000);
+    },2000);
          
 });
 
