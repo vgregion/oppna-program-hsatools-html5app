@@ -54,7 +54,7 @@ gmap.state = function(){
 		
 		google.maps.event.addListener(config.map, 'idle', function(){ 
 			state.mapLoad = false;
-			//console.log("idle");			
+			console.log("idle");			
 			idle.forEach(function (el) {el();});
 		     
 		});
