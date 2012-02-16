@@ -4,9 +4,7 @@
 /*****************************
 * Hriv object classes
 *****************************/
-
-hriv.classes =  {};
-
+hriv.classes = {};
 
 /**
  * Class mode 
@@ -187,8 +185,8 @@ hriv.classes.detailview = function(spec){
 		nativeDirectionsLink += 'll=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
 		nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
 		nativeDirectionsLink += '&daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude;
-		//nativeDirectionsLink +=  + '&iwloc=A';		
-				
+		//nativeDirectionsLink +=  + '&iwloc=A';
+					
 		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
 		
 		str = '<div class="detailview-head">' + conf.myListArr[idx].name + ' , ' + conf.myListArr[idx].locale + '</div>' +
