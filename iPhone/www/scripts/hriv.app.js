@@ -167,17 +167,17 @@ hriv.app.init = function(){
     
     
     hriv.CareUnits.map.addListerner("idle", function(){
-        console.log("Care idle");    
+        //console.log("Care idle");    
         hriv.app.state.readyLoading("CareUnits", true);
     });
     
     hriv.DutyUnits.map.addListerner("idle", function(){    
-        console.log("Duty idle");
+        //console.log("Duty idle");
         hriv.app.state.readyLoading("DutyUnits", true);
     });    
     
     hriv.EmergencyUnits.map.addListerner("idle", function(){    
-        console.log("Emg idle");
+        //console.log("Emg idle");
         hriv.app.state.readyLoading("EmergencyUnits", true);
     }); 
         
