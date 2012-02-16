@@ -47,9 +47,8 @@ $(document).ready(function(){
 *****************************************/          
 window.addEventListener('load', function () {
     document.addEventListener('deviceready', function () {
-        console.log("PhoneGap is now loaded!");
-        //hriv.app.inst(); 
-        gmap.curentPosition.update1();                        
+        //console.log("PhoneGap is now loaded!");         
+        gmap.curentPosition.update();                        
     }, false);
 }, false);
 
@@ -59,19 +58,21 @@ window.addEventListener('load', function () {
 *****************************************/          
 $(document).ready(function() {
                 
-        $('#jqmModal-start').modal();
-        setTimeout(function(){        
-            $.mobile.showPageLoadingMsg("laddar");        
-        }, 500);        
-        
-       hriv.app.inst();
-        
-        if (!PhoneGap.available){          
-            gmap.curentPosition.update1();
-            //$(document).bind("deviceready", function(){
-                //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
-            //});
-        }        
+    $('#jqmModal-start').modal();
+    setTimeout(function(){        
+        $.mobile.showPageLoadingMsg("laddar");        
+    },500);    
+                  
+    if (!PhoneGap.available){          
+        gmap.curentPosition.update();
+        //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
+    }
+    
+    hriv.app.inst();
+       
+    setTimeout(function(){
+        hriv.app.init();   
+    },1000);     
 });
 
 
