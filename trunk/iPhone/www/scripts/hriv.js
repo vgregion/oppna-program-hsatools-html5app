@@ -46,6 +46,9 @@ var hriv = {
               detailview :  {} ,
               calc : {}
         },
-        app : {}            
+        app : {},
+        state : {
+            gotGeoPos : false
+        }            
     };
 
