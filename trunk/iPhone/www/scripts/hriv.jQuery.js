@@ -42,25 +42,32 @@ $(document).ready(function(){
 });
 
 
+window.addEventListener('load', function () {
+    document.addEventListener('deviceready', function () {
+        console.log("PhoneGap is now loaded!");        
+    }, false);
+}, false);
+
 $(document).ready(function() {
-    
-    /*****************************************
-    * Instansitate the applications objects 
-    *****************************************/
-    hriv.app.inst();
 
-    if (PhoneGap.available){
-        $(document).bind("deviceready", function(){
-            //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });
+        /*****************************************
+        * Instansitate the applications objects 
+        *****************************************/
+        hriv.app.inst(); 
+        
+        console.log("nints");
+        
+        if (PhoneGap.available){
             gmap.curentPosition.update1(); 
-            console.log("device ready");                                 
-        });
-    }else{
-        //gmap.curentPosition.update1();        
-    }   
+            console.log("device ready");
+            //$(document).bind("deviceready", function(){
+                //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
+            //});
+        }else{
+            //gmap.curentPosition.update1();        
+        }  
+        
 });
-
-
 
 
 /*******************************
