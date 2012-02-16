@@ -64,14 +64,19 @@ $(document).ready(function() {
         $.mobile.showPageLoadingMsg("laddar");        
     },500);    
 
-                      
-    if (!hriv.state.gotGeoPos){
-        gmap.curentPosition.update();
-        //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
-    }
-    
-    hriv.app.inst();    
+    setTimeout(function(){
+        if (!hriv.state.gotGeoPos){
+            gmap.curentPosition.update();
+            //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
+        }       
+    },1500);                  
        
+    
+    setTimeout(function(){        
+        hriv.app.inst();
+    },3000);
+    
+    
     setTimeout(function(){
         hriv.app.init();   
     },5000);
