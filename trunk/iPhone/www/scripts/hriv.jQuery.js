@@ -48,7 +48,7 @@ $(document).ready(function(){
 window.addEventListener('load', function () {
     document.addEventListener('deviceready', function () {
         console.log("PhoneGap is now loaded!");
-        hriv.app.inst(); 
+        //hriv.app.inst(); 
         gmap.curentPosition.update1();                        
     }, false);
 }, false);
@@ -64,8 +64,9 @@ $(document).ready(function() {
             $.mobile.showPageLoadingMsg("laddar");        
         }, 500);        
         
-        if (!PhoneGap.available){
-            hriv.app.inst(); 
+       hriv.app.inst();
+        
+        if (!PhoneGap.available){          
             gmap.curentPosition.update1();
             //$(document).bind("deviceready", function(){
                 //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
