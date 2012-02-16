@@ -87,7 +87,7 @@ gmap.curentPosition.update1 = function(func){
         navigator.geolocation.getCurrentPosition(gmap.curentPosition.onSuccess1, gmap.curentPosition.onError1);
     }else{
         gmap.curentPosition.onError1();
-        hriv.app.init();         
+        //hriv.app.init();         
     }   
 };
 
