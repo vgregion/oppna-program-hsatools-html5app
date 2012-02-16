@@ -1,4 +1,4 @@
-/*global $, q, console, gmap, google, PhoneGap */
+/*global $, q, console, gmap, google, PhoneGap, window */
 
 /**************************
 * 
