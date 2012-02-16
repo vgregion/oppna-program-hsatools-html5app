@@ -47,7 +47,7 @@ $(document).ready(function(){
 *****************************************/          
 window.addEventListener('load', function () {
     document.addEventListener('deviceready', function () {
-        //console.log("PhoneGap is now loaded!");         
+        console.log("PhoneGap is now loaded!");         
         gmap.curentPosition.update();                        
     }, false);
 }, false);
@@ -68,12 +68,12 @@ $(document).ready(function() {
         //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });                                          
     }
     
-    hriv.app.inst();
-    
+    hriv.app.inst();    
        
     setTimeout(function(){
         hriv.app.init();   
-    },1000);     
+    },1000);
+         
 });
 
 
