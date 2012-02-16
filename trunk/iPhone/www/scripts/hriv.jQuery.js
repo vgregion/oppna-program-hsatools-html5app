@@ -69,6 +69,7 @@ $(document).ready(function() {
     }
     
     hriv.app.inst();
+    
        
     setTimeout(function(){
         hriv.app.init();   
