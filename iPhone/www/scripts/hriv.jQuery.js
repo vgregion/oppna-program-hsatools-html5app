@@ -52,10 +52,11 @@ $(document).ready(function() {
     if (PhoneGap.available){
         $(document).bind("deviceready", function(){
             //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });
-            gmap.curentPosition.update1();                                  
+            gmap.curentPosition.update1(); 
+            console.log("device ready");                                 
         });
     }else{
-        gmap.curentPosition.update1();        
+        //gmap.curentPosition.update1();        
     }   
 });
 
