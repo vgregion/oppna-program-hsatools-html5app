@@ -74,7 +74,7 @@ $(document).ready(function() {
      
     setTimeout(function(){
         hriv.app.init();
-    },2000);
+    },5000);
          
 });
 
