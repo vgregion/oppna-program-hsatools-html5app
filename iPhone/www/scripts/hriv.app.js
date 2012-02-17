@@ -6,7 +6,7 @@
  * */
 hriv.app.state = (function(){
     
-    var init = false, isLoading, loadingObj;
+    var init = false, isLoading, loadingObj, timeOutLoadModal;
      
     loadingObj = {
         CareUnits : false,
@@ -38,11 +38,14 @@ hriv.app.state = (function(){
             return init;
             
         },
+        clearTimeOut : function(){
+          clearTimeout(timeOutLoadModal.clear);  
+        },
         set : function(val){
             init = val;
         }, 
         isLoading : function(){
-            isLoading();
+           return isLoading();
         },
         readyLoading : function(prop, val){
             loadingObj[prop] = val;
@@ -167,17 +170,17 @@ hriv.app.init = function(){
     
     
     hriv.CareUnits.map.addListerner("idle", function(){
-        //console.log("Care idle");    
+        console.log("Care idle");    
         hriv.app.state.readyLoading("CareUnits", true);
     });
     
     hriv.DutyUnits.map.addListerner("idle", function(){    
-        //console.log("Duty idle");
+        console.log("Duty idle");
         hriv.app.state.readyLoading("DutyUnits", true);
     });    
     
     hriv.EmergencyUnits.map.addListerner("idle", function(){    
-        //console.log("Emg idle");
+        console.log("Emg idle");
         hriv.app.state.readyLoading("EmergencyUnits", true);
     }); 
         
@@ -206,10 +209,14 @@ hriv.app.init = function(){
     setTimeout(function () { q.flush(); }, 2000);       // 2 sec
     setTimeout(function () { aq.flush(); }, 240000);    //4 min 
     
-    setTimeout(function(){
-        $.modal.close();
-        $.mobile.hidePageLoadingMsg();    
-    },1000);
+    setTimeout(function(){       
+         
+        if(hriv.app.state.isLoading()){        
+            $.modal.close();
+            $.mobile.hidePageLoadingMsg();
+            alert("Internet anslutning saknas. Karta kunde ej laddas");
+        }
+    },60000); //Alerts efter 1 min
     
     
 };
