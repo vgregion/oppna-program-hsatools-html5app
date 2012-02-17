@@ -61,9 +61,7 @@ $(document).ready(function() {
                 
     $('#jqmModal-start').modal();
     setTimeout(function(){        
-        $.mobile.showPageLoadingMsg("laddar");
-        hriv.app.inst();
-        
+        $.mobile.showPageLoadingMsg("laddar");        
         if (!hriv.state.gotGeoPos){
             gmap.curentPosition.update();
             //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
@@ -71,6 +69,8 @@ $(document).ready(function() {
     },500);        
      
     setTimeout(function(){
+        console.log("inst");
+        hriv.app.inst();
         console.log("init");
         hriv.app.init();
     },2000);
