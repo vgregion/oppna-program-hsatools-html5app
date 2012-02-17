@@ -6,7 +6,8 @@
  * */
 hriv.app.state = (function(){
     
-    var init = false, isLoading, loadingObj, timeOutLoadModal;
+    var init = false, isLoading, loadingObj,
+        timeOutLoadModal;
      
     loadingObj = {
         CareUnits : false,
@@ -114,17 +115,21 @@ hriv.app.print = function(){
     
     hriv.EmergencyUnits.detail.init();
     hriv.CareUnits.detail.init();
-    hriv.DutyUnits.detail.init();   
+    hriv.DutyUnits.detail.init();
 };
+
+
+hriv.app.printMarkers = function(){
+    hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap());
+    hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap());         
+    hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap());
+};
+
 
 /**
  * Object instantiation
  * */
 hriv.app.inst = function(){   
-    
-    //hriv.dataStore.CareUnits = dataStore.CareUnits.careUnits;
-    //hriv.dataStore.DutyUnits = dataStore.DutyUnits.dutyUnits;
-    //hriv.dataStore.EmergencyUnits = dataStore.EmergencyUnits.emergencyUnits;     
     
     /*****************************************
     * Function setup & object initilization 
@@ -158,6 +163,8 @@ hriv.app.inst = function(){
  * Object initilization
  * */
 hriv.app.init = function(){
+    var timerInitMap;
+    
     
     //Check if app is initilized
     if(hriv.app.state.isInit()){ return; }
@@ -167,6 +174,16 @@ hriv.app.init = function(){
     hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
     hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
     hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);
+    
+    
+    hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});                                 
+    hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});       
+        
+    hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});
+    hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
+    
+    hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});
+    hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
     
     
     hriv.CareUnits.map.addListerner("idle", function(){
@@ -182,40 +199,30 @@ hriv.app.init = function(){
     hriv.EmergencyUnits.map.addListerner("idle", function(){    
         console.log("Emg idle");
         hriv.app.state.readyLoading("EmergencyUnits", true);
-    }); 
+    });    
         
-    
-    hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});                                 
-    hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});       
-        
-    hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});
-    hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
-    
-    hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});
-    hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
-    
-        
-    setTimeout(function(){
-        hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap());
-        hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap());         
-        hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap());   
-    }, 200);
-    
-    
-    setTimeout(function(){         
-        hriv.app.print();
+   
+   hriv.app.print();
+   
+   timerInitMap = setInterval(function(){
+        console.log("init map run");
+        if(!hriv.app.state.isLoading()){
+          hriv.app.printMarkers();  
+          clearInterval(timerInitMap);
+          console.log("init map stopped");   
+        }
     }, 500);
     
-    setTimeout(function () { q.flush(); }, 2000);       // 2 sec
-    setTimeout(function () { aq.flush(); }, 240000);    //4 min 
     
+    setTimeout(function () { q.flush(); }, 2000);       //2 sec
+    setTimeout(function () { aq.flush(); }, 240000);    //4 min 
+            
     setTimeout(function(){
         if(hriv.app.state.isLoading()){        
             $.modal.close();
             $.mobile.hidePageLoadingMsg();
             alert("Internet anslutning saknas. Karta kunde ej laddas");
         }
-    },60000); //Alerts efter 1 min
-    
+    },60000); //Alerts efter 1 min   
     
 };
