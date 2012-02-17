@@ -184,7 +184,8 @@ hriv.app.init = function(){
     hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});         
     hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});    
     
-       
+    hriv.app.initMarkers();
+    hriv.app.print();
     
     hriv.CareUnits.map.addListerner("idle", function(){
         console.log("Care idle");    
@@ -199,13 +200,8 @@ hriv.app.init = function(){
     hriv.EmergencyUnits.map.addListerner("idle", function(){    
         console.log("Emg idle");
         hriv.app.state.readyLoading("EmergencyUnits", true);
-    });    
-      
-        
-   setTimeout(function(){
-      hriv.app.initMarkers();
-      hriv.app.print();       
-   }, 500);   
+    }); 
+   
    
    timerInitMap = setInterval(function(){
         console.log("init map run");
