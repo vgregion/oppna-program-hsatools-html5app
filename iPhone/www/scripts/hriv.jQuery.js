@@ -71,6 +71,7 @@ $(document).ready(function() {
     },500);        
      
     setTimeout(function(){
+        console.log("init");
         hriv.app.init();
     },2000);
          
