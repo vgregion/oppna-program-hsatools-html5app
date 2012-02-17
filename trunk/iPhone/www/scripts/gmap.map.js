@@ -54,14 +54,14 @@ gmap.state = function(){
 		
 		google.maps.event.addListener(config.map, 'idle', function(){ 
 			state.mapLoad = false;
-			//console.log("idle");			
+			console.log("idle");			
 			idle.forEach(function (el) {el();});
 		     
 		});
 				
 		google.maps.event.addListener(config.map, 'bounds_changed', function(){ 
 			state.mapLoad = true;
-			//console.log("map change");			
+			console.log("map change");			
 			loading.forEach(function (el) {el();});
 		});		
 		
