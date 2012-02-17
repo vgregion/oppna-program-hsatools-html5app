@@ -209,8 +209,7 @@ hriv.app.init = function(){
     setTimeout(function () { q.flush(); }, 2000);       // 2 sec
     setTimeout(function () { aq.flush(); }, 240000);    //4 min 
     
-    setTimeout(function(){       
-         
+    setTimeout(function(){
         if(hriv.app.state.isLoading()){        
             $.modal.close();
             $.mobile.hidePageLoadingMsg();

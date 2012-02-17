@@ -61,19 +61,17 @@ $(document).ready(function() {
                 
     $('#jqmModal-start').modal();
     setTimeout(function(){        
-        $.mobile.showPageLoadingMsg("laddar");        
-    },500);    
-
-    setTimeout(function(){
+        $.mobile.showPageLoadingMsg("laddar");
+        hriv.app.inst();
+        
         if (!hriv.state.gotGeoPos){
             gmap.curentPosition.update();
             //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
         }
-         hriv.app.inst();       
-    },1000);
-        
+    },500);        
+     
     setTimeout(function(){
-        hriv.app.init();   
+        hriv.app.init();
     },2000);
          
 });
