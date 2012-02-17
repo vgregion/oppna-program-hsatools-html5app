@@ -70,10 +70,13 @@ $(document).ready(function() {
     
     setTimeout(function(){
         hriv.app.inst();
-    },1000);    
-     
+    },1000);
+    
     setTimeout(function(){
         hriv.app.load();
+    },2000);
+     
+    setTimeout(function(){
         hriv.app.init();
     },15000);
          
