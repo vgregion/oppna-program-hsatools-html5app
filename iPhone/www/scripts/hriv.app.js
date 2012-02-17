@@ -75,7 +75,7 @@ hriv.app.settings = (function(){
 /**
  * Load data to HRIV javscript application
  * */
-hriv.app.load = function(refData, refObj){
+hriv.app.load2 = function(refData, refObj){
     
     //Loads pois to marker object
     var pois = [], listItems = [], listDetails = [], 
@@ -101,6 +101,12 @@ hriv.app.load = function(refData, refObj){
 
     refObj.marker.setPOIS(pois);    
     
+};
+
+hriv.app.load = function(){
+    hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
+    hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
+    hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);    
 };
 
 /**
@@ -173,12 +179,7 @@ hriv.app.init = function(){
     //Check if app is initilized
     if(hriv.app.state.isInit()){ return; }
     
-    hriv.app.state.set(true);   
-    
-    hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
-    hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
-    hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);  
-    
+    hriv.app.state.set(true);
         
     hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});                                             
     hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});         
