@@ -173,21 +173,18 @@ hriv.app.inst = function(){
  * Object initilization
  * */
 hriv.app.init = function(){
-    var timerInitMap;
-    
+    var timerInitMap;    
     
     //Check if app is initilized
     if(hriv.app.state.isInit()){ return; }
     
     hriv.app.state.set(true);
+    
         
     hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});                                             
     hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});         
     hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});    
-    
-    hriv.app.initMarkers();
-    hriv.app.print();
-    
+           
     hriv.CareUnits.map.addListerner("idle", function(){
         console.log("Care idle");    
         hriv.app.state.readyLoading("CareUnits", true);
@@ -207,7 +204,9 @@ hriv.app.init = function(){
    timerInitMap = setInterval(function(){
         console.log("init map run");
         if(!hriv.app.state.isLoading()){          
-          hriv.app.printMarkers();  
+          hriv.app.initMarkers();          
+          hriv.app.printMarkers();
+          hriv.app.print();  
           clearInterval(timerInitMap);
           console.log("init map stopped");   
         }
