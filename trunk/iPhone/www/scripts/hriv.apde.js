@@ -124,10 +124,10 @@ DED.Queue.method('flush', function () {
 		if (that.indx >= that.queue.length) {
             that.indx  = 0;
             that.pause();
-            setTimeout(function(){that.start(); that.flush(); }, that.timeout);              
+            that.timer = setTimeout(function(){that.start(); that.flush(); }, that.timeout);              
         }else{
             // recursive call to flush
-            setTimeout(function () { that.flush(); }, that.interval);
+            that.timer = setTimeout(function () { that.flush(); }, that.interval);
         }        
       };
 
@@ -156,6 +156,8 @@ DED.Queue.method('flush', function () {
       this.paused = true;
   }).method('start', function () {
       this.paused = false;
+  }).method('stopTimeOut', function () {
+      window.clearTimeout(this.timer);
   }).method('dequeue', function () {
       this.queue.pop();
   }).method('clear', function () {
@@ -194,6 +196,7 @@ DED.AjaxQueue = function () {
     this.sleep = 600000;			//Sleep in 10 min
     this.conn = {};
     this.timer = {};
+    this.timer2 = {};
     this.isRunning = false;      
     this.indx = 0;
 };
@@ -229,11 +232,11 @@ DED.AjaxQueue.method('flush', function () {
 	      
           if (that.indx >= that.queue.length) {
 	          that.indx  = 0;
-	          setTimeout(function(){that.start(); that.flush(); }, that.sleep);
+	          that.timer2 = setTimeout(function(){that.start(); that.flush(); }, that.sleep);
 	          that.onComplete.fire(o, data);	          
 	      }else{          
 	          // recursive call to flush
-              setTimeout(function () { that.flush(); }, that.interval);
+              that.timer2 = setTimeout(function () { that.flush(); }, that.interval);
 	      }
 	  };
 	
@@ -260,17 +263,17 @@ DED.AjaxQueue.method('flush', function () {
 	      this.paused = true;
 	  }).method('start', function () {
 	      this.paused = false;
+      }).method('stopTimeOut', function () {
+          window.clearTimeout(this.timer);
+          window.clearTimeout(this.timer2);
 	  }).method('dequeue', function () {
-	      this.queue.pop();
+          this.queue.pop();
 	  }).method('clear', function () {
 	      this.queue = [];
 	  }).method('isRunning', function () {
 	      return this.isRunning;
-	  });  /* Usage. */
+	  });
     
-    
-
-
 
     /* Usage. */
     var q = new DED.Queue;
@@ -279,8 +282,17 @@ DED.AjaxQueue.method('flush', function () {
     q.setInterval(30000);    //Time between runs 1 min
     q.setSleep(30000);      //Time between each iteration 2min
 
+    q.setTimeout(15000);    //Timeout when failure in ajax call 10 min
+    q.setInterval(15000);    //Time between runs 1 min
+    q.setSleep(15000);      //Time between each iteration 2min
+
+
     var aq = new DED.AjaxQueue;
     aq.setRetryCount(5);     // Reset our retry count to be higher for slow connections.
     aq.setTimeout(1200000);   //Timeout when failure in ajax call 10 min
     aq.setInterval(30000);   //Time between runs 30 sec
-    aq.setSleep(1200000);     //Time between each iteration 4min  
+    aq.setSleep(1200000);     //Time between each iteration 20min
+    
+    aq.setTimeout(240000);   //Timeout when failure in ajax call 4 min
+    aq.setInterval(30000);   //Time between runs 30 sec
+    aq.setSleep(240000);     //Time between each iteration 4min  

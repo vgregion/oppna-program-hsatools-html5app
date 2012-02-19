@@ -57,13 +57,39 @@ hriv.app.state = (function(){
 })();
 
 hriv.app.run2 = function(){
-  var that = {};
+  var that = {}, isRunning = false, lastRun;
   
   that.start = function(){
       
     setTimeout(function () { q.flush(); }, 2000);       //2 sec
     setTimeout(function () { aq.flush(); }, 240000);    //4 min
-      
+    isRunning = true;
+    lastRun = new Date().getTime();  
+  };
+  
+  that.isRunning = function(){
+    return isRunning;  
+  };
+  
+  that.restart = function(){
+      if(isRunning){
+        var elapsed = new Date().getTime() - lastRun;
+        console.log(elapsed);
+        
+        //if(elapsed > hriv.app.settings.timeGetData()){
+        if(elapsed > 600000){          
+            console.log("restart");         
+            q.pause();
+            q.stopTimeOut();
+            aq.pause();
+            aq.stopTimeOut();
+          
+            setTimeout(function () { q.start(); q.flush(); }, 30000);       //2 sec
+            setTimeout(function () { aq.start(); aq.flush(); }, 120000);    //2 min
+            lastRun = new Date().getTime(); 
+        }
+        
+      }      
   };
   
   return that;  
@@ -76,11 +102,15 @@ hriv.app.run2 = function(){
  * */
 hriv.app.settings = (function(){
     
-    var numPrintListItems = 25;
+    var numPrintListItems = 25,
+        timeGetData = 14400000; //4 hours interval for fetching new data
     
     return {
         printListItems : function(){
             return numPrintListItems;   
+        },
+        timeGetData : function(){
+            return timeGetData;
         }
     };
     
