@@ -1,5 +1,46 @@
 /*global $, hriv, q, console, gmap, google, PhoneGap, window */
 
+/*****************************************
+* Case phongegap 
+* Instansitate the applications objects 
+*****************************************/          
+    //window.addEventListener('load', function () {
+        //document.addEventListener('deviceready', function () {
+            //console.log("PhoneGap is now loaded!");         
+            //gmap.curentPosition.update();
+            //hriv.state.gotGeoPos = true;                        
+        //}, false);
+    //}, false);
+
+
+    // Handle the resume event
+    //
+    function onResume() {
+        setTimeout(function(){
+            hriv.app.run.restart();            
+        },5000);    
+    }
+    
+    // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
+    //
+    function onDeviceReady() {
+        document.addEventListener("resume", onResume, false);
+        
+        gmap.curentPosition.update();
+        hriv.state.gotGeoPos = true;  
+    }
+
+    // Call onDeviceReady when PhoneGap is loaded.
+    //
+    // At this point, the document has loaded but phonegap.js has not.
+    // When PhoneGap is loaded and talking with the native device,
+    // it will call the event `deviceready`.
+    // 
+    document.addEventListener("deviceready", onDeviceReady, false);    
+
+
+
+
 /*************************************
 * Initializer jQuery mobile framework
 *************************************/
@@ -40,18 +81,6 @@ $(document).ready(function(){
         e.preventDefault();
     });
 });
-
-/*****************************************
-* Case phongegap 
-* Instansitate the applications objects 
-*****************************************/          
-window.addEventListener('load', function () {
-    document.addEventListener('deviceready', function () {
-        //console.log("PhoneGap is now loaded!");         
-        gmap.curentPosition.update();
-        hriv.state.gotGeoPos = true;                        
-    }, false);
-}, false);
 
 /*****************************************
 * Case desktop browser 
