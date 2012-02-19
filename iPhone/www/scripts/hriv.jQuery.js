@@ -47,7 +47,7 @@ $(document).ready(function(){
 *****************************************/          
 window.addEventListener('load', function () {
     document.addEventListener('deviceready', function () {
-        console.log("PhoneGap is now loaded!");         
+        //console.log("PhoneGap is now loaded!");         
         gmap.curentPosition.update();
         hriv.state.gotGeoPos = true;                        
     }, false);
@@ -60,16 +60,20 @@ window.addEventListener('load', function () {
 $(document).ready(function() {
                 
     $('#jqmModal-start').modal();
+    
+    setTimeout(function(){
+        $.mobile.showPageLoadingMsg("laddar");        
+    },500);
+    
     setTimeout(function(){        
-        $.mobile.showPageLoadingMsg("laddar");
         if (!hriv.state.gotGeoPos){
             gmap.curentPosition.update();                   
         }        
-    },500);
+    },1000);
     
     setTimeout(function(){
         hriv.app.inst();
-    },1000);
+    },1500);
      
     setTimeout(function(){
         hriv.app.init();
