@@ -363,8 +363,6 @@ hriv.classes.list = function(spec){
 		});
 		
 		try{$(conf.listId).listview("refresh");}catch(e){}
-		//setTimeout(function(){try{$(conf.listId).listview("refresh");}catch(e){}},100);	
-				
 	};	
 		
 	that.isOpen = function(obj){
