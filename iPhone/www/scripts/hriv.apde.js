@@ -281,8 +281,6 @@ DED.AjaxQueue.method('flush', function () {
 
     var aq = new DED.AjaxQueue;
     aq.setRetryCount(5);     // Reset our retry count to be higher for slow connections.
-    aq.setTimeout(600000);   //Timeout when failure in ajax call 10 min
+    aq.setTimeout(1200000);   //Timeout when failure in ajax call 10 min
     aq.setInterval(30000);   //Time between runs 30 sec
-    aq.setSleep(600000);     //Time between each iteration 4min
-
-  
+    aq.setSleep(1200000);     //Time between each iteration 4min  
