@@ -16,6 +16,7 @@
     // Handle the resume event
     //
     function onResume() {
+        console.log("resume");
         setTimeout(function(){
             hriv.app.run.restart();            
         },5000);    
