@@ -75,7 +75,7 @@ hriv.app.settings = (function(){
 /**
  * Load data to HRIV javscript application
  * */
-hriv.app.load2 = function(refData, refObj){
+hriv.app.load = function(refData, refObj){
     
     //Loads pois to marker object
     var pois = [], listItems = [], listDetails = [], 
@@ -103,11 +103,6 @@ hriv.app.load2 = function(refData, refObj){
     
 };
 
-hriv.app.load = function(){
-    hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
-    hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
-    hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);    
-};
 
 /**
  * Print out data to html
@@ -178,33 +173,36 @@ hriv.app.init = function(){
     //Check if app is initilized
     if(hriv.app.state.isInit()){ return; }
     
-    hriv.app.state.set(true);
+    hriv.app.state.set(true);   
     
+    hriv.app.load(hriv.dataStore.CareUnits.careUnits, hriv.CareUnits);
+    hriv.app.load(hriv.dataStore.DutyUnits.dutyUnits, hriv.DutyUnits);
+    hriv.app.load(hriv.dataStore.EmergencyUnits.emergencyUnits, hriv.EmergencyUnits);        
         
     hriv.CareUnits.map.initialize({refmarker : hriv.CareUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});                                             
     hriv.DutyUnits.map.initialize({refmarker : hriv.DutyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});         
     hriv.EmergencyUnits.map.initialize({refmarker : hriv.EmergencyUnits.marker, mapCenterLat : gmap.curentPosition.latitude(), mapCenterLng : gmap.curentPosition.longitude()});    
            
     hriv.CareUnits.map.addListerner("idle", function(){
-        console.log("Care idle");    
+        //console.log("Care idle");    
         hriv.app.state.readyLoading("CareUnits", true);
     });
     
     hriv.DutyUnits.map.addListerner("idle", function(){    
-        console.log("Duty idle");
+        //console.log("Duty idle");
         hriv.app.state.readyLoading("DutyUnits", true);
     });    
     
     hriv.EmergencyUnits.map.addListerner("idle", function(){    
-        console.log("Emg idle");
+        //console.log("Emg idle");
         hriv.app.state.readyLoading("EmergencyUnits", true);
     }); 
    
+   hriv.app.initMarkers();   
    
    timerInitMap = setInterval(function(){
         console.log("init map run");
-        if(!hriv.app.state.isLoading()){          
-          hriv.app.initMarkers();          
+        if(!hriv.app.state.isLoading()){                 
           hriv.app.printMarkers();
           hriv.app.print();  
           clearInterval(timerInitMap);
