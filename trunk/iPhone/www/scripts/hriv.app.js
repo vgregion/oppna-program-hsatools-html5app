@@ -56,6 +56,20 @@ hriv.app.state = (function(){
     
 })();
 
+hriv.app.run2 = function(){
+  var that = {};
+  
+  that.start = function(){
+      
+    setTimeout(function () { q.flush(); }, 2000);       //2 sec
+    setTimeout(function () { aq.flush(); }, 240000);    //4 min
+      
+  };
+  
+  return that;  
+    
+};
+
 
 /**
  * Settings HRIV javscript application
@@ -104,10 +118,142 @@ hriv.app.load = function(refData, refObj){
 };
 
 
+hriv.app.initMarkers = function(){
+    hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
+    hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});       
+    hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
+};
+
+
+hriv.app.initQueue = function(){
+    
+    q.add({
+        func : hriv.CareUnits.list.reload,
+        para : hriv.dataStore.CareUnits.careUnits,
+        cmd : "CareUnits"
+    });
+    
+    q.add({
+      func : gmap.curentPosition.update,
+      para : "",
+      cmd : "UpdateCurrentPos"
+    });
+    
+    q.add({
+        func : hriv.DutyUnits.list.reload,
+        para : hriv.dataStore.DutyUnits.dutyUnits,
+        cmd : "DutyUnits"
+    });
+    
+    q.add({
+      func : gmap.curentPosition.update,
+      para : "",
+      cmd : "UpdateCurrentPos"
+    });
+    
+    q.add({
+        func : hriv.EmergencyUnits.list.reload,
+        para : hriv.dataStore.EmergencyUnits.emergencyUnits,
+        cmd : "EmergencyUnits"
+    });
+    
+    q.add({
+      func : gmap.curentPosition.update,
+      para : "",
+      cmd : "UpdateCurrentPos"
+    });
+    
+    
+    // Notifier for each flush.
+    q.onFlush.subscribe(function (cmd, data) {});
+    
+    // Notifier for any failures.
+    q.onFailure.subscribe(function() { });
+    
+    // Notifier of the completion of the flush.
+    q.onComplete.subscribe(function (cmd, data) { });  
+};
+
+
+hriv.app.initAjaxQueue = function(){
+
+    aq.add({
+        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getCareUnits.json",
+        cmd: "ReloadCareUnits",
+        data: hriv.dataStore.CareUnits.careUnits 
+    });
+
+    aq.add({
+        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getDutyUnits.json",
+        cmd: "ReloadDutyUnits",
+        data : hriv.dataStore.DutyUnits.dutyUnits
+    });
+    
+    aq.add({
+        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getEmergencyUnits.json",
+        cmd: "ReloadEmergencyUnits",
+        data: hriv.dataStore.EmergencyUnits.emergencyUnits
+    }); 
+    
+    
+    /********************************************
+    * Notifier for each request that 
+    * is being flushed, eg. when its success.
+    *********************************************/
+    aq.onFlush.subscribe(function (cmd, data) {
+        console.log("exec reload :" + cmd + "  " + new Date());
+        q.pause();
+        //console.log("stop queue");
+        
+        switch (cmd) {
+            case 'CareUnits':
+                    hriv.dataStore.CareUnits.careUnits = null;  //Removes data
+                    hriv.dataStore.CareUnits.careUnits = data;  //Adds new data
+                                    
+                    //Check if user is on current page              
+                    hriv.CareUnits.marker.clearMarkers();       //Remove all pois           
+                    hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos               
+                break;
+            case 'DutyUnits':
+                    hriv.dataStore.DutyUnits.careUnits = null;  //Removes data
+                    hriv.dataStore.DutyUnits.careUnits = data;  //Adds new data
+                    
+                    //Check if user is on current page                              
+                    hriv.DutyUnits.marker.clearMarkers();       //Remove all pois               
+                    hriv.DutyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
+                break;
+            case 'EmergencyUnits':
+                    hriv.dataStore.EmergencyUnits.careUnits = null; //Removes data
+                    hriv.dataStore.EmergencyUnits.careUnits = data; //Adds new data
+                    
+                    //Check if user is on current page                              
+                    hriv.EmergencyUnits.marker.clearMarkers();      //Remove all pois           
+                    hriv.EmergencyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
+                break;
+        }       
+        
+    });
+    
+    // Notifier for any failures.
+    aq.onFailure.subscribe(function() {
+        console.log("failure queue");       
+        q.start();
+        q.flush();
+    });
+    
+    // Notifier of the completion of the flush.
+    aq.onComplete.subscribe(function (cmd, data) {      
+        console.log("started queue");
+        q.start();
+        q.flush();
+    });     
+    
+};
+
 /**
  * Print out data to html
  * */
-hriv.app.print = function(){
+hriv.app.printList = function(){
     var itms = hriv.app.settings.printListItems();
     
     hriv.CareUnits.list.print(itms);
@@ -117,12 +263,6 @@ hriv.app.print = function(){
     hriv.EmergencyUnits.detail.init();
     hriv.CareUnits.detail.init();
     hriv.DutyUnits.detail.init();
-};
-
-hriv.app.initMarkers = function(){
-    hriv.EmergencyUnits.marker.initialize({refMap : hriv.EmergencyUnits.map.getMap()});
-    hriv.CareUnits.marker.initialize({refMap : hriv.CareUnits.map.getMap()});       
-    hriv.DutyUnits.marker.initialize({refMap : hriv.DutyUnits.map.getMap()});
 };
 
 hriv.app.printMarkers = function(){
@@ -140,6 +280,9 @@ hriv.app.inst = function(){
     /*****************************************
     * Function setup & object initilization 
     *****************************************/
+   
+    hriv.app.run = hriv.app.run2();
+   
     hriv.CareUnits.map = gmap.map({pageId : '#mapCareUnits [data-icon="compass"]', mapCanvasId: "map_canvas", headerSelector : ".ui-page-active .ui-header", footerSelector : ".ui-page-active .ui-footer", linkMap : "#detailview", page : "CareUnits"});
     hriv.CareUnits.marker = gmap.marker();
     hriv.CareUnits.list = hriv.classes.listview({refObj : hriv.CareUnits, listId: "#lCareUnits"});
@@ -199,21 +342,23 @@ hriv.app.init = function(){
     }); 
    
    hriv.app.initMarkers();   
-   
+   hriv.app.initQueue();
+   hriv.app.initAjaxQueue();
+     
    timerInitMap = setInterval(function(){
         console.log("init map run");
-        if(!hriv.app.state.isLoading()){                 
+        if(!hriv.app.state.isLoading()){
           hriv.app.printMarkers();
-          hriv.app.print();  
+          hriv.app.printList();
           clearInterval(timerInitMap);
-          console.log("init map stopped");   
+          console.log("init map stopped"); 
         }
     }, 1000);
+   
+   setTimeout(function(){
+       hriv.app.run.start(); 
+   }, 2000);   
     
-    
-    setTimeout(function () { q.flush(); }, 2000);       //2 sec
-    setTimeout(function () { aq.flush(); }, 240000);    //4 min 
-            
     setTimeout(function(){
         if(hriv.app.state.isLoading()){        
             $.modal.close();

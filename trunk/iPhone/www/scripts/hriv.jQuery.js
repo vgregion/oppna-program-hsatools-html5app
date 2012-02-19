@@ -63,18 +63,13 @@ $(document).ready(function() {
     setTimeout(function(){        
         $.mobile.showPageLoadingMsg("laddar");
         if (!hriv.state.gotGeoPos){
-            gmap.curentPosition.update();
-            //navigator.geolocation.watchPosition(gmap.curentPosition.onSuccess2, gmap.curentPosition.onError, { frequency: 30000 });       
+            gmap.curentPosition.update();                   
         }        
     },500);
     
     setTimeout(function(){
         hriv.app.inst();
     },1000);
-    
-    setTimeout(function(){
-        hriv.app.load();
-    },2000);
      
     setTimeout(function(){
         hriv.app.init();

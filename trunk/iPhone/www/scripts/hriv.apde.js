@@ -138,7 +138,7 @@ DED.Queue.method('flush', function () {
 	  
 	if(this.jump !== cmd){
 		console.log("exe func qeueu: " + cmd + " " + new Date());
-		//func(para);
+		func(para);
 	}
 	callback(cmd,"");
 	  
@@ -167,64 +167,7 @@ DED.Queue.method('flush', function () {
   });
 
 
-	/* Usage. */
-	var q = new DED.Queue;
-
-	q.add({
-		func : hriv.CareUnits.list.reload,
-		para : hriv.dataStore.CareUnits.careUnits,
-		cmd : "CareUnits"
-	});
 	
-	q.add({
-		func : function(){		
-			//hriv.CareUnits.list.update();   
-		},
-		para : "",
-		cmd : "UpdateListCareUnits"
-	});
-	
-	q.add({
-		func : hriv.DutyUnits.list.reload,
-		para : hriv.dataStore.DutyUnits.dutyUnits,
-		cmd : "DutyUnits"
-	});
-	
-	q.add({
-		func : function(){		
-			//hriv.DutyUnits.list.update();   
-		},
-		para : "",
-		cmd : "UpdateListDutyUnitsUnits"
-	});
-	
-	q.add({
-		func : hriv.EmergencyUnits.list.reload,
-		para : hriv.dataStore.EmergencyUnits.emergencyUnits,
-		cmd : "EmergencyUnits"
-	});
-	
-	q.add({
-		func : function(){		
-			//hriv.EmergencyUnits.list.update();   
-		},
-		para : "",
-		cmd : "UpdateListEmergencyUnitsUnits"
-	});
-	
-	
-	
-	q.onFlush.subscribe(function (cmd, data) {
-		//console.log("Uppdating current pos");
-		gmap.curentPosition.update();
-	});
-	
-	// Notifier for any failures.
-	q.onFailure.subscribe(function() { });
-	
-	// Notifier of the completion of the flush.
-	q.onComplete.subscribe(function (cmd, data) { });	
-
 
 /******************************
 * Ajax queue handling 
@@ -323,92 +266,23 @@ DED.AjaxQueue.method('flush', function () {
 	      this.queue = [];
 	  }).method('isRunning', function () {
 	      return this.isRunning;
-	  });
+	  });  /* Usage. */
+    
+    
 
 
 
-
-	/* Usage. */
-	var aq = new DED.AjaxQueue;
-
-	aq.add({
-	    url: "http://tycktill.vgregion.se/hriv-mobile-ws/getCareUnits.json",
-	    cmd: "ReloadCareUnits",
-	    data: hriv.dataStore.CareUnits.careUnits 
-	});
-
-	aq.add({
-	    url: "http://tycktill.vgregion.se/hriv-mobile-ws/getDutyUnits.json",
-	    cmd: "ReloadDutyUnits",
-	    data : hriv.dataStore.DutyUnits.dutyUnits
-	});
-	
-	aq.add({
-	    url: "http://tycktill.vgregion.se/hriv-mobile-ws/getEmergencyUnits.json",
-	    cmd: "ReloadEmergencyUnits",
-	    data: hriv.dataStore.EmergencyUnits.emergencyUnits
-	});	
-	
-	
-	/********************************************
-	* Notifier for each request that 
-	* is being flushed, eg. when its success.
-	*********************************************/
-	aq.onFlush.subscribe(function (cmd, data) {
-	    console.log("exec reload :" + cmd + "  " + new Date());
-		q.pause();
-		//console.log("stop queue");
-		
-	    switch (cmd) {
-			case 'CareUnits':
-					hriv.dataStore.CareUnits.careUnits = null;	//Removes data
-					hriv.dataStore.CareUnits.careUnits = data;	//Adds new data
-									
-					//Check if user is on current page				
-					hriv.CareUnits.marker.clearMarkers();		//Remove all pois			
-					hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos				
-	            break;
-	        case 'DutyUnits':
-					hriv.dataStore.DutyUnits.careUnits = null;	//Removes data
-					hriv.dataStore.DutyUnits.careUnits = data;	//Adds new data
-					
-					//Check if user is on current page								
-					hriv.DutyUnits.marker.clearMarkers();		//Remove all pois				
-					hriv.DutyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
-	            break;
-	        case 'EmergencyUnits':
-					hriv.dataStore.EmergencyUnits.careUnits = null;	//Removes data
-					hriv.dataStore.EmergencyUnits.careUnits = data;	//Adds new data
-					
-					//Check if user is on current page								
-					hriv.EmergencyUnits.marker.clearMarkers();		//Remove all pois			
-					hriv.EmergencyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
-	            break;
-	    }	    
-	    
-	});
-	
-	// Notifier for any failures.
-	aq.onFailure.subscribe(function() {
-	    console.log("failure queue");	    
-	    q.start();
-	    q.flush();
-	});
-	
-	// Notifier of the completion of the flush.
-	aq.onComplete.subscribe(function (cmd, data) {	    
-	    console.log("started queue");
-	    q.start();
-        q.flush();
-	});   
-
-
+    /* Usage. */
+    var q = new DED.Queue;
     q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
-    q.setTimeout(600000);    //Timeout when failure in ajax call 10 min
-    q.setInterval(60000);    //Time between runs 1 min
-    q.setSleep(120000);         //Time between each iteration 2min
+    q.setTimeout(30000);    //Timeout when failure in ajax call 10 min
+    q.setInterval(30000);    //Time between runs 1 min
+    q.setSleep(30000);      //Time between each iteration 2min
 
-    aq.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
-    aq.setTimeout(600000);    //Timeout when failure in ajax call 10 min
-    aq.setInterval(60000);    //Time between runs 1min
-    aq.setSleep(240000);         //Time between each iteration 4min
+    var aq = new DED.AjaxQueue;
+    aq.setRetryCount(5);     // Reset our retry count to be higher for slow connections.
+    aq.setTimeout(600000);   //Timeout when failure in ajax call 10 min
+    aq.setInterval(30000);   //Time between runs 30 sec
+    aq.setSleep(600000);     //Time between each iteration 4min
+
+  
