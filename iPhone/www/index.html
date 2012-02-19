@@ -80,42 +80,6 @@
     </div>
 
 
-    <div data-role="page" id="mainList" data-theme="f">
-        <div data-role="header" data-theme="f">
-            <h1>Västra Götalandsregionen</h1>
-        </div>
-        
-        <div data-role="content">
-            <div class="ui-content-text-header">Hitta vård nu</div>                     
-            
-            <div class="ui-listbox">
-                <ul data-role="listview" data-inset="false" data-theme="d">                
-                    <li data-icon="care" class="ui-li-single ui-li-rounded">        
-                        <a id="linkCareUnits" href="#listCareUnits" data-theme="f">Vårdcentral</a>
-                    </li>
-                </ul> 
-            </div>
-            
-            <div class="ui-listbox">
-                <ul data-role="listview" data-inset="false" data-theme="d">                
-                    <li data-icon="duty" class="ui-li-single ui-li-rounded">
-                        <a id="linkDutyUnits" href="#listDutyUnits" data-theme="f">Jourmottagning</a>                        
-                    </li>
-                </ul> 
-            </div>           
-
-            <div class="ui-listbox">
-                <ul data-role="listview" data-inset="false" data-theme="d">                
-                    <li data-icon="emergency" class="ui-li-single ui-li-rounded">
-                        <a id="linkEmergencyUnits" href="#listEmergencyUnits" data-theme="f">Akutmottagning</a>
-                    </li>
-                </ul> 
-            </div>
-        </div>    
-    </div>
-
-
-
     <div data-role="page" id="mapCareUnits" class="ui-page-map" style="width: 100%; height:100%;">
         <div data-role="header" data-theme="f">
             <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
@@ -123,6 +87,10 @@
             <a href="#" data-icon="compass" class="ui-button"></a>
         </div>
 
+        <!-- <div data-role="content" style="width:100%;height:100%;padding:0;"> 
+          <div id="map_canvas" style="width:100%;height:100%;padding:0;"></div>
+        </div> -->
+        
 		<div data-role="content"> 
           <div id="map_canvas"></div>
         </div>        
@@ -137,10 +105,11 @@
     
     <div data-role="page" id="listCareUnits">
         <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
-            <a href="#mainList" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Vårdcentraler</h1>
         </div>
 
+        <!-- <div data-role="content" style="width: 90%"> -->
     	<div data-role="content">                
         	<ul id="lCareUnits"  class="ui-listview-units" data-role="listview" data-theme="d"> 
         		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		     		                		
@@ -172,10 +141,11 @@
     
     <div data-role="page" id="listDutyUnits">
         <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
-            <a href="#mainList" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Jourmottagningar</h1>
         </div>
 
+        <!-- <div data-role="content" style="width: 90%"> -->
      	<div data-role="content">
         	<ul id="ldutyUnits" class="ui-listview-units" data-role="listview" data-theme="d">  
         		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		
@@ -196,6 +166,7 @@
             <a href="#" data-icon="compass" class="ui-button"></a>
         </div>
 
+        <!-- <div data-role="content" style="width:100%;height:100%;padding:0;"> -->
 		<div data-role="content">          
           <div id="map_canvas_Emergency"></div>
         </div>
@@ -208,10 +179,11 @@
     
     <div data-role="page" id="listEmergencyUnits">
         <div data-role="header" data-theme="f" data-position="fixed" class="listview-header">
-            <a href="#mainList" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
+            <a href="#main" data-direction="reverse" class="back-btn ui-button-back nav-button">hem</a>
             <h1>Akutmottagningar</h1>
         </div>
 
+        <!-- <div data-role="content" style="width: 90%"> -->
 		<div data-role="content">        	                
         	<ul id="lemergencyUnits" class="ui-listview-units" data-role="listview" data-theme="d">
         		<li data-icon="false" class="ui-list-load-up" ><a><h3>Gå upp</h3></a></li>        		        		            
