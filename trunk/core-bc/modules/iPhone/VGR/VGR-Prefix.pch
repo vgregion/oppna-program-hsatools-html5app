@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'VGR' target in the 'VGR' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+#endif
