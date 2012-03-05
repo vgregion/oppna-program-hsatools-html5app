@@ -208,21 +208,21 @@ hriv.app.initQueue = function(){
 hriv.app.initAjaxQueue = function(){
 
     aq.add({
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getCareUnits.json",
-        cmd: "ReloadCareUnits",
-        data: hriv.dataStore.CareUnits.careUnits 
+        url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getCareUnits.jsonp",
+        cmd: "ReloadCareUnits"
+        //data: hriv.dataStore.CareUnits.careUnits 
     });
 
     aq.add({
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getDutyUnits.json",
-        cmd: "ReloadDutyUnits",
-        data : hriv.dataStore.DutyUnits.dutyUnits
+        url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getDutyUnits.jsonp",
+        cmd: "ReloadDutyUnits"
+        //data : hriv.dataStore.DutyUnits.dutyUnits
     });
     
     aq.add({
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getEmergencyUnits.json",
-        cmd: "ReloadEmergencyUnits",
-        data: hriv.dataStore.EmergencyUnits.emergencyUnits
+        url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getEmergencyUnits.jsonp",
+        cmd: "ReloadEmergencyUnits"
+        //data: hriv.dataStore.EmergencyUnits.emergencyUnits
     }); 
     
     
@@ -232,33 +232,32 @@ hriv.app.initAjaxQueue = function(){
     *********************************************/
     aq.onFlush.subscribe(function (cmd, data) {
         console.log("exec reload :" + cmd + "  " + new Date());
-        q.pause();
-        //console.log("stop queue");
+        q.pause();        
         
         switch (cmd) {
-            case 'CareUnits':
+            case 'ReloadCareUnits':
                     hriv.dataStore.CareUnits.careUnits = null;  //Removes data
-                    hriv.dataStore.CareUnits.careUnits = data;  //Adds new data
+                    hriv.dataStore.CareUnits.careUnits = data.careUnits;  //Adds new data
                                     
                     //Check if user is on current page              
                     hriv.CareUnits.marker.clearMarkers();       //Remove all pois           
                     hriv.CareUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos               
                 break;
-            case 'DutyUnits':
-                    hriv.dataStore.DutyUnits.careUnits = null;  //Removes data
-                    hriv.dataStore.DutyUnits.careUnits = data;  //Adds new data
+            case 'ReloadDutyUnits':
+                    hriv.dataStore.DutyUnits.dutyUnits = null;  //Removes data
+                    hriv.dataStore.DutyUnits.dutyUnits = data.dutyUnits;  //Adds new data
                     
                     //Check if user is on current page                              
                     hriv.DutyUnits.marker.clearMarkers();       //Remove all pois               
-                    hriv.DutyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
+                    hriv.DutyUnits.marker.showMarkers(hriv.DutyUnits.map.getMap()); //Add new pos
                 break;
-            case 'EmergencyUnits':
-                    hriv.dataStore.EmergencyUnits.careUnits = null; //Removes data
-                    hriv.dataStore.EmergencyUnits.careUnits = data; //Adds new data
+            case 'ReloadEmergencyUnits':
+                    hriv.dataStore.EmergencyUnits.emergencyUnits = null; //Removes data
+                    hriv.dataStore.EmergencyUnits.emergencyUnits = data.emergencyUnits; //Adds new data
                     
                     //Check if user is on current page                              
                     hriv.EmergencyUnits.marker.clearMarkers();      //Remove all pois           
-                    hriv.EmergencyUnits.marker.showMarkers(hriv.CareUnits.map.getMap()); //Add new pos
+                    hriv.EmergencyUnits.marker.showMarkers(hriv.EmergencyUnits.map.getMap()); //Add new pos
                 break;
         }       
         
