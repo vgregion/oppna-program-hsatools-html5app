@@ -54,12 +54,12 @@ hriv.classes.mode = function(spec){
 	
 	that.mapClick = function(){
 		$(conf.linkId).attr("href", conf.linkMap);
-		that.mapOn();		
+		//that.mapOn();		
 	};
 	
 	that.listClick = function(){
 		$(conf.linkId).attr("href", conf.linkList);
-		that.listOn();
+		//that.listOn();
 	};
 	
 	that.mapOn = function(){
@@ -326,10 +326,11 @@ hriv.classes.list = function(spec){
 		if(bolShow){
 			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta mer</h3></a></li>';
 			strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
-		}
+		}	
 		
-		$(conf.listId).append(strList);		
-		$(conf.listId).trigger("create");	
+		$(conf.listId).append(strList);
+		$(conf.listId).trigger("create");
+		//try{$(conf.listId).listview("refresh");}catch(e){}	
 	};	
 	
 	that.sortOnDistance = function(){
@@ -344,11 +345,61 @@ hriv.classes.list = function(spec){
 		_listItems = val;		
 	};
 	
+	that.update2 = function(itms, start, stop){
+        
+        var bolShowUp = false, bolShowDown = true, list = [], strList ="", $listItems, s=0;
+                
+        if(itms){ 
+            conf.itms = itms;           
+            if(itms < _listItems.length){
+                conf.stop = itms;                
+            }else{
+                conf.stop = _listItems.length;          
+            }                   
+        }
+        
+        if(start){ conf.start = start; }
+        if(start === 0){ conf.start = start; }
+        if(stop){ conf.stop = stop; }
+        
+        if(conf.start >= conf.itms){ bolShowUp = true; }
+        if(conf.stop > _listItems.length){ 
+            conf.stop = _listItems.length; 
+            s = conf.stop - conf.start;
+            s = conf.itms - s;
+            bolShowDown = false; 
+        }
+        
+        if(bolShowUp){ $(conf.listId + "  .ui-list-load-up").show(); } else { $(conf.listId + "  .ui-list-load-up").hide(); }
+        
+        if(bolShowDown){$(conf.listId + "  .ui-list-load-down").show();}else{$(conf.listId + "  .ui-list-load-down").hide();}
+        
+        
+        
+        $listItems = $(conf.listId + " li.ui-listItem");
+        for(var i = conf.start; i < conf.stop; i++, s++){
+            //var i = conf.start + index;
+            var strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;
+
+            strList = "";           
+            strList = strList + '<li class="ui-listItem" data-icon="false">';
+            strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
+            strList = strList + '<img src="images/' + that.isOpen(_listItems[i].open)  + '" alt="" class="ui-li-icon">';
+            strList = strList + '<h3>' + _listItems[i].name + '</h3>';
+            strList = strList + '<p>' + strDistance + '</p>';
+            strList = strList + '</a></li>';     
+            
+            $($listItems[s]).replaceWith(strList);                            
+        }
+        
+        try{$(conf.listId).listview("refresh");}catch(e){}
+	};
+	
 	that.update = function(){
 		var list = [], strList ="";
 				
 		$(conf.listId + " li.ui-listItem").each(function(index) {
-			var i = 0 + index;
+			var i = conf.start + index;
 			var strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;
 
 			strList = "";			
@@ -405,6 +456,7 @@ hriv.classes.listview = function(spec){
 		list.sortOnDistance();
 		list.print(itms);
 		
+		$(conf.listId + " .ui-list-load-up").on("click", that.upClick);
 		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
 	};
 	
@@ -438,24 +490,38 @@ hriv.classes.listview = function(spec){
 	that.update = function(){		
 		list.update();		
 	};
+
+
+    that.upClick = function($e){      
+        
+        $.mobile.showPageLoadingMsg();                      
+        
+        conf.listStart = conf.listStart - conf.listPadding;
+        conf.listStop = conf.listStop - conf.listPadding;   
+        
+        list.update2(conf.listPadding, conf.listStart, conf.listStop);       
+        
+        setTimeout(function(){
+            $.mobile.hidePageLoadingMsg();    
+        }, 800);                              
+        
+        return false;
+    };
+
 	
 	that.downClick = function($e){		
-		
-		$(this).hide();
 		
 		$.mobile.showPageLoadingMsg();						
 		
 		conf.listStart = conf.listStart + conf.listPadding;
 		conf.listStop = conf.listStop + conf.listPadding;	
 		
-		list.print(conf.listPadding, conf.listStart, conf.listStop);			
-		$(conf.listId).listview("refresh");		
+		list.update2(conf.listPadding, conf.listStart, conf.listStop);
 		
-		$(conf.listId + " .ui-list-load-down").off("click", that.downClick);	
-		$(conf.listId + " .ui-list-load-down").on("click", that.downClick);	
-		
-		$.mobile.hidePageLoadingMsg();						
-		
+        setTimeout(function(){
+            $.mobile.hidePageLoadingMsg();    
+        }, 800);
+        		
 		return false;
 	};
 	

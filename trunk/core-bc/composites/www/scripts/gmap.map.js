@@ -208,10 +208,10 @@ gmap.map = function(spec) {
 
 		/* Calculate the geometry that our content area should take */
 		var header = $(".header:visible");
-		//var footer = $(".footer:visible");    
+		var footer = $(".footer:visible");    
 		var content = $(".content:visible");
 		var viewport_height = $(document).height();    
-		var content_height = viewport_height - header.outerHeight(); // - footer.outerHeight();
+		var content_height = viewport_height - header.outerHeight() - footer.outerHeight() - 42 - 42;
     
 		/* Trim margin/border/padding height */
 		content_height -= (content.outerHeight() - content.height());

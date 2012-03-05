@@ -1,5 +1,29 @@
 /*global $, hriv, q, console, gmap, google, PhoneGap, window */
 
+
+var test = function(){
+  //console.log("here");
+  //console.log(data);      
+};
+
+var jsonpRequest = function(){
+    
+   //$.ajax({
+        //url: 'http://tycktill.vgregion.se/test-hriv-mobile-ws/getCareUnits.jsonp',
+        //data: {},
+        //cache : false,
+        //dataType: 'jsonp',
+        //jsonp: 'callback',
+        //jsonpCallback: "test",
+        //success: function(data){
+            //alert("success");
+          //  console.log(data);
+        //}
+    //});    
+    
+};
+
+
 /*****************************************
 * Case phongegap 
 * Instansitate the applications objects 
@@ -7,7 +31,7 @@
 
     // Handle the resume event    
     function onResume() {
-        //console.log("resume");
+        console.log("resume");
         setTimeout(function(){
             hriv.app.run.restart();            
         },5000);    
@@ -16,7 +40,7 @@
     // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
     function onDeviceReady() {
         document.addEventListener("resume", onResume, false);
-        //console.log("PhoneGap is now loaded!");  
+        console.log("PhoneGap is now loaded!");  
         gmap.curentPosition.update();
         hriv.state.gotGeoPos = true;  
     }
@@ -49,8 +73,11 @@ $(document).ready(function(){
     
     //$.support.cors = true;
     $.mobile.allowCrossDomainPages = true;  
-    $.mobile.fixedToolbars.setTouchToggleEnabled(false);
-    $.mobile.touchOverflowEnabled = true;
+    $.mobile.defaultPageTransition = 'none';
+    //$.mobile.fixedToolbars.setTouchToggleEnabled(false);
+    //$.mobile.pushStateEnabled = false;
+    $.mobile.loadingMessage = "Vänligen vänta, uppdaterar data...";
+    //$.mobile.touchOverflowEnabled = true;
     
     $("#main").bind("vmousemove", function(e){
         e.preventDefault();
@@ -82,7 +109,7 @@ $(document).ready(function() {
     $('#jqmModal-start').modal();
     
     setTimeout(function(){
-        $.mobile.showPageLoadingMsg("laddar");        
+        $.mobile.showPageLoadingMsg();        
     },500);
     
     setTimeout(function(){        
@@ -97,8 +124,7 @@ $(document).ready(function() {
      
     setTimeout(function(){
         hriv.app.init();
-    },15000);
-         
+    },3000);         
 });
 
 
@@ -106,14 +132,14 @@ $(document).ready(function() {
 * Page initializers CareUnits 
 *******************************/
 $('#mapCareUnits').live('pagecreate', function(event){  
+    hriv.CareUnits.map.resizeMap();
+    hriv.CareUnits.mode.map.mapOn(); 
     hriv.CareUnits.mode.map.init("map");
 });
-$('#mapCareUnits').live('pageshow', function(event){
-    hriv.CareUnits.mode.map.mapOn();    
+$('#mapCareUnits').live('pageshow', function(event){   
     hriv.CareUnits.map.showCurrentPosition(true);  
     
     setTimeout(function(){
-        hriv.CareUnits.map.resizeMap();
         hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());               
     }, 1000);   
 });
@@ -127,28 +153,28 @@ $('#listCareUnits').live('pagecreate', function(event){
 });
 $('#listCareUnits').live('pagebeforeshow', function(event){
     q.skip("CareUnits");
-    hriv.CareUnits.list.update();
+    //hriv.CareUnits.list.update();
 });
 $('#listCareUnits').live('pageshow', function(event){   
     hriv.CareUnits.mode.list.listOn();
     setTimeout(function(){ q.skip(""); }, 200);     
 });
 $('#listCareUnits').live('pagehide', function(event){
-    hriv.CareUnits.list.remove();   
+    //hriv.CareUnits.list.remove();   
 });
 
 /*********************************
  * Page initializers DutyUnits 
  *********************************/
 $('#mapDutyUnits' ).live('pagecreate', function(event){ 
-    hriv.DutyUnits.mode.map.init("map");    
+    hriv.DutyUnits.map.resizeMap();    
+    hriv.DutyUnits.mode.map.mapOn();
+    hriv.DutyUnits.mode.map.init("map");        
 });
-$('#mapDutyUnits' ).live('pageshow', function(event){       
-    hriv.DutyUnits.mode.map.mapOn();    
+$('#mapDutyUnits' ).live('pageshow', function(event){           
     hriv.DutyUnits.map.showCurrentPosition(true);      
         
     setTimeout(function(){
-        hriv.DutyUnits.map.resizeMap();
         hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
     }, 1000);   
 });
@@ -162,14 +188,14 @@ $('#listDutyUnits' ).live('pagecreate', function(event){
 });
 $('#listDutyUnits').live('pagebeforeshow', function(event){
     q.skip("DutyUnits");
-    hriv.DutyUnits.list.update();
+    //hriv.DutyUnits.list.update();
 });
 $('#listDutyUnits' ).live('pageshow', function(event){
     hriv.DutyUnits.mode.list.listOn();  
     setTimeout(function(){ q.skip(""); }, 200); 
 });
 $('#listDutyUnits').live('pagehide', function(event){
-    hriv.DutyUnits.list.remove();
+    //hriv.DutyUnits.list.remove();
 });
 
 
@@ -177,14 +203,14 @@ $('#listDutyUnits').live('pagehide', function(event){
  * Page initializers for EmergencyUnits 
  ***************************************/
 $('#mapEmergencyUnits' ).live('pagecreate', function(event){
+    hriv.EmergencyUnits.map.resizeMap();
+    hriv.EmergencyUnits.mode.map.mapOn();
     hriv.EmergencyUnits.mode.map.init("map");
 });
 $('#mapEmergencyUnits' ).live('pageshow', function(event){      
-    hriv.EmergencyUnits.mode.map.mapOn();
     hriv.EmergencyUnits.map.showCurrentPosition(true);
         
     setTimeout(function(){
-        hriv.EmergencyUnits.map.resizeMap();
         hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());  
     }, 1000);       
 });
@@ -198,14 +224,14 @@ $('#listEmergencyUnits' ).live('pagecreate', function(event){
 });
 $('#listEmergencyUnits').live('pagebeforeshow', function(event){
     q.skip("EmergencyUnits");
-    hriv.EmergencyUnits.list.update();      
+    //hriv.EmergencyUnits.list.update();      
 });
 $('#listEmergencyUnits' ).live('pageshow', function(event){
     hriv.EmergencyUnits.mode.list.listOn(); 
     setTimeout(function(){ q.skip(""); }, 200);         
 });
 $('#listEmergencyUnits').live('pagehide', function(event){
-    hriv.EmergencyUnits.list.remove();  
+    //hriv.EmergencyUnits.list.remove();  
 });
 
 /**************************************

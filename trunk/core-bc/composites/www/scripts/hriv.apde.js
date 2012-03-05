@@ -238,16 +238,27 @@ DED.AjaxQueue.method('flush', function () {
 	          // recursive call to flush
               that.timer2 = setTimeout(function () { that.flush(); }, that.interval);
 	      }
-	  };
-	
+	  };	  
+	  
 	  var para = this.queue[this.indx].cmd;
-	  var data = this.queue[this.indx].data;
-	
-	  //$.getJSON(this.queue[this.indx]['url'], null, function(data){
-	  //})
-	  //.error(function() { abort(); });
+	  //var data = this.queue[this.indx].data;
+      
+      $.ajax({
+          url: this.queue[this.indx].url,
+          data: {},
+          cache : false,
+          dataType: "jsonp",
+          jsonp: 'callback',
+          jsonpCallback: "jsonpRequest",        
+          success: function (data) {
+              callback(para, data);
+          },
+          error: function () {
+              abort();
+          }
+      });	  
 		  
-	  callback(para, data);
+	  //callback(para, data);
 	
 	  }).method('setRetryCount', function (count) {
 	      this.retryCount = count;
@@ -282,9 +293,9 @@ DED.AjaxQueue.method('flush', function () {
     q.setInterval(30000);    //Time between runs 1 min
     q.setSleep(30000);      //Time between each iteration 2min
 
-    q.setTimeout(15000);    //Timeout when failure in ajax call 10 min
-    q.setInterval(15000);    //Time between runs 1 min
-    q.setSleep(15000);      //Time between each iteration 2min
+    //q.setTimeout(15000);    //Timeout when failure in ajax call 10 min
+    //q.setInterval(15000);    //Time between runs 1 min
+    //q.setSleep(15000);      //Time between each iteration 2min
 
 
     var aq = new DED.AjaxQueue();
