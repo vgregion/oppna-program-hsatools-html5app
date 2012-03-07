@@ -1,4 +1,4 @@
-/*global $, gmap, google, hriv, PhoneGap */
+/*global $, gmap, google, hriv, PhoneGap, device, console */
 
 
 /*****************************
@@ -176,16 +176,25 @@ hriv.classes.detailview = function(spec){
 		idx = conf.myListArr.getIndex(hsaId);
 		if(idx === null){ return; }	
 				
-		if (PhoneGap.available){
-            nativeDirectionsLink = 'maps:q=http://maps.google.com/maps?';
+		if (PhoneGap.available){            
+            switch(device.platform){
+                case"Android":
+                    nativeDirectionsLink = 'http://maps.google.com/maps?';
+                    break;
+                case "iPhone":
+                    nativeDirectionsLink = 'maps:q=http://maps.google.com/maps?';
+                    break;
+                default:
+                    nativeDirectionsLink = 'http://maps.google.com/maps?'; 
+                    break;
+            }                   
         }else{
             nativeDirectionsLink = 'http://maps.google.com/maps?';
         }		
 		
 		nativeDirectionsLink += 'll=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
 		nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
-		nativeDirectionsLink += '&daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude;
-		//nativeDirectionsLink +=  + '&iwloc=A';
+		nativeDirectionsLink += '&daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude;		
 					
 		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
 		
@@ -213,11 +222,11 @@ hriv.classes.detailview = function(spec){
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc detailview-buttons">' +
 						'<div class="detailview-buttons1"><a href="tel:'+ conf.myListArr[idx].tel +'" data-role="button" data-inline="true">Ring</a></div>' +
-						'<div class="detailview-buttons2"><a  target="_blank" href="'+ conf.myListArr[idx].website +'" data-role="button" data-inline="true">Webbplats</a></div>'+
+						'<div class="detailview-buttons2"><a id="btnWebSite" target="_blank" href="'+ conf.myListArr[idx].website +'"  rel="external"  data-role="button" data-inline="true">Webbplats</a></div>'+
 					'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc">' +
-						'<a id="btnMap" data-role="button" href="'+ nativeDirectionsLink +'">Färdbeskrivning</a>' +
+						'<a id="btnMap" data-role="button" href="'+ nativeDirectionsLink +'" rel="external">Färdbeskrivning</a>' +
 					'</div>' +
 				'</div>'+
 				'<div class="detailview-head">Beskrivning</div>' +
@@ -324,7 +333,7 @@ hriv.classes.list = function(spec){
 		}
 		
 		if(bolShow){
-			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta mer</h3></a></li>';
+			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta fler</h3></a></li>';
 			strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
 		}	
 		
@@ -503,7 +512,7 @@ hriv.classes.listview = function(spec){
         
         setTimeout(function(){
             $.mobile.hidePageLoadingMsg();    
-        }, 800);                              
+        }, 1500);                              
         
         return false;
     };
@@ -520,8 +529,8 @@ hriv.classes.listview = function(spec){
 		
         setTimeout(function(){
             $.mobile.hidePageLoadingMsg();    
-        }, 800);
-        		
+        }, 1500);
+
 		return false;
 	};
 	
