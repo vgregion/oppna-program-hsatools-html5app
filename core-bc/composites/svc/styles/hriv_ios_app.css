@@ -1,5 +1,14 @@
 ﻿
 /* header */
+.ui-page {
+    margin-left: -1px;
+    margin-right: -1px;
+}
+
+.ui-header {
+   
+}
+
 .ui-header .ui-btn-left{
   left: 5px;
 }
@@ -124,27 +133,22 @@
 .ui-listview-units a.ui-link-inherit {
 	/*margin-left: 8px;*/
 }
-
 .ui-listview-units .ui-list-marker {
 	 display: none;	
 }
-
-
 .ui-listview-units .ui-list-load-up {
 	 display: none;	
 }
-
 .ui-listview-units .ui-list-load-up,
 .ui-listview-units .ui-list-load-down {			
  	background : #C0C0C0;  	
 }
-
-.ui-listview-units .ui-list-load-up a,
-.ui-listview-units .ui-list-load-down a {
-	 /*text-align : center;
-	 height: 40px;*/	 
+.ui-listview-units .ui-list-load-up .ui-link.ui-link-inherit,
+.ui-listview-units .ui-list-load-down .ui-link.ui-link-inherit {
+	 text-align : center;
+	/* height: 40px;*/	 
+	 
 }
-
 .ui-listview-units .ui-list-load  .ui-li-heading {
 	/*color: White;
     margin-top: 0;
@@ -225,6 +229,9 @@
 .ui-page-map .ui-footer {
    height: 42px;
 }
+
+
+/* Page: listview */
 
 
 /* Page: DetailView */

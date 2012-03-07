@@ -374,7 +374,8 @@ hriv.app.init = function(){
    hriv.app.initQueue();
    hriv.app.initAjaxQueue();
      
-   timerInitMap = setInterval(function(){
+   //timerInitMap = setInterval(function(){
+   setTimeout(function(){
         console.log("init map run");
         if(!hriv.app.state.isLoading()){
           hriv.app.printMarkers();
@@ -382,11 +383,11 @@ hriv.app.init = function(){
           clearInterval(timerInitMap);
           console.log("init map stopped"); 
         }
-    }, 1000);
+    }, 4000);
    
    setTimeout(function(){
        hriv.app.run.start(); 
-   }, 2000);   
+   }, 6000);   
     
     setTimeout(function(){
         if(hriv.app.state.isLoading()){        

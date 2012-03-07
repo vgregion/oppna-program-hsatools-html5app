@@ -1,26 +1,7 @@
 /*global $, hriv, q, console, gmap, google, PhoneGap, window */
 
-
-var test = function(){
-  //console.log("here");
-  //console.log(data);      
-};
-
 var jsonpRequest = function(){
-    
-   //$.ajax({
-        //url: 'http://tycktill.vgregion.se/test-hriv-mobile-ws/getCareUnits.jsonp',
-        //data: {},
-        //cache : false,
-        //dataType: 'jsonp',
-        //jsonp: 'callback',
-        //jsonpCallback: "test",
-        //success: function(data){
-            //alert("success");
-          //  console.log(data);
-        //}
-    //});    
-    
+     
 };
 
 
@@ -59,16 +40,6 @@ var jsonpRequest = function(){
 /*************************************
 * Initializer jQuery mobile framework
 *************************************/
-
-$(document).bind("mobileinit", function() {
-    // Make your jQuery Mobile framework configuration changes here!
-    //$.support.cors = true;
-    //$.mobile.allowCrossDomainPages = true;
-    //$.mobile.fixedToolbars.setTouchToggleEnabled(false);  
-    //$.mobile.touchOverflowEnabled = true;
-});
-
-
 $(document).ready(function(){
     
     //$.support.cors = true;
@@ -252,4 +223,24 @@ $("#detailview").live('pagebeforeshow', function(event){
             hriv.EmergencyUnits.detail.print(id);
         break;      
     }
+    
+    
+    $("#btnWebSite").on("vclick", function(){
+        
+        var url =  $(this).attr("href");
+        var re = new RegExp("^(http|https)://");
+        var m = re.exec(url);        
+        
+        if(!m){            
+           url = "http://" + url;
+        }
+        
+        window.open(url); 
+        return false; 
+                
+    });             
+});
+
+$("#detailview").live('pagehide', function(event){
+    $("#btnWebSite").off("vclick");
 });
