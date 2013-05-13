@@ -76,6 +76,10 @@ hriv.fn.getQueryStringParamters = function(name)
 hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 				
 		var _calculate = function(lt1, ln1, lt2, ln2){
+			if(lt1 === null || ln1 === null || lt2 === null || ln2 === null){
+			     return;
+		    }
+						
 			var R = 6371; // km
 			var dLat = (lt2-lt1).toRad();
 			var dLon = (ln2-ln1).toRad();
@@ -180,20 +184,32 @@ hriv.fn.calc.distance = function(lat1, lng1, lat2, lng2){
 	return result;
 };
 
-hriv.fn.calc.time =  function (open1,close2) {
+hriv.fn.calc.time =  function (o1,c2) {
   
-	var now = new Date();	
-	var t1 = new Date();
-	var parts = open1.split(":");
-	t1.setHours(parts[0],parts[1],parts[2],0);
-	var t2 = new Date();
-	parts = close2.split(":");
-	t2.setHours(parts[0],parts[1],parts[2],0);
+	var now = new Date(),	
+	    open1 = new Date(),
+	    close1 = new Date(),
+	    parts = null;
+	
+	parts = o1.split(":");
+	open1.setHours(parts[0],parts[1],parts[2],0);
+	parts = c2.split(":");
+	close1.setHours(parts[0],parts[1],parts[2],0);
 
-	// returns 1 if is in intervall, -1 if otherwise
-	if (t1.getTime() < now.getTime() && now.getTime() < t2.getTime()) { 
-		return 1;
-	}
+	// returns 1 if is in intervall, -1 if otherwise	
+	if (now.getTime() > open1.getTime()){	    
+	   if(close1.getTime() > open1.getTime()){
+	       if(now.getTime() < close1.getTime()){  
+	           return 1;
+	       }
+       } else if(close1.getTime() < open1.getTime() ) {           
+           return 1;
+       }
+    }else if(close1.getTime() < open1.getTime()){
+        if(now.getTime() < close1.getTime()){            
+            return 1;
+        }
+    }
 	
 	return -1;
   
@@ -205,61 +221,64 @@ hriv.fn.calc.time =  function (open1,close2) {
  **/
  hriv.fn.calc.openhours = function(hours){
 
-	var arrDays = ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"];
+	var arrDays = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
 	var arrOpen = [];
 	var arrOpenHours = [];
 	var monday, tuesday, wednesday, thursday, friday, saturday, sunday;	
 	
-	var obj = hours;	
-	
-	if(obj.hasOwnProperty('sunday')){
-	    sunday= obj.sunday[0];
-	    sunday.day = "sunday";
-	    sunday.daynb = 0;	    
-	    arrOpen.push(sunday);
-	}
-	
+	var obj = hours;
+		
 	if(obj.hasOwnProperty('monday')){
 	    monday = obj.monday[0];
 	    monday.day = "monday";
-	    monday.daynb = 1;
+	    monday.daynb = 0;
 	    arrOpen.push(monday);
 	}	
 	
 	if(obj.hasOwnProperty('tuesday')){
 	    tuesday= obj.tuesday[0];
 	    tuesday.day = "tuesday";
-	    tuesday.daynb = 2;
+	    tuesday.daynb = 1;
 	    arrOpen.push(tuesday);
 	}	
 	
 	if(obj.hasOwnProperty('wednesday')){
 	    wednesday= obj.wednesday[0];
 	    wednesday.day = "wednesday";
-	    wednesday.daynb = 3;
+	    wednesday.daynb = 2;
 	    arrOpen.push(wednesday);
 	}	
 	
 	if(obj.hasOwnProperty('thursday')){
 	    thursday= obj.thursday[0];
 	    thursday.day = "thursday";
-	    thursday.daynb = 4;
+	    thursday.daynb = 3;
 	    arrOpen.push(thursday);
 	}	
 	
 	if(obj.hasOwnProperty('friday')){
 	    friday= obj.friday[0];
 	    friday.day = "friday";
-	    friday.daynb = 5;	    
+	    friday.daynb = 4;	    
 	    arrOpen.push(friday);
 	}	
 	
 	if(obj.hasOwnProperty('saturday')){
 	    saturday= obj.saturday[0];
 	    saturday.day = "saturday";
-	    saturday.daynb = 6;	    
+	    saturday.daynb = 5;	    
 	    arrOpen.push(saturday);
-	}	
+	}
+	
+	
+	if(obj.hasOwnProperty('sunday')){
+        sunday= obj.sunday[0];
+        sunday.day = "sunday";
+        sunday.daynb = 6;       
+        arrOpen.push(sunday);
+    }
+	
+		
 	
 	arrOpen.sort(function(a,b){
 	    if(a !== null && b !==null ){

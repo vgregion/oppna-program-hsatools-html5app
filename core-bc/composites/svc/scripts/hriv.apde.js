@@ -9,78 +9,10 @@
 ***********************************/
 
 
-Function.prototype.method = function(name, fn) {
-  this.prototype[name] = fn;
-  return this;
-};
-
-
-
-// From the Mozilla Developer Center website at 
-// http://developer.mozilla.org/en/docs/New_in_JavaScript_1.6#Array_extras.
-if (!Array.prototype.forEach) {
-    Array.method('forEach', function (fn, thisObj) {
-        var scope = thisObj || window;
-        for (var i = 0, len = this.length; i < len; ++i) {
-            fn.call(scope, this[i], i, this);
-        }
-    });
-}
-
-if (!Array.prototype.filter) {
-    Array.method('filter', function (fn, thisObj) {
-        var scope = thisObj || window;
-        var a = [];
-        for (var i = 0, len = this.length; i < len; ++i) {
-            if (!fn.call(scope, this[i], i, this)) {
-                continue;
-            }
-            a.push(this[i]);
-        }
-        return a;
-    });
-}
-
-
-/************
- * Observer
- ************/
-window.DED = window.DED || {};
-DED.util = DED.util || {};
-
-DED.util.Observer = function () {
-    this.fns = [];
-};
-
-DED.util.Observer.prototype = {
-    subscribe: function (fn) {
-        this.fns.push(fn);
-    },
-    unsubscribe: function (fn) {
-        this.fns = this.fns.filter(
-          function (el) {
-              if (el !== fn) {
-                  return el;
-              }
-          }
-        );
-    },
-    fire: function (o, data) {
-        this.fns.forEach(
-        function (el) {
-            el(o, data);            
-        }
-    );
-    }
-};
-
-
 
 /* 
  *  
  * */
-
-
 DED.Queue = function () {
     // Queued requests.
     this.queue = [];
@@ -133,14 +65,16 @@ DED.Queue.method('flush', function () {
 
       //var para = this.queue[0]['cmd'];
       var func = this.queue[this.indx].func;
-      var para = this.queue[this.indx].para;
+      var getData = this.queue[this.indx].para;
+      var data = "";
 	  var cmd  = this.queue[this.indx].cmd;
+	  if(getData) { data = getData(); }
 	  
-	if(this.jump !== cmd){
+	  if(this.jump !== cmd){
 		console.log("exe func qeueu: " + cmd + " " + new Date());
-		func(para);
-	}
-	callback(cmd,"");
+		func(data);
+	  }
+	  callback(cmd,"");
 	  
   }).method('setRetryCount', function (count) {
       this.retryCount = count;
@@ -287,11 +221,11 @@ DED.AjaxQueue.method('flush', function () {
     
 
     /* Usage. */
-    var q = new DED.Queue();
-    q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
-    q.setTimeout(30000);    //Timeout when failure in ajax call 10 min
-    q.setInterval(30000);    //Time between runs 1 min
-    q.setSleep(30000);      //Time between each iteration 2min
+    //var q = new DED.Queue();
+    //q.setRetryCount(5);      // Reset our retry count to be higher for slow connections.
+    //q.setTimeout(30000);    //Timeout when failure in ajax call 10 min
+    //q.setInterval(30000);    //Time between runs 1 min
+    //q.setSleep(30000);      //Time between each iteration 2min
 
     //q.setTimeout(15000);    //Timeout when failure in ajax call 10 min
     //q.setInterval(15000);    //Time between runs 1 min
@@ -300,10 +234,10 @@ DED.AjaxQueue.method('flush', function () {
 
     var aq = new DED.AjaxQueue();
     aq.setRetryCount(5);     // Reset our retry count to be higher for slow connections.
-    aq.setTimeout(1200000);   //Timeout when failure in ajax call 10 min
-    aq.setInterval(30000);   //Time between runs 30 sec
-    aq.setSleep(1200000);     //Time between each iteration 20min
+    //aq.setTimeout(1200000);   //Timeout when failure in ajax call 10 min
+    //aq.setInterval(30000);   //Time between runs 30 sec
+    //aq.setSleep(1200000);     //Time between each iteration 20min
     
     aq.setTimeout(240000);   //Timeout when failure in ajax call 4 min
     aq.setInterval(30000);   //Time between runs 30 sec
-    aq.setSleep(240000);     //Time between each iteration 4min  
+    aq.setSleep(600000);     //Time between each iteration 10min  

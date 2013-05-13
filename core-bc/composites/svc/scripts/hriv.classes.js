@@ -1,4 +1,4 @@
-/*global $, gmap, google, hriv, PhoneGap, device, console */
+/*global $, gmap, google, hriv, PhoneGap, device, console, window */
 
 
 /*****************************
@@ -54,12 +54,12 @@ hriv.classes.mode = function(spec){
 	
 	that.mapClick = function(){
 		$(conf.linkId).attr("href", conf.linkMap);
-		//that.mapOn();		
+		that.mapOn();		
 	};
 	
 	that.listClick = function(){
 		$(conf.linkId).attr("href", conf.linkList);
-		//that.listOn();
+		that.listOn();
 	};
 	
 	that.mapOn = function(){
@@ -97,6 +97,18 @@ hriv.classes.detailview = function(spec){
 			
 	that.init = function(){		
 
+	};
+	
+	
+	that.reload = function(data, listDetails){
+	    
+	  conf.myListArr = [];
+       
+       for(var i = 0; i < data.length; i++){                    
+            //Load detail items
+            that.load(data[i], listDetails);
+        } 	  
+	    
 	};
 	
 	/** 
@@ -176,29 +188,32 @@ hriv.classes.detailview = function(spec){
 		idx = conf.myListArr.getIndex(hsaId);
 		if(idx === null){ return; }	
 				
-		if (PhoneGap.available){            
-            switch(device.platform){
+		if (window.device){          		    
+            switch(window.device.platform){
                 case"Android":
                     nativeDirectionsLink = 'http://maps.google.com/maps?';
                     break;
                 case "iPhone":
                     nativeDirectionsLink = 'maps:q=http://maps.google.com/maps?';
                     break;
+                case "iPad":
+                    nativeDirectionsLink = 'maps:q=http://maps.google.com/maps?';
+                    break;                    
                 default:
                     nativeDirectionsLink = 'http://maps.google.com/maps?'; 
                     break;
             }                   
         }else{
             nativeDirectionsLink = 'http://maps.google.com/maps?';
-        }		
-		
+        }
+
 		nativeDirectionsLink += 'll=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
 		nativeDirectionsLink += '&saddr=' + gmap.curentPosition.latitude() + ',+' + gmap.curentPosition.longitude();
 		nativeDirectionsLink += '&daddr=' + conf.myListArr[idx].latitude + ',+' + conf.myListArr[idx].longitude;		
 					
 		var telnb = (conf.myListArr[idx].tel.length > 0) ? '0'+ conf.myListArr[idx].tel.substring(3, conf.myListArr[idx].tel.length) : "";		
 		
-		str = '<div class="detailview-head">' + conf.myListArr[idx].name + ' , ' + conf.myListArr[idx].locale + '</div>' +
+		str = '<div class="detailview-head">' + conf.myListArr[idx].name + '</div>' +
                     '<div class="detailview-content1">'+
 					'<div class="ui-li-heading">Öppettider</div>' +					
 					'' + conf.myListArr[idx].open + ''+					
@@ -221,8 +236,8 @@ hriv.classes.detailview = function(spec){
 					'<div class="ui-li-desc"> '+ telnb +'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc detailview-buttons">' +
-						'<div class="detailview-buttons1"><a href="tel:'+ conf.myListArr[idx].tel +'" data-role="button" data-inline="true">Ring</a></div>' +
-						'<div class="detailview-buttons2"><a id="btnWebSite" target="_blank" href="'+ conf.myListArr[idx].website +'"  rel="external"  data-role="button" data-inline="true">Webbplats</a></div>'+
+						'<div class="detailview-buttons1"><a ' + (conf.myListArr[idx].tel ? '' : 'class="ui-disabled"') + ' href="tel:'+ conf.myListArr[idx].tel +'" data-role="button" data-inline="true">Ring</a></div>' +												
+						'<div class="detailview-buttons2"><a id="btnWebSite" ' + (conf.myListArr[idx].website ? '' : 'class="ui-disabled"') +  'target="_blank" href="'+ conf.myListArr[idx].website +'"  rel="external"  data-role="button" data-inline="true">Webbplats</a></div>'+						
 					'</div>' +
 					'<hr class="detailview-divider">' +
 					'<div class="ui-li-desc">' +
@@ -302,45 +317,6 @@ hriv.classes.list = function(spec){
 		});						
 	};	
 			
-	that.print = function(itms, start, stop){
-		
-		var strDistance =  "", bolShow = false, strList ="";
-				
-		if(itms !== undefined){ 
-			conf.itms = itms;			
-			if(itms < _listItems.length){
-				conf.stop = itms;
-				bolShow = true;
-			}else{
-				conf.stop = _listItems.length;			
-			}					
-		}
-
-		if(start !== undefined){ conf.start = start; }
-		if(stop !== undefined){ conf.stop = stop; }
-		if(conf.stop > _listItems.length){ conf.stop = _listItems.length; bolShow = false; }
-									
-		for(var i = conf.start; i < conf.stop; i++){
-			
-            strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;
-			
-			strList = strList + '<li class="ui-listItem" data-icon="false">';
-			strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
-			strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
-			strList = strList + '<h3>' + _listItems[i].name + '</h3>';
-			strList = strList + '<p>' + strDistance + '</p>';
-			strList = strList + '</a></li>';
-		}
-		
-		if(bolShow){
-			strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta fler</h3></a></li>';
-			strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
-		}	
-		
-		$(conf.listId).append(strList);
-		$(conf.listId).trigger("create");
-		//try{$(conf.listId).listview("refresh");}catch(e){}	
-	};	
 	
 	that.sortOnDistance = function(){
 		_listItems.sort(hriv.fn.compare.distance);				
@@ -423,7 +399,47 @@ hriv.classes.list = function(spec){
 		});
 		
 		try{$(conf.listId).listview("refresh");}catch(e){}
-	};	
+	};
+	
+   that.print = function(itms, start, stop){
+        
+        var strDistance =  "", bolShow = false, strList ="";
+                
+        if(itms !== undefined){ 
+            conf.itms = itms;           
+            if(itms < _listItems.length){
+                conf.stop = itms;
+                bolShow = true;
+            }else{
+                conf.stop = _listItems.length;          
+            }                   
+        }
+
+        if(start !== undefined){ conf.start = start; }
+        if(stop !== undefined){ conf.stop = stop; }
+        if(conf.stop > _listItems.length){ conf.stop = _listItems.length; bolShow = false; }
+                                    
+        for(var i = conf.start; i < conf.stop; i++){
+            
+            strDistance = (_listItems[i].distance === 999999999) ? "Avstånd saknas, " + _listItems[i].locale : _listItems[i].distance + ' km, '+ _listItems[i].locale;
+            
+            strList = strList + '<li class="ui-listItem" data-icon="false">';
+            strList = strList + '<a rel=external href="' + _listItems[i].link + '">';
+            strList = strList + '<img src="images/' + _listItems[i].openImg  + '" alt="" class="ui-li-icon">';
+            strList = strList + '<h3>' + _listItems[i].name + '</h3>';
+            strList = strList + '<p>' + strDistance + '</p>';
+            strList = strList + '</a></li>';
+        }
+        
+        if(bolShow){
+            strList = strList + '<li data-icon="false" class="ui-list-load-down"><a><h3>Hämta fler</h3></a></li>';
+            strList = strList + '<li data-icon="false" class="ui-list-marker"></li>';
+        }   
+        
+        $(conf.listId).append(strList);
+        $(conf.listId).trigger("create");
+        //try{$(conf.listId).listview("refresh");}catch(e){}    
+    };  	
 		
 	that.isOpen = function(obj){
 		var val, open = 0; 
@@ -511,7 +527,7 @@ hriv.classes.listview = function(spec){
         list.update2(conf.listPadding, conf.listStart, conf.listStop);       
         
         setTimeout(function(){
-            $.mobile.hidePageLoadingMsg();    
+            $.mobile.hidePageLoadingMsg();                
         }, 1500);                              
         
         return false;
@@ -525,11 +541,16 @@ hriv.classes.listview = function(spec){
 		conf.listStart = conf.listStart + conf.listPadding;
 		conf.listStop = conf.listStop + conf.listPadding;	
 		
-		list.update2(conf.listPadding, conf.listStart, conf.listStop);
+		list.update2(conf.listPadding, conf.listStart, conf.listStop);		
 		
+        setTimeout(function(){                            
+            $.mobile.silentScroll(0);
+        }, 1000);
+        
         setTimeout(function(){
-            $.mobile.hidePageLoadingMsg();    
-        }, 1500);
+            $.mobile.hidePageLoadingMsg();                
+            $.mobile.silentScroll(0);
+        }, 2000);
 
 		return false;
 	};
