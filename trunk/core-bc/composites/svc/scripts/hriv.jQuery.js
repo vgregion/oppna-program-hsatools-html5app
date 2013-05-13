@@ -1,53 +1,73 @@
-/*global $, hriv, q, console, gmap, google, PhoneGap, window */
+/*global $, hriv, q, console, gmap, google, PhoneGap, window, alert */
 
-var jsonpRequest = function(){
-     
-};
-
-
-/*****************************************
-* Case phongegap 
-* Instansitate the applications objects 
-*****************************************/          
-
+/****************************************************
+* Instansitate and start the applications objects 
+****************************************************/   
+    
+    /*****************************************
+    * Case phongegap 
+    * Instansitate the applications objects 
+    *****************************************/ 
+    // If you want to prevent dragging, uncomment this section
+    /*
+    function preventBehavior(e) 
+    { 
+      e.preventDefault(); 
+    };
+    document.addEventListener("touchmove", preventBehavior, false);
+    */
+    
+    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+    see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+    for more details -jm */
+    /*
+    function handleOpenURL(url)
+    {
+        // TODO: do something with the url passed in.
+    }
+    */
+    
     // Handle the resume event    
     function onResume() {
-        console.log("resume");
+        console.log("Debugg info: app resume");
         setTimeout(function(){
-            hriv.app.run.restart();            
-        },5000);    
+            if(hriv.app.run){
+                hriv.app.run.restart();
+            }            
+        }, 4000);    
+    }    
+    
+    /* When this function is called, Cordova has been initialized and is ready to roll */
+    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+    see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+    for more details -jm */
+    function onDeviceReady()
+    {        
+        //navigator.notification.alert("Cordova is working");
+        document.addEventListener("resume", onResume, false);
+        hriv.state.isNative = true;
+        hriv.app.start(); 
     }
     
-    // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
-    function onDeviceReady() {
-        document.addEventListener("resume", onResume, false);
-        console.log("PhoneGap is now loaded!");  
-        gmap.curentPosition.update();
-        hriv.state.gotGeoPos = true;  
-    }
-
-    // Call onDeviceReady when PhoneGap is loaded.
-    //
-    // At this point, the document has loaded but phonegap.js has not.
-    // When PhoneGap is loaded and talking with the native device,
-    // it will call the event `deviceready`.
-    // 
-    document.addEventListener("deviceready", onDeviceReady, false);    
-
-
+    function onBodyLoad()
+    {       
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } 
 
 
 /*************************************
 * Initializer jQuery mobile framework
 *************************************/
-$(document).ready(function(){
+$(document).ready(function(){       
     
     //$.support.cors = true;
     $.mobile.allowCrossDomainPages = true;  
     $.mobile.defaultPageTransition = 'none';
+    $.mobile.transitionFallbacks.slideout = "none"
+    $('[data-position="fixed"]').fixedtoolbar({ tapToggle: false });
     //$.mobile.fixedToolbars.setTouchToggleEnabled(false);
     //$.mobile.pushStateEnabled = false;
-    $.mobile.loadingMessage = "Vänligen vänta, uppdaterar data...";
+    //$.mobile.loadingMessage = "Vänligen vänta, uppdaterar...";
     //$.mobile.touchOverflowEnabled = true;
     
     $("#main").bind("vmousemove", function(e){
@@ -68,34 +88,12 @@ $(document).ready(function(){
     
     $('#detailview .detailview-header').bind("vmousemove", function(e){
         e.preventDefault();
-    });
-});
-
-/*****************************************
-* Case desktop browser 
-* Instansitate the applications objects 
-*****************************************/          
-$(document).ready(function() {
-                
+    });    
+    
     $('#jqmModal-start').modal();
-    
-    setTimeout(function(){
-        $.mobile.showPageLoadingMsg();        
-    },500);
-    
-    setTimeout(function(){        
-        if (!hriv.state.gotGeoPos){
-            gmap.curentPosition.update();                   
-        }        
-    },1000);
-    
-    setTimeout(function(){
-        hriv.app.inst();
-    },1500);
-     
-    setTimeout(function(){
-        hriv.app.init();
-    },3000);         
+    $.mobile.showPageLoadingMsg();    
+    setTimeout(hriv.app.start, 30000);
+        
 });
 
 
@@ -106,32 +104,47 @@ $('#mapCareUnits').live('pagecreate', function(event){
     hriv.CareUnits.map.resizeMap();
     hriv.CareUnits.mode.map.mapOn(); 
     hriv.CareUnits.mode.map.init("map");
+    hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude()); 
 });
-$('#mapCareUnits').live('pageshow', function(event){   
-    hriv.CareUnits.map.showCurrentPosition(true);  
-    
+$('#mapCareUnits').live('pagebeforeshow', function(event){
+    hriv.CareUnits.mode.map.mapOn();
+});
+$('#mapCareUnits').live('pageshow', function(event){       
+   hriv.CareUnits.map.show2();
+   
     setTimeout(function(){
-        hriv.CareUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());               
+        hriv.CareUnits.marker.clearMyPos();
+        hriv.CareUnits.marker.clearMarkers();            
+        hriv.CareUnits.map.showCurrentPosition(true);
+        hriv.CareUnits.marker.showMarkers();
+        
+        hriv.app.qFactory.start("MapCareUnits");                           
     }, 1000);   
 });
-$('#mapCareUnits').live('pagehide', function(event){    
+$('#mapCareUnits').live('pagehide', function(event){     
     hriv.CareUnits.map.watchCurrentPosition(false);
     gmap.currentInfoWindow.close();
-    hriv.CareUnits.marker.clearMyPos(); 
+    hriv.app.qFactory.stop("MapCareUnits");
 });
+
+
 $('#listCareUnits').live('pagecreate', function(event){ 
     hriv.CareUnits.mode.list.init("list");
 });
 $('#listCareUnits').live('pagebeforeshow', function(event){
-    q.skip("CareUnits");
-    //hriv.CareUnits.list.update();
+    hriv.CareUnits.mode.list.listOn();
 });
 $('#listCareUnits').live('pageshow', function(event){   
+    $(".ui-header-fixed").fixedtoolbar('updatePagePadding');
+    $(".ui-footer-fixed").fixedtoolbar('updatePagePadding');
     hriv.CareUnits.mode.list.listOn();
-    setTimeout(function(){ q.skip(""); }, 200);     
+    setTimeout(function(){ 
+        hriv.CareUnits.list.update();
+        hriv.app.qFactory.start("ListCareUnits");
+     }, 800);    
 });
 $('#listCareUnits').live('pagehide', function(event){
-    //hriv.CareUnits.list.remove();   
+    hriv.app.qFactory.stop("ListCareUnits");   
 });
 
 /*********************************
@@ -140,33 +153,47 @@ $('#listCareUnits').live('pagehide', function(event){
 $('#mapDutyUnits' ).live('pagecreate', function(event){ 
     hriv.DutyUnits.map.resizeMap();    
     hriv.DutyUnits.mode.map.mapOn();
-    hriv.DutyUnits.mode.map.init("map");        
+    hriv.DutyUnits.mode.map.init("map");
+    hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());        
 });
-$('#mapDutyUnits' ).live('pageshow', function(event){           
-    hriv.DutyUnits.map.showCurrentPosition(true);      
-        
+$('#mapDutyUnits' ).live('pagebeforeshow', function(event){
+    hriv.DutyUnits.mode.map.mapOn();
+});
+$('#mapDutyUnits' ).live('pageshow', function(event){                
+    hriv.DutyUnits.map.show2();
+    
     setTimeout(function(){
-        hriv.DutyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
+        hriv.DutyUnits.marker.clearMyPos();
+        hriv.DutyUnits.marker.clearMarkers();           
+        hriv.DutyUnits.map.showCurrentPosition(true);
+        hriv.DutyUnits.marker.showMarkers();  
+        
+        hriv.app.qFactory.start("MapDutyUnits");          
     }, 1000);   
 });
 $('#mapDutyUnits' ).live('pagehide', function(event){           
     hriv.DutyUnits.map.watchCurrentPosition(false); 
-    gmap.currentInfoWindow.close();
-    hriv.DutyUnits.marker.clearMyPos();
+    gmap.currentInfoWindow.close(); 
+    hriv.app.qFactory.stop("MapDutyUnits");   
 });
 $('#listDutyUnits' ).live('pagecreate', function(event){
     hriv.DutyUnits.mode.list.init("list");
 });
 $('#listDutyUnits').live('pagebeforeshow', function(event){
-    q.skip("DutyUnits");
-    //hriv.DutyUnits.list.update();
+    hriv.DutyUnits.mode.list.listOn();        
 });
 $('#listDutyUnits' ).live('pageshow', function(event){
+    $(".ui-header-fixed").fixedtoolbar('updatePagePadding');
+    $(".ui-footer-fixed").fixedtoolbar('updatePagePadding');
     hriv.DutyUnits.mode.list.listOn();  
-    setTimeout(function(){ q.skip(""); }, 200); 
+    setTimeout(function(){ 
+        hriv.DutyUnits.list.update(); 
+        hriv.app.qFactory.start("ListDutyUnits");
+    }, 800);
+     
 });
 $('#listDutyUnits').live('pagehide', function(event){
-    //hriv.DutyUnits.list.remove();
+    hriv.app.qFactory.stop("ListDutyUnits");
 });
 
 
@@ -177,32 +204,45 @@ $('#mapEmergencyUnits' ).live('pagecreate', function(event){
     hriv.EmergencyUnits.map.resizeMap();
     hriv.EmergencyUnits.mode.map.mapOn();
     hriv.EmergencyUnits.mode.map.init("map");
+    hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());
 });
-$('#mapEmergencyUnits' ).live('pageshow', function(event){      
-    hriv.EmergencyUnits.map.showCurrentPosition(true);
-        
+$('#mapEmergencyUnits' ).live('pagebeforeshow', function(event){
+    hriv.EmergencyUnits.mode.map.mapOn();
+});
+$('#mapEmergencyUnits' ).live('pageshow', function(event){
+    hriv.EmergencyUnits.map.show2();
+    
     setTimeout(function(){
-        hriv.EmergencyUnits.map.show(gmap.curentPosition.latitude(), gmap.curentPosition.longitude());  
+        hriv.EmergencyUnits.marker.clearMyPos();
+        hriv.EmergencyUnits.marker.clearMarkers();        
+        hriv.EmergencyUnits.map.showCurrentPosition(true);
+        hriv.EmergencyUnits.marker.showMarkers();
+        
+        hriv.app.qFactory.start("MapEmergencyUnits");          
     }, 1000);       
 });
 $('#mapEmergencyUnits' ).live('pagehide', function(event){          
     hriv.EmergencyUnits.map.watchCurrentPosition(false);
     gmap.currentInfoWindow.close();
-    hriv.EmergencyUnits.marker.clearMyPos();
+    hriv.app.qFactory.stop("MapEmergencyUnits");
 });
 $('#listEmergencyUnits' ).live('pagecreate', function(event){
     hriv.EmergencyUnits.mode.list.init("list");
 });
 $('#listEmergencyUnits').live('pagebeforeshow', function(event){
-    q.skip("EmergencyUnits");
-    //hriv.EmergencyUnits.list.update();      
+    hriv.EmergencyUnits.mode.list.listOn();       
 });
 $('#listEmergencyUnits' ).live('pageshow', function(event){
+    $(".ui-header-fixed").fixedtoolbar('updatePagePadding');
+    $(".ui-footer-fixed").fixedtoolbar('updatePagePadding');
     hriv.EmergencyUnits.mode.list.listOn(); 
-    setTimeout(function(){ q.skip(""); }, 200);         
+    setTimeout(function(){  
+        hriv.EmergencyUnits.list.update();
+        hriv.app.qFactory.start("ListEmergencyUnits"); 
+    }, 800);         
 });
 $('#listEmergencyUnits').live('pagehide', function(event){
-    //hriv.EmergencyUnits.list.remove();  
+    hriv.app.qFactory.stop("ListEmergencyUnits");  
 });
 
 /**************************************
@@ -222,8 +262,7 @@ $("#detailview").live('pagebeforeshow', function(event){
         case "EmergencyUnits":
             hriv.EmergencyUnits.detail.print(id);
         break;      
-    }
-    
+    }    
     
     $("#btnWebSite").on("vclick", function(){
         
@@ -237,10 +276,12 @@ $("#detailview").live('pagebeforeshow', function(event){
         
         window.open(url); 
         return false; 
-                
+                        
     });             
 });
-
+$("#detailview").live('pageshow', function(event){
+    $(".ui-header-fixed").fixedtoolbar('updatePagePadding');
+});
 $("#detailview").live('pagehide', function(event){
     $("#btnWebSite").off("vclick");
 });

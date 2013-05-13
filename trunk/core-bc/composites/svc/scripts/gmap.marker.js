@@ -1,4 +1,4 @@
-/*global $, gmap, i, google, key, window */
+/*global $, gmap, i, google, key, window,hriv */
 
 /**
  *Creates a new instance of marker object
@@ -20,20 +20,27 @@ gmap.marker = function(){
 	
 	that.addPosMarker = function(lat, lng, title, bubbleContent, image, bubbleType, link){
 		idxMyPos = markers.length;
-		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, link);				
+		that.addMarker(lat, lng, title, bubbleContent, image, bubbleType, link, null);				
 	};
 	
 	/**
 	 * addMarker
 	 */
-    that.addMarker = function(lat, lng, title, bubbleContent, image, bubbleType, link) {        
+    that.addMarker = function(lat, lng, title, bubbleContent, image, bubbleType, link, open) {        
 
-        var latlng = new google.maps.LatLng(lat, lng),options, marker;
+        var latlng = new google.maps.LatLng(lat, lng),options, marker,
+            openHours, openImg = "PinGray.png", isOpen = -1;
+        
+        //Kontroll öppettider
+        if(open){
+            isOpen = hriv.fn.calc.isOpen(open);          
+            openImg = (isOpen === 1) ? 'PinGreen.png' : 'PinGray.png' ;         
+        }
         
         options = {
             position: latlng,
             title: title,
-            icon: image,
+            icon: (open !== null) ? 'images/' + openImg : image, 
             //animation: (animate !== undefined ? google.maps.Animation.DROP : null),
             map: this.map,
             shape: {
@@ -66,7 +73,7 @@ gmap.marker = function(){
 		
             that.addMarker(mapPois[i].Latitude, mapPois[i].Longitude, 
 						   mapPois[i].Title, mapPois[i].BubbleContent, 
-						   mapPois[i].Image, 2, mapPois[i].link);
+						   mapPois[i].Image, 2, mapPois[i].link, mapPois[i].open);
 
 		}       
    };	
@@ -97,6 +104,28 @@ gmap.marker = function(){
 
 		markers.length = 0;
     };
+	
+	that.reload = function(data, refObj){
+	    mapPois = [];
+	    
+	    for(var i = 0; i < data.length; i++){
+	        //Load marker items
+            that.load(refObj, data[i]);
+	    }
+	};	
+		
+	that.load = function(refObj, obj){        
+              
+        //Load POI info
+        mapPois.push({
+            Latitude : obj.latitude,
+            Longitude :  obj.longitude,
+            Title : obj.name,
+            hsaIdentity : obj.hsaIdentity,
+            link : refObj.map.getLink() +'?page='+ refObj.map.getPage() +'&id='+ obj.hsaIdentity,
+            open: obj.hsaSurgeryHours 
+        });
+	};	
 		
 	/**
 	 * getMarkers

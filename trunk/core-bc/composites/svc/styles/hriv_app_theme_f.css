@@ -301,21 +301,23 @@
 .ui-button-bottom-left.ui-button {
 	background-position: right;  
 	margin-top:4px;
+	margin-left: 4px;
 }
 .ui-button-bottom-left {
     background-image: url('../images/BtnBottomLeftOffv2.png');
     background-repeat:no-repeat;  
     background-color:transparent;         
-    width:  50%;  	       
+    width:  49%;  	       
     left: 0;
     right: 0;  
 }
 .ui-button-bottom-left .ui-btn-inner {
     background-image: none;
-	text-align: right;     
+	text-align: right;
+	padding-top: 8px;     
 }
 .ui-button-bottom-left .ui-btn-text{
-	margin-right: 35px;	
+	margin-right: 49px;	
 }
 .ui-button-bottom-left.ui-btn-hover-f, .ui-button-bottom-left.ui-btn-down-f {    	
 	background-position: right;
@@ -329,22 +331,24 @@
 /* Button bottom right */
 .ui-button-bottom-right.ui-button {
 	background-position: left;
-	margin-top:4px;	
+	margin-top:4px;
+	margin-left: -4px;	
 }
 .ui-button-bottom-right {
     background-image: url('../images/BtnBottomRightOff.png');
     background-repeat:no-repeat;  
     background-color:transparent;     
-    width: 50%;      
+    width: 49%;      
     left: 0;
-    right: 0;         	     
+    right: 0;             	     
 }
 .ui-button-bottom-right .ui-btn-inner {
     background-image: none;
-	text-align: left;    
+	text-align: left;
+    padding-top: 8px;    
 }
 .ui-button-bottom-right .ui-btn-text{
-	margin-left: 35px;
+	margin-left: 40px;
 }
 .ui-button-bottom-right.ui-btn-hover-f, .ui-button-bottom-right.ui-btn-down-f {    	
  	background-position: left;

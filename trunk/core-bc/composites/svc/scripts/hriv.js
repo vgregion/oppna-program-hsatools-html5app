@@ -1,12 +1,6 @@
 /*global $, q, console, gmap, google, PhoneGap, window */
 
 /**************************
-* 
-**************************/
-
-
-
-/**************************
 * App global variables
 **************************/
 var hriv = {

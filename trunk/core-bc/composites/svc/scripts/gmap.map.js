@@ -16,20 +16,23 @@ gmap.bubble = function(refMap){
 	 */
 	that.addBubble = function(marker, title, bubbleContent, lat, lng, bubbleType, link) {
 
-        var infowindow = new google.maps.InfoWindow(), slink;
-		
+        var cnt = '<div id="content">' +
+            '<b>' + title + '</b>' +
+            '<br/> ' +
+            ((link !== null) ? ' <a rel=external href="' + link  + '">Mer info</a>' : "") +
+            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+            content : '<div style="display: block; width:90%">' + cnt + '</div>',
+            maxWidth : window.innerWidth - 70
+        });
+
         google.maps.event.addListener(marker, 'click', function() {
 			
-			gmap.currentInfoWindow.close();
-            
-            var content = '<div id="content">' +
-								'<b>' + title + '</b></br>'+((link !== null) ? '<a rel=external href="' + link  + '">Mer info</a>' : "") +''+
-							'</div>';
+			gmap.currentInfoWindow.close();         //closes previous info window
+            infowindow.open(this.map, marker);      //opens new info window
+            gmap.currentInfoWindow.set(infowindow); //adds current info window reference to map object
 
-            infowindow.content = '<div style="display: block;">' + content + '</div>';            
-            infowindow.open(this.map, marker);
-            
-            gmap.currentInfoWindow.set(infowindow);   
         });        
     };    
 
@@ -237,6 +240,12 @@ gmap.map = function(spec) {
         
         
         google.maps.event.trigger(this.map, 'resize');        
+    };
+    
+    that.show2 = function(){
+        var _map = that.getMap();        
+        google.maps.event.trigger(_map, 'resize');
+        
     };
     
     that.zoom = function(){

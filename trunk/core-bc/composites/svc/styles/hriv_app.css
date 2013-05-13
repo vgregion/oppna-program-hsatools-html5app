@@ -1,12 +1,16 @@
 ﻿
 /* header */
 .ui-page {
-    margin-left: -1px;
-    margin-right: -1px;
+/*    margin-left: -1px;
+    margin-right: -1px;*/     
 }
 
-.ui-header {
-   
+.ui-page .ui-header,
+.ui-page .ui-footer {   
+    border-left-width: 0px;
+    border-right-width: 0px;  
+    padding-left: 1px;
+    padding-right: 1px; 
 }
 
 .ui-header .ui-btn-left{
@@ -14,8 +18,16 @@
 }
 
 /* footer */
+/*
+.ui-page .ui-footer{
+    bottom: 0px;
+    position:absolute;
+}
+*/
+
 .ui-footer {
 	height: 42px;
+	
 }
 
 .ui-controlgroup-horizontal {
@@ -23,6 +35,14 @@
 	margin-bottom: 5px;
     margin-top: 5px;
  	text-align: center;
+}
+
+.ui-li-heading{
+    margin-left: 5px;    
+}
+
+.ui-li-desc {
+    margin-left: 5px;
 }
 
 /* listbox */
@@ -48,10 +68,9 @@
 .ui-listbox .ui-li-single.ui-li{                  
     border-width: 1px thin;
 }
-
-.ui-listbox a.ui-link-inherit{
-    color: #33333;
+.ui-listbox a.ui-link-inherit{    
     font-size:large;    
+    color: #33333;
 }
 .ui-listbox a.ui-link-inherit > div > div{
     color:#333333;
@@ -59,13 +78,13 @@
 }
 
 .ui-listbox .ui-icon, .ui-listbox .ui-icon-searchfield:after {
-	background: 						#666 /*{global-icon-color}*/;
-	background: 						none; /*{global-icon-disc}*/;
-	background-image: none; /*{global-icon-set}*/;
-	background-repeat: no-repeat;
-	-moz-border-radius: 				0px;
-	-webkit-border-radius: 				0px;
-	border-radius: 						0px;
+	/*background: 		   #666;*/ 	
+	-moz-border-radius:    0px;
+	-webkit-border-radius: 0px;
+	border-radius: 		   0px;
+	background:            none; 
+    background-image:      none; 
+    background-repeat:     no-repeat;
 }
 
 .ui-listbox .ui-li-rounded{    
@@ -124,6 +143,11 @@
 	padding-left: 5px;
 }
 
+
+.ui-listview .ui-li-icon {
+    top: 25px;
+}
+
 /* list units */
 .ui-listview-units {}
 
@@ -141,10 +165,10 @@
 }
 .ui-listview-units .ui-list-load-up,
 .ui-listview-units .ui-list-load-down {			
- 	background : #C0C0C0;  	
+ 	background : #C0C0C0; 		
 }
-.ui-listview-units .ui-list-load-up .ui-link.ui-link-inherit,
-.ui-listview-units .ui-list-load-down .ui-link.ui-link-inherit {
+.ui-listview-units .ui-list-load-up .ui-btn-text,
+.ui-listview-units .ui-list-load-down .ui-btn-text {
 	 text-align : center;
 	/* height: 40px;*/	 
 	 
@@ -203,6 +227,12 @@
 
 
 /* Button icons */
+.ui-button .ui-icon-compass.ui-icon {
+    left: 0px;
+    margin-left: 11px;   
+    margin-top: -11px;   
+}
+
 .ui-button .ui-icon-compass {
 	margin-top: -11px;
 	background: url(../images/Compass.png)
@@ -232,7 +262,9 @@
 
 
 /* Page: listview */
-
+.ui-listview-content {
+   /*padding-bottom: 57px;*/ 
+}
 
 /* Page: DetailView */
 .ui-page-detailview.ui-body-f {
@@ -286,13 +318,13 @@
 
 .ui-page-detailview .detailview-buttons1 { 	
   	display: inline;
-	width: 50%  	
-	text-align:left;
+	text-align: left;
+	width: 50%;		
 }
 .ui-page-detailview .detailview-buttons2 { 
  	display: inline;
- 	width: 50% 	
- 	text-align:right;
+ 	text-align: right;
+ 	width: 50%;
 }
 .ui-page-detailview .detailview-buttons1 a {
 	 width: 45%
