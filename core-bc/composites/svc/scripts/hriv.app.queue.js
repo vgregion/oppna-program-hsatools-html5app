@@ -13,23 +13,20 @@ hriv.app.initQueue = function(){
 
 hriv.app.initAjaxQueue = function(){
 
-    aq.add({
-        //url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getCareUnits.jsonp",
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getCareUnits.jsonp?callback=?",
+    aq.add({        
+        url: "Please contact responsible person at VGR for url to service: https://code.google.com/p/oppna-program/",
         cmd: "FetchingCareUnits"
         //data: hriv.dataStore.CareUnits.careUnits 
     });
 
-    aq.add({
-        //url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getDutyUnits.jsonp",
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getDutyUnits.jsonp?callback=?",
+    aq.add({        
+        url: "Please contact responsible person at VGR for url to service: https://code.google.com/p/oppna-program/",
         cmd: "FetchingDutyUnits"
         //data : hriv.dataStore.DutyUnits.dutyUnits
     });
     
-    aq.add({
-        //url: "http://tycktill.vgregion.se/test-hriv-mobile-ws/getEmergencyUnits.jsonp",
-        url: "http://tycktill.vgregion.se/hriv-mobile-ws/getEmergencyUnits.jsonp?callback=?",
+    aq.add({        
+        url: "Please contact responsible person at VGR for url to service: https://code.google.com/p/oppna-program/",
         cmd: "FetchingEmergencyUnits"
         //data: hriv.dataStore.EmergencyUnits.emergencyUnits
     }); 
